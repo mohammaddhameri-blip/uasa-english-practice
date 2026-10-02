@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UASA English Practice — Year 5 & Year 6</title>
+<style>
+:root{
+  --navy:#10234f;--navy2:#19366f;--blue:#2f68d8;--sky:#eaf3ff;
+  --ink:#17233d;--muted:#65728c;--line:#dce5f2;--panel:#fff;
+  --gold:#f2bd35;--green:#198754;--red:#c43d4b;--orange:#c37b1d;
+  --bg:#f4f7fb;--shadow:0 12px 34px rgba(22,47,91,.12);
+}
+*{box-sizing:border-box}
+html{font-size:16px}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.topbar{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 4px 18px rgba(5,20,50,.2)}
+.topbarIn{max-width:1180px;margin:auto;display:flex;align-items:center;gap:12px;padding:11px 16px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brandBadge{width:44px;height:44px;border-radius:13px;background:var(--gold);color:#16214a;display:grid;place-items:center;font-weight:950}
+.brandTitle{font-weight:900;letter-spacing:.01em}
+.grow{flex:1}
+.pill,.topBtn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;border-radius:999px;padding:8px 11px;font-weight:800}
+.topBtn{border-radius:12px}
+.wrap{max-width:1180px;margin:auto;padding:20px 16px 44px}
+.hero{background:linear-gradient(135deg,#173469,#2759b0);color:#fff;border-radius:26px;padding:clamp(20px,4vw,34px);display:grid;grid-template-columns:1.5fr .7fr;gap:18px;align-items:center;box-shadow:var(--shadow)}
+.hero h1{margin:5px 0 8px;font-size:clamp(2rem,4vw,3.4rem);line-height:1}
+.hero p{margin:0;color:#dce7ff;max-width:720px;line-height:1.55}
+.eyebrow{font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;color:#bdd0ff}
+.heroBadge{justify-self:end;text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:21px;padding:18px;min-width:180px}
+.heroBadge b{display:block;font-size:1.35rem;margin:4px 0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:18px}
+.setupGrid,.yearGrid,.partGrid,.exerciseGrid{display:grid;gap:14px;margin-top:16px}
+.setupGrid{grid-template-columns:1fr 1fr}
+.yearGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.partGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.exerciseGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.panel h2,.panel h3{margin:0 0 8px}
+.note{font-size:.9rem;color:var(--muted);line-height:1.5}
+.field label{display:block;font-weight:900;margin-bottom:7px}
+.field input,.answerInput,textarea{width:100%;border:2px solid #cfd9e9;border-radius:13px;padding:11px 12px;background:#fff;color:var(--ink);outline:none}
+.field input:focus,.answerInput:focus,textarea:focus{border-color:#5f83df;box-shadow:0 0 0 3px rgba(47,104,216,.1)}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:900;background:#e8eef8;color:#17325f}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.gold{background:var(--gold);color:#18244a}
+.btn.ghost{background:#fff;border:1px solid var(--line)}
+.btn.danger{background:#ffe9ec;color:#9b2735}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.actionRow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.choiceCard{padding:22px;border-radius:22px;border:2px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+.choiceCard:hover{border-color:#94afe7}
+.choiceBadge{display:inline-flex;padding:5px 9px;border-radius:999px;background:var(--sky);color:#2659b7;font-weight:900;font-size:.8rem}
+.choiceCard h2{margin:10px 0 6px}
+.bigYear{font-size:2rem;font-weight:950}
+.sectionHeader{display:flex;align-items:center;gap:12px;margin:8px 0 14px}
+.sectionIcon{width:50px;height:50px;border-radius:15px;background:var(--navy2);color:#fff;display:grid;place-items:center;font-size:1.3rem;font-weight:950}
+.sectionHeader h2{margin:0}.sectionHeader p{margin:3px 0 0;color:var(--muted)}
+.exerciseCard{display:flex;flex-direction:column;gap:9px}
+.exerciseMeta{display:flex;gap:7px;flex-wrap:wrap}
+.tag{display:inline-flex;padding:5px 8px;border-radius:999px;background:#edf3fd;color:#355d9c;font-weight:850;font-size:.78rem}
+.scoreStrip{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.scorePill{padding:7px 9px;border-radius:10px;background:#f5f7fb;border:1px solid #e2e8f2;color:#3d4a63;font-size:.82rem;font-weight:800}
+.exerciseWrap{max-width:1040px;margin:auto}
+.taskCard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.taskText{font-size:1.02rem;line-height:1.65}
+.emailMeta{display:grid;gap:6px;margin:12px 0;padding:11px 13px;background:#f3f6fb;border-radius:12px}
+.emailMeta b{display:inline-block;min-width:74px}
+.qList{display:grid;gap:12px;margin-top:16px}
+.qRow{border:1px solid var(--line);border-radius:15px;padding:13px;background:#fbfcfe}
+.qPrompt{font-weight:800;line-height:1.45}
+.qHint{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#315a9c;margin:5px 0 8px;font-weight:900}
+.answerInput.correct{border-color:#32a46d;background:#effaf4}
+.answerInput.wrong{border-color:#d76672;background:#fff2f3}
+.stimulus{border:2px dashed #87a5dd;background:linear-gradient(180deg,#f7fbff,#eef5ff);border-radius:18px;padding:16px;margin:15px 0}
+.stimulus h3{margin:0 0 10px;color:#214e9d}
+.stimulus ul{margin:8px 0 0;padding-left:22px;line-height:1.55}
+.writingGrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:14px;align-items:start}
+.writeBox{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px}
+textarea{min-height:250px;resize:vertical;line-height:1.55}
+.wordCount{font-weight:900;color:var(--muted);text-align:right;margin-top:7px}
+.wordCount.good{color:var(--green)}.wordCount.warn{color:var(--orange)}
+.feedbackBox{margin-top:15px;border-radius:17px;padding:15px;border:1px solid var(--line);background:#fff}
+.scoreBig{font-size:2.3rem;font-weight:950;color:var(--navy)}
+.scoreTiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.scoreTile{background:#f5f8fc;border:1px solid #e2e9f3;border-radius:13px;padding:10px;text-align:center}
+.scoreTile b{display:block;font-size:1.25rem}
+.checkList{display:grid;gap:7px;margin-top:10px}
+.check{padding:9px 10px;border-radius:11px;background:#f5f7fb;font-size:.9rem}
+.check.met{border-left:4px solid var(--green)}
+.check.miss{border-left:4px solid var(--orange)}
+.feedbackGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:10px}
+.feedbackMini{border-radius:13px;padding:11px;background:#f6f8fc}
+.feedbackMini b{display:block;margin-bottom:4px}
+.status{padding:11px 13px;border-radius:12px;margin-top:12px}
+.status.info{background:#edf4ff;color:#214d94}.status.ok{background:#eaf8f0;color:#12623e}.status.err{background:#fff0f1;color:#9d2c3a}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid #bfd0f2;border-top-color:#285fc4;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(10,24,53,.65);display:grid;place-items:center;padding:16px}
+.modalCard{width:min(94vw,760px);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:18px;box-shadow:0 24px 70px rgba(5,17,40,.35)}
+.modalHead{display:flex;align-items:center;gap:10px}.modalHead h2{margin:0}.modalHead .grow{flex:1}
+.lbTable{width:100%;border-collapse:collapse;margin-top:12px}
+.lbTable th,.lbTable td{text-align:left;padding:10px 8px;border-bottom:1px solid #e5eaf2}
+.lbTable th{font-size:.8rem;color:#67748e;text-transform:uppercase;letter-spacing:.06em}
+.lbRank{font-weight:950;font-size:1.05rem}.currentRow{background:#eef5ff}
+.empty{text-align:center;color:var(--muted);padding:28px}
+.history{margin-top:14px}
+.historyItem{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid #e8edf4}
+.backRow{margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:850px){
+  .hero{grid-template-columns:1fr}.heroBadge{justify-self:start}
+  .setupGrid,.writingGrid{grid-template-columns:1fr}
+  .partGrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+  .wrap{padding:12px 10px 35px}.topbarIn{padding:9px 10px}.brandTitle{font-size:.95rem}
+  .yearGrid,.partGrid,.exerciseGrid,.feedbackGrid{grid-template-columns:1fr}
+  .topbarIn .pill{display:none}.topBtn{padding:7px 9px}
+  .hero{border-radius:20px}.choiceCard,.panel,.taskCard{border-radius:17px}
+  .scoreTiles{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbarIn">
+    <div class="brand"><div class="brandBadge">UASA</div><span class="brandTitle">English Practice</span></div>
+    <div class="grow"></div>
+    <div id="pupilBadge" class="pill hidden"></div>
+    <button id="homeBtn" class="topBtn hidden" type="button">Home</button>
+    <button id="changeBtn" class="topBtn hidden" type="button">Change Pupil</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="loginScreen">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">UASA Practice • Parts 5–7</div>
+        <h1>Year 5 & Year 6<br>English Practice</h1>
+        <p>Choose the year level and exercise that suits you. Part 5 is marked instantly. Parts 6 and 7 use the writing rubric and AI-assisted marking. Every exercise has its own leaderboard.</p>
+      </div>
+      <div class="heroBadge"><span>Practice freely</span><b>Y5 + Y6</b><span>One pupil code</span></div>
+    </div>
+    <div class="setupGrid">
+      <div class="panel">
+        <h2>How it works</h2>
+        <p class="note">Use the same pupil code as the Year 5 Online Exam or UPDLP Year 6 Online Exam. Your registered year does not restrict the practice you can open.</p>
+        <p class="note"><b>Leaderboard rule:</b> you only appear on an exercise leaderboard after you submit that exercise. Your best score is used, with fewer attempts to reach that score as the first tie-break.</p>
+      </div>
+      <div class="panel">
+        <h2>Candidate</h2>
+        <div class="field">
+          <label for="pupilCode">Pupil code</label>
+          <input id="pupilCode" maxlength="40" autocomplete="off" placeholder="Example: Y5-001 or Y6-001">
+        </div>
+        <div class="actionRow"><button id="loginBtn" class="btn primary">Start / Resume Practice</button></div>
+        <div id="loginMsg"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="homeScreen" class="hidden">
+    <div class="sectionHeader">
+      <div class="sectionIcon">★</div>
+      <div><h2 id="welcomeTitle">Choose your practice</h2><p>You can practise either year level.</p></div>
+    </div>
+    <div class="yearGrid">
+      <button class="choiceCard" data-year="5" type="button">
+        <span class="choiceBadge">UASA Practice</span><div class="bigYear">Year 5</div>
+        <div class="note">Part 5 vocabulary • Part 6 short communicative message • Part 7 email writing</div>
+      </button>
+      <button class="choiceCard" data-year="6" type="button">
+        <span class="choiceBadge">UASA Practice</span><div class="bigYear">Year 6</div>
+        <div class="note">Part 5 vocabulary • Part 6 short communicative message • Part 7 email writing</div>
+      </button>
+    </div>
+  </section>
+
+  <section id="yearScreen" class="hidden">
+    <div class="backRow"><button class="btn ghost" id="backHomeBtn">← Year selection</button></div>
+    <div class="sectionHeader">
+      <div id="yearIcon" class="sectionIcon">5</div>
+      <div><h2 id="yearTitle">Year 5 Practice</h2><p>Select a part.</p></div>
+    </div>
+    <div id="partGrid" class="partGrid"></div>
+  </section>
+
+  <section id="partScreen" class="hidden">
+    <div class="backRow"><button class="btn ghost" id="backYearBtn">← Parts</button></div>
+    <div class="sectionHeader">
+      <div id="partIcon" class="sectionIcon">5</div>
+      <div><h2 id="partTitle">Part 5</h2><p id="partSubtitle"></p></div>
+    </div>
+    <div id="exerciseGrid" class="exerciseGrid"></div>
+  </section>
+
+  <section id="exerciseScreen" class="hidden">
+    <div class="exerciseWrap">
+      <div class="backRow">
+        <button class="btn ghost" id="backPartBtn">← Exercises</button>
+        <button class="btn gold" id="exerciseLeaderboardBtn">🏆 Leaderboard</button>
+      </div>
+      <div id="exerciseContent"></div>
+    </div>
+  </section>
+</main>
+
+<div id="leaderModal" class="modal hidden">
+  <div class="modalCard">
+    <div class="modalHead">
+      <div><h2 id="leaderTitle">Leaderboard</h2><div id="leaderSub" class="note"></div></div>
+      <div class="grow"></div>
+      <button id="leaderClose" class="btn ghost">✕</button>
+    </div>
+    <div id="leaderBody"></div>
+  </div>
+</div>
+
+<script>
+const CONFIG={
+  baseUrl:"https://qekcgsfeomjckctiubgm.supabase.co",
+  publishableKey:"sb_publishable_yJbCYOLDeMreuqM01g_oqA_eF5YEWwq"
+};
+const LS_CODE="uasa_practice_code_v1";
+let state={code:"",pupil:null,exercises:[],progress:{},year:null,part:null,current:null,currentResult:null};
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const uuid=()=>crypto.randomUUID();
+function show(id){["loginScreen","homeScreen","yearScreen","partScreen","exerciseScreen"].forEach(x=>$("#"+x).classList.toggle("hidden",x!==id))}
+function draftKey(exId){return `uasa_practice_draft_${state.code}_${exId}`}
+function saveDraft(exId,val){localStorage.setItem(draftKey(exId),JSON.stringify(val))}
+function loadDraft(exId){try{return JSON.parse(localStorage.getItem(draftKey(exId))||"null")}catch{return null}}
+async function api(payload){
+  const r=await fetch(`${CONFIG.baseUrl}/functions/v1/uasa-practice`,{
+    method:"POST",headers:{"Content-Type":"application/json","apikey":CONFIG.publishableKey},
+    body:JSON.stringify(payload)
+  });
+  const d=await r.json().catch(()=>({success:false,error:"Unreadable server response"}));
+  if(!r.ok||!d.success) throw new Error(d.error||"Request failed");
+  return d;
+}
+function setLoggedInUI(on){
+  $("#pupilBadge").classList.toggle("hidden",!on);
+  $("#homeBtn").classList.toggle("hidden",!on);
+  $("#changeBtn").classList.toggle("hidden",!on);
+  if(on&&state.pupil) $("#pupilBadge").textContent=`${state.pupil.name} • ${state.pupil.className}`;
+}
+async function login(){
+  const code=$("#pupilCode").value.trim().toUpperCase();
+  if(!code){$("#loginMsg").innerHTML='<div class="status err">Enter your pupil code.</div>';return}
+  $("#loginBtn").disabled=true;$("#loginMsg").innerHTML='<div class="status info"><span class="spinner"></span>Checking pupil code…</div>';
+  try{
+    const [l,e]=await Promise.all([
+      api({action:"login",pupilCode:code}),
+      api({action:"exercises",pupilCode:code})
+    ]);
+    state.code=code;state.pupil=l.pupil;state.progress=l.progress||{};state.exercises=e.exercises||[];
+    localStorage.setItem(LS_CODE,code);setLoggedInUI(true);
+    $("#welcomeTitle").textContent=`Welcome, ${state.pupil.name}!`;
+    show("homeScreen");
+  }catch(err){$("#loginMsg").innerHTML=`<div class="status err">${esc(err.message)}</div>`}
+  finally{$("#loginBtn").disabled=false}
+}
+function refreshProgress(){
+  return api({action:"sync",pupilCode:state.code}).then(d=>{state.progress=d.progress||{};});
+}
+function progressFor(id){return state.progress?.[id]||null}
+function yearStats(y){
+  const xs=state.exercises.filter(e=>Number(e.year_level)===y);
+  const attempted=xs.filter(e=>progressFor(e.exercise_id)).length;
+  return {total:xs.length,attempted};
+}
+function openYear(y){
+  state.year=Number(y);state.part=null;
+  $("#yearIcon").textContent=state.year;$("#yearTitle").textContent=`Year ${state.year} Practice`;
+  const parts=[5,6,7].map(p=>{
+    const xs=state.exercises.filter(e=>Number(e.year_level)===state.year&&Number(e.part)===p);
+    const attempted=xs.filter(e=>progressFor(e.exercise_id)).length;
+    const names={5:"Word Definition & Spelling",6:"Short Communicative Message",7:"Notes Expansion / Email Writing"};
+    return `<button class="choiceCard" data-part="${p}" type="button">
+      <span class="choiceBadge">Part ${p}</span>
+      <h2>${names[p]}</h2>
+      <div class="note">${xs.length} exercise${xs.length===1?"":"s"} • ${attempted} submitted</div>
+    </button>`
+  }).join("");
+  $("#partGrid").innerHTML=parts;
+  $$("#partGrid [data-part]").forEach(b=>b.onclick=()=>openPart(Number(b.dataset.part)));
+  show("yearScreen");
+}
+function openPart(p){
+  state.part=Number(p);
+  const names={5:"Word Definition & Spelling",6:"Short Communicative Message",7:"Notes Expansion / Email Writing"};
+  $("#partIcon").textContent=p;$("#partTitle").textContent=`Year ${state.year} • Part ${p}`;
+  $("#partSubtitle").textContent=names[p];
+  const xs=state.exercises.filter(e=>Number(e.year_level)===state.year&&Number(e.part)===p);
+  $("#exerciseGrid").innerHTML=xs.map(e=>{
+    const pr=progressFor(e.exercise_id);
+    return `<div class="panel exerciseCard">
+      <div class="exerciseMeta"><span class="tag">Practice ${e.exercise_no}</span><span class="tag">${esc(e.topic)}</span></div>
+      <h3>${esc(e.title)}</h3>
+      <div class="note">${p===5?`${e.max_score} vocabulary item${e.max_score===1?"":"s"}`:`${e.word_min}–${e.word_max} words • ${e.max_score} marks`}</div>
+      <div class="scoreStrip">
+        <span class="scorePill">${pr?`Best: ${pr.bestScore}/${e.max_score}`:"Not submitted"}</span>
+        ${pr?`<span class="scorePill">Attempts: ${pr.attempts}</span>`:""}
+      </div>
+      <div class="actionRow">
+        <button class="btn primary" data-open="${e.exercise_id}">${pr?"Practise Again":"Start Practice"}</button>
+        <button class="btn gold" data-lb="${e.exercise_id}">🏆 Leaderboard</button>
+      </div>
+    </div>`
+  }).join("");
+  $$("[data-open]").forEach(b=>b.onclick=()=>openExercise(b.dataset.open));
+  $$("[data-lb]").forEach(b=>b.onclick=()=>openLeaderboard(b.dataset.lb));
+  show("partScreen");
+}
+async function openExercise(id){
+  const e=state.exercises.find(x=>x.exercise_id===id); if(!e)return;
+  state.current=e;state.currentResult=null;
+  $("#exerciseLeaderboardBtn").onclick=()=>openLeaderboard(id);
+  if(Number(e.part)===5) renderPart5(e); else renderWriting(e);
+  show("exerciseScreen");
+}
+function metaHTML(e){
+  const s=e.stimulus||{};
+  if(!s.to&&!s.subject)return "";
+  return `<div class="emailMeta">${s.to?`<div><b>To</b> ${esc(s.to)}</div>`:""}${s.subject?`<div><b>Subject</b> ${esc(s.subject)}</div>`:""}</div>`;
+}
+function renderPart5(e){
+  const d=loadDraft(e.exercise_id)||[];
+  $("#exerciseContent").innerHTML=`<div class="taskCard">
+    <div class="exerciseMeta"><span class="tag">Year ${e.year_level}</span><span class="tag">Part 5</span><span class="tag">Practice ${e.exercise_no}</span></div>
+    <h2>${esc(e.title)}</h2><div class="taskText">${esc(e.task_text)}</div>
+    <div class="qList">${(e.question_data||[]).map((q,i)=>`<div class="qRow">
+      <div class="qPrompt">${i+1}. ${esc(q.prompt)}</div><div class="qHint">${esc(q.hint)}</div>
+      <input class="answerInput" data-index="${i}" autocomplete="off" value="${esc(d[i]||"")}" placeholder="Type the word">
+    </div>`).join("")}</div>
+    <div id="submitStatus"></div>
+    <div class="actionRow"><button id="submitP5" class="btn primary">Submit Answers</button><button id="viewHistory" class="btn ghost">Attempts</button></div>
+    <div id="resultArea"></div>
+  </div>`;
+  $$(".answerInput").forEach(inp=>inp.addEventListener("input",()=>{
+    const vals=$$(".answerInput").map(x=>x.value);saveDraft(e.exercise_id,vals);
+    inp.classList.remove("correct","wrong");
+  }));
+  $("#submitP5").onclick=()=>submitPart5(e);
+  $("#viewHistory").onclick=()=>showHistory(e);
+}
+async function submitPart5(e){
+  const btn=$("#submitP5"),status=$("#submitStatus");
+  const answers=$$(".answerInput").map(x=>x.value.trim());
+  btn.disabled=true;status.innerHTML='<div class="status info"><span class="spinner"></span>Marking…</div>';
+  try{
+    const d=await api({action:"submit_part5",pupilCode:state.code,exerciseId:e.exercise_id,submissionId:uuid(),answers});
+    (d.attempt.checks||[]).forEach(c=>{
+      const inp=$(`.answerInput[data-index="${c.index-1}"]`);
+      if(inp) inp.classList.add(c.correct?"correct":"wrong");
+    });
+    $("#resultArea").innerHTML=`<div class="feedbackBox">
+      <div class="scoreBig">${d.attempt.score}/${d.attempt.maxScore}</div>
+      <div class="note">${esc(d.attempt.feedback?.message||"")}</div>
+      <div class="checkList">${(d.attempt.checks||[]).filter(c=>!c.correct).map(c=>`<div class="check miss">Question ${c.index}: correct answer — <b>${esc(c.answer)}</b></div>`).join("")}</div>
+      <div class="actionRow"><button class="btn gold" id="resultLB">🏆 View Leaderboard</button></div>
+    </div>`;
+    $("#resultLB").onclick=()=>openLeaderboard(e.exercise_id);
+    status.innerHTML='<div class="status ok">Submission saved.</div>';
+    await refreshProgress();
+  }catch(err){status.innerHTML=`<div class="status err">${esc(err.message)}</div>`}
+  finally{btn.disabled=false}
+}
+function stimulusHTML(e){
+  const s=e.stimulus||{};
+  if(!s.heading&&!Array.isArray(s.facts))return "";
+  return `<div class="stimulus"><h3>${esc(s.heading||"Stimulus")}</h3>${Array.isArray(s.facts)?`<ul>${s.facts.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>`:""}</div>`;
+}
+function renderWriting(e){
+  const draft=loadDraft(e.exercise_id)||"";
+  const part=Number(e.part);
+  $("#exerciseContent").innerHTML=`<div class="taskCard">
+    <div class="exerciseMeta"><span class="tag">Year ${e.year_level}</span><span class="tag">Part ${part}</span><span class="tag">Practice ${e.exercise_no}</span></div>
+    <h2>${esc(e.title)}</h2>
+    <div class="${part===7?"writingGrid":""}">
+      <div>
+        <div class="taskText">${esc(e.task_text)}</div>
+        ${metaHTML(e)}
+        ${part===7?stimulusHTML(e):""}
+      </div>
+      <div class="writeBox">
+        <label style="font-weight:900;display:block;margin-bottom:7px">Write your ${part===6?"message / email":"email"}</label>
+        <textarea id="writingAnswer" placeholder="Type your answer here…">${esc(draft)}</textarea>
+        <div id="wordCount" class="wordCount"></div>
+        <div id="submitStatus"></div>
+        <div class="actionRow"><button id="submitWriting" class="btn primary">Submit for Marking</button><button id="viewHistory" class="btn ghost">Attempts</button></div>
+      </div>
+    </div>
+    <div id="resultArea"></div>
+  </div>`;
+  const ta=$("#writingAnswer");
+  const update=()=>{
+    const wc=(ta.value.trim().match(/[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g)||[]).length;
+    const good=wc>=Number(e.word_min)&&wc<=Number(e.word_max);
+    $("#wordCount").textContent=`${wc} words • target ${e.word_min}–${e.word_max}`;
+    $("#wordCount").className=`wordCount ${good?"good":wc?"warn":""}`;
+    saveDraft(e.exercise_id,ta.value);
+  };
+  ta.addEventListener("input",update);update();
+  $("#submitWriting").onclick=()=>submitWriting(e);
+  $("#viewHistory").onclick=()=>showHistory(e);
+}
+async function submitWriting(e){
+  const ta=$("#writingAnswer"),btn=$("#submitWriting"),status=$("#submitStatus");
+  const responseText=ta.value.trim();
+  if(!responseText){status.innerHTML='<div class="status err">Write your answer before submitting.</div>';return}
+  btn.disabled=true;status.innerHTML='<div class="status info"><span class="spinner"></span>AI is marking your writing using the Part '+e.part+' rubric…</div>';
+  try{
+    const d=await api({action:"grade_writing",pupilCode:state.code,exerciseId:e.exercise_id,submissionId:uuid(),responseText});
+    renderWritingResult(e,d.attempt);
+    status.innerHTML='<div class="status ok">Submission marked and saved.</div>';
+    await refreshProgress();
+  }catch(err){status.innerHTML=`<div class="status err">${esc(err.message)}</div>`}
+  finally{btn.disabled=false}
+}
+function renderWritingResult(e,a){
+  const ss=a.sectionScores||{};
+  const scoreTiles=Number(e.part)===6
+    ? `<div class="scoreTile"><span>CCA</span><b>${ss.cca}/5</b></div><div class="scoreTile"><span>Organisation & Language</span><b>${ss.ol}/5</b></div>`
+    : `<div class="scoreTile"><span>Content</span><b>${ss.content}/5</b></div><div class="scoreTile"><span>Communicative Achievement</span><b>${ss.ca}/5</b></div><div class="scoreTile"><span>Organisation & Language</span><b>${ss.ol}/5</b></div>`;
+  $("#resultArea").innerHTML=`<div class="feedbackBox">
+    <div class="scoreBig">${a.score}/${a.maxScore}</div>
+    <div class="note">${a.wordCount} words</div>
+    <div class="scoreTiles">${scoreTiles}</div>
+    <div class="checkList">${(a.contentChecks||[]).map(c=>`<div class="check ${c.status==="MET"?"met":"miss"}"><b>${esc(c.status.replaceAll("_"," "))}</b> — ${esc(c.evidence)}</div>`).join("")}</div>
+    <div class="feedbackGrid">
+      <div class="feedbackMini"><b>✓ You did well</b>${esc(a.feedback?.did_well||"")}</div>
+      <div class="feedbackMini"><b>↗ Improve</b>${esc(a.feedback?.improve||"")}</div>
+      <div class="feedbackMini"><b>💡 Tip</b>${esc(a.feedback?.tip||"")}</div>
+    </div>
+    ${(a.issues||[]).length?`<div class="history"><h3>Specific corrections</h3>${a.issues.map(i=>`<div class="historyItem"><div><b>${esc(i.type)}</b><br><span class="note">${esc(i.original||"")} ${i.suggested?`→ ${esc(i.suggested)}`:""}<br>${esc(i.explanation||"")}</span></div></div>`).join("")}</div>`:""}
+    <div class="actionRow"><button class="btn gold" id="resultLB">🏆 View Leaderboard</button></div>
+  </div>`;
+  $("#resultLB").onclick=()=>openLeaderboard(e.exercise_id);
+}
+async function showHistory(e){
+  try{
+    const d=await api({action:"history",pupilCode:state.code,exerciseId:e.exercise_id});
+    const h=d.history||[];
+    $("#resultArea").innerHTML=`<div class="feedbackBox history"><h3>Your attempts</h3>${h.length?h.map(x=>`<div class="historyItem"><div>Attempt ${x.attempt_no}<div class="note">${new Date(x.created_at).toLocaleString()}</div></div><b>${x.score}/${e.max_score}</b></div>`).join(""):'<div class="empty">No submissions yet.</div>'}</div>`;
+  }catch(err){$("#resultArea").innerHTML=`<div class="status err">${esc(err.message)}</div>`}
+}
+async function openLeaderboard(exerciseId){
+  const e=state.exercises.find(x=>x.exercise_id===exerciseId);
+  $("#leaderTitle").textContent=`${e?e.title:"Exercise"} Leaderboard`;
+  $("#leaderSub").textContent=e?`Year ${e.year_level} • Part ${e.part} • Practice ${e.exercise_no}`:"";
+  $("#leaderBody").innerHTML='<div class="empty"><span class="spinner"></span>Loading leaderboard…</div>';
+  $("#leaderModal").classList.remove("hidden");
+  try{
+    const d=await api({action:"leaderboard",pupilCode:state.code,exerciseId});
+    const rows=d.rows||[];
+    $("#leaderBody").innerHTML=rows.length?`<table class="lbTable"><thead><tr><th>Rank</th><th>Pupil</th><th>Best</th><th>Reached in</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.isCurrent?"currentRow":""}">
+      <td class="lbRank">${r.rank===1?"🥇":r.rank===2?"🥈":r.rank===3?"🥉":"#"+r.rank}</td>
+      <td><b>${esc(r.name)}</b><div class="note">${esc(r.className||"")}</div></td>
+      <td><b>${r.bestScore}/${d.exercise.maxScore}</b></td>
+      <td>Attempt ${r.bestAttemptNo}</td>
+    </tr>`).join("")}</tbody></table>`:'<div class="empty">No pupil has submitted this exercise yet.</div>';
+  }catch(err){$("#leaderBody").innerHTML=`<div class="status err">${esc(err.message)}</div>`}
+}
+function goHome(){state.year=null;state.part=null;state.current=null;show("homeScreen")}
+function changePupil(){
+  state={code:"",pupil:null,exercises:[],progress:{},year:null,part:null,current:null,currentResult:null};
+  localStorage.removeItem(LS_CODE);setLoggedInUI(false);$("#pupilCode").value="";$("#loginMsg").innerHTML="";show("loginScreen");
+}
+$("#loginBtn").onclick=login;
+$("#pupilCode").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+$$("[data-year]").forEach(b=>b.onclick=()=>openYear(Number(b.dataset.year)));
+$("#backHomeBtn").onclick=goHome;
+$("#backYearBtn").onclick=()=>openYear(state.year);
+$("#backPartBtn").onclick=()=>openPart(state.part);
+$("#homeBtn").onclick=goHome;
+$("#changeBtn").onclick=changePupil;
+$("#leaderClose").onclick=()=>$("#leaderModal").classList.add("hidden");
+$("#leaderModal").addEventListener("click",e=>{if(e.target.id==="leaderModal")$("#leaderModal").classList.add("hidden")});
+
+const remembered=localStorage.getItem(LS_CODE);
+if(remembered){$("#pupilCode").value=remembered}
+</script>
+</body>
+</html>
