@@ -66,6 +66,10 @@ button{cursor:pointer}
 .exerciseWrap{max-width:1040px;margin:auto}
 .taskCard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
 .taskText{font-size:1.02rem;line-height:1.65}
+.taskIntro{margin:0 0 18px}
+.taskLead{margin:0 0 6px}
+.taskPoints{margin:0 0 20px;padding-left:26px;list-style-type:disc}
+.taskPoints li{padding-left:3px;margin:6px 0}
 .emailMeta{display:grid;gap:6px;margin:12px 0;padding:11px 13px;background:#f3f6fb;border-radius:12px}
 .emailMeta b{display:inline-block;min-width:74px}
 .qList{display:grid;gap:12px;margin-top:16px}
@@ -377,6 +381,21 @@ function stimulusHTML(e){
   if(!s.heading&&!Array.isArray(s.facts))return "";
   return `<div class="stimulus"><h3>${esc(s.heading||"Stimulus")}</h3>${Array.isArray(s.facts)?`<ul>${s.facts.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>`:""}</div>`;
 }
+function writingTaskHTML(e){
+  const text=String(e.task_text||"");
+  if(Number(e.part)!==6)return esc(text);
+  const match=text.match(/^(.*?)\s+In your (email|message)(?:,\s*([^:]+))?:\s*([\s\S]+)$/i);
+  if(!match)return esc(text);
+  const points=match[4].replace(/\s*Write\s+(?:about\s+|your\s+(?:email|message)\s+in\s+)?\d+\s*[-–]\s*\d+\s+words\.?\s*$/i,"")
+    .split(/;\s*|\n\s*[•-]\s*/).map(s=>s.trim().replace(/^[•-]\s*/,"")).filter(Boolean);
+  if(points.length!==3)return esc(text);
+  const kind=match[2].toLowerCase();
+  const lead=match[3]?match[3].trim()+" ":"";
+  return '<p class="taskIntro">'+esc(match[1])+' Write your '+kind+' in '+esc(e.word_min)+'–'+esc(e.word_max)+' words.</p>'+
+    '<p class="taskLead">In your '+kind+':</p>'+
+    '<ul class="taskPoints">'+points.map(point=>'<li>'+esc(lead+point)+'</li>').join("")+'</ul>';
+}
+
 function renderWriting(e){
   const draft=loadDraft(e.exercise_id)||"";
   const part=Number(e.part);
@@ -385,7 +404,7 @@ function renderWriting(e){
     <h2>${esc(e.title)}</h2>
     <div class="${part===7?"writingGrid":""}">
       <div>
-        <div class="taskText">${esc(e.task_text)}</div>
+        <div class="taskText">${writingTaskHTML(e)}</div>
         ${metaHTML(e)}
         ${part===7?stimulusHTML(e):""}
       </div>
@@ -489,3 +508,4 @@ if(remembered){$("#pupilCode").value=remembered}
 </script>
 </body>
 </html>
+
