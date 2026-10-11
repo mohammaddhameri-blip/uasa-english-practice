@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<title>Part 6 Question Drill</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="badge">P6</div>
+    <div><h1>Part 6 Question Drill</h1><p>Year 5 & Year 6 · 5W1H → Thinking Questions</p></div>
+  </div>
+  <div class="head-actions">
+    <button id="shuffleBtn" class="btn" type="button">🔀 <span>Shuffle</span></button>
+    <button id="settingsBtn" class="btn" type="button">⚙️ <span>Settings</span></button>
+  </div>
+</header>
+
+<main>
+  <div class="stage">
+    <aside class="phone-wrap">
+      <div class="phone" id="phoneLeft">
+        <div class="phone-screen">
+          <div class="speaker"></div>
+          <div class="call-icon">☎</div>
+          <div class="called-name" id="leftName">Ready</div>
+          <small id="leftClass">Year 5</small>
+          <button id="callLeft" type="button">Call a pupil</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="centre">
+      <div class="toolbar">
+        <div class="type-select">
+          <strong>Question type</strong>
+          <select id="sectionSelect"></select>
+        </div>
+        <div id="progressText" class="progress"></div>
+      </div>
+
+      <article class="question-card" aria-live="polite">
+        <div id="questionLabel" class="q-label"></div>
+        <div id="questionText" class="question"></div>
+        <div id="hintText" class="hint"></div>
+      </article>
+
+      <div class="mobile-phones">
+        <button id="mobileCallLeft" type="button">☎ Call a pupil <span id="mobileLeftName">Ready</span></button>
+        <button id="mobileCallRight" type="button">☎ Call another pupil <span id="mobileRightName">Ready</span></button>
+      </div>
+
+      <div class="nav">
+        <button id="prevBtn" class="btn" type="button">← Previous</button>
+        <button id="nextBtn" class="btn primary" type="button">Next →</button>
+      </div>
+    </section>
+
+    <aside class="phone-wrap">
+      <div class="phone" id="phoneRight">
+        <div class="phone-screen">
+          <div class="speaker"></div>
+          <div class="call-icon">☎</div>
+          <div class="called-name" id="rightName">Ready</div>
+          <small id="rightClass">Year 5</small>
+          <button id="callRight" type="button">Call a pupil</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="footerline">
+    <div>Ask for a full sentence, then a supporting detail or reason.</div>
+    <div id="calledHistory">Add pupil names in Settings</div>
+  </div>
+</main>
+</div>
+
+<div class="overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="settingsTitle">Class Settings</h2>
+      <button id="closeSettings" class="btn icon" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="two-col">
+        <label>Current class<select id="classSelect"></select></label>
+        <label>Class name<input id="className" maxlength="40" placeholder="e.g. 5 Gemilang"></label>
+      </div>
+      <label>Pupil names — one name per line
+        <textarea id="rosterInput" placeholder="Aina&#10;Amir&#10;Siti&#10;Daniel"></textarea>
+      </label>
+      <div class="note">Calls are random without repetition. After every pupil has been called, a new round begins automatically.</div>
+      <div id="settingsStatus" class="status"></div>
+    </div>
+    <div class="modal-actions">
+      <button id="deleteClassBtn" class="btn danger" type="button">Delete class</button>
+      <button id="newClassBtn" class="btn" type="button">＋ New class</button>
+      <button id="saveSettingsBtn" class="btn primary" type="button">Save settings</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
