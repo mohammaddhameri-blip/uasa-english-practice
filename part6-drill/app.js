@@ -1,0 +1,61 @@
+(function(){
+var sections=[
+{name:"A. Common 5W1H",hint:"Answer directly in a complete sentence.",questions:[
+"What do you usually do after school?","What do you like to do during the school holidays?","What do you usually bring on a school trip?","Where do you usually spend time with your family at weekends?","Where would you like to go for your next holiday?","Where do you usually study at home?","When do you usually do your homework?","When do you usually exercise?","When would you like to go on a holiday with your family?","Who do you usually spend your free time with?","Who would you ask for help if you lost something at school?","Who would you invite to your birthday celebration?","Why do you enjoy your favourite school subject?","Why do you like spending time with your friends?","Why is it important to keep your classroom clean?","How do you usually travel to school?","How do you prepare for an examination?","How do you help your family at home?"
+]},
+{name:"B. Suggest",hint:"Give one suitable suggestion and add a short detail.",questions:[
+"Suggest a place you can visit when you are going on an overseas holiday.","Suggest an activity you can do during a family picnic.","Suggest something you should bring when you go camping.","Suggest a gift you can give to your friend on his or her birthday.","Suggest a food you can prepare for a class party.","Suggest a sport you can try during the school holidays.","Suggest a way you can help your parents at home.","Suggest a place you can visit during a school trip.","Suggest an activity you can do with your friends after school.","Suggest something you can do to stay healthy."
+]},
+{name:"C. Explain How",hint:"Explain the steps or method clearly.",questions:[
+"Explain how you can prepare for a school camping trip.","Explain how you can get ready for an important examination.","Explain how you can keep your classroom clean.","Explain how you can help a friend who is feeling sad.","Explain how you can save money when you go shopping.","Explain how you can travel safely on a long journey.","Explain how you can prepare for a sports competition.","Explain how you can take care of a pet at home.","Explain how you can stay safe when using the Internet.","Explain how you can help your family prepare for a celebration."
+]},
+{name:"D. Describe",hint:"Use clear details to tell what it is like.",questions:[
+"Describe a place you enjoy visiting with your family.","Describe an activity you enjoy doing during the school holidays.","Describe a meal you enjoy eating with your family.","Describe a school event you enjoy taking part in.","Describe a sport you enjoy playing.","Describe a place you would like to visit in another country.","Describe an outdoor activity you would like to try.","Describe a useful item you always bring to school.","Describe a celebration you enjoy with your family.","Describe an interesting place near your home."
+]},
+{name:"E. Explain Why",hint:"State your idea, then give a reason.",questions:[
+"Explain why you would like to visit another country.","Explain why you enjoy spending time with your friends.","Explain why you think exercise is important.","Explain why you would recommend your favourite place to a friend.","Explain why you think pupils should read every day.","Explain why you would like to join a school club.","Explain why you think helping others is important.","Explain why you enjoy your favourite school subject.","Explain why you think school trips are useful.","Explain why you would like to learn a new skill."
+]},
+{name:"F. What Should You Do?",hint:"Say what you should do and why it is sensible.",questions:[
+"What should you bring when you go on a beach holiday?","What should you do before going on a long journey?","What should you wear when you take part in an outdoor activity?","What should you do if it rains during a picnic?","What should you do if you lose something at school?","What should you do if your friend gets hurt during a game?","What should you do if you arrive late for an event?","What should you do if you forget to bring your homework?","What should you do if you get lost in a shopping centre?","What should you do if you find a lost wallet?"
+]},
+{name:"G. Choose and Give a Reason",hint:"Choose one option clearly and support your choice.",questions:[
+"Which activity would you choose for a school holiday programme and why?","Which place would you choose for a family holiday and why?","Which sport would you like to learn and why?","Which school club would you like to join and why?","Which type of transport would you choose for a long journey and why?","Which activity would you choose for a class party and why?","Which place would you recommend to a tourist visiting your town?","Which subject would you like to improve and why?","Which new skill would you like to learn and why?","Which activity would you choose to do with your friends at the weekend?"
+]}];
+
+var KEY="part6-drill-settings-v1";
+var state={section:0,index:0,shuffled:false,orders:[],classes:{},currentClass:"",called:[]};
+var ids=["sectionSelect","questionLabel","questionText","hintText","progressText","prevBtn","nextBtn","shuffleBtn","settingsBtn","settingsOverlay","closeSettings","classSelect","className","rosterInput","saveSettingsBtn","newClassBtn","deleteClassBtn","settingsStatus","leftName","rightName","leftClass","rightClass","calledHistory","callLeft","callRight","phoneLeft","phoneRight","mobileCallLeft","mobileCallRight","mobileLeftName","mobileRightName"];
+var el={};ids.forEach(function(id){el[id]=document.getElementById(id);});
+
+function resetOrders(){state.orders=sections.map(function(s){return s.questions.map(function(_,i){return i;});});}
+function defaults(){return {classes:{"Year 5":[],"Year 6":[]},currentClass:"Year 5"};}
+function load(){var d;try{d=JSON.parse(localStorage.getItem(KEY)||"null")||defaults();}catch(e){d=defaults();}state.classes=d.classes&&typeof d.classes==="object"?d.classes:defaults().classes;var keys=Object.keys(state.classes);if(!keys.length){state.classes={"Year 5":[]};keys=["Year 5"];}state.currentClass=d.currentClass&&state.classes[d.currentClass]!==undefined?d.currentClass:keys[0];}
+function saveStore(){localStorage.setItem(KEY,JSON.stringify({classes:state.classes,currentClass:state.currentClass}));}
+function roster(){var r=state.classes[state.currentClass];return Array.isArray(r)?r:[];}
+function currentQuestion(){return sections[state.section].questions[state.orders[state.section][state.index]];}
+function render(){var s=sections[state.section];el.questionLabel.textContent=s.name;el.questionText.textContent=currentQuestion();el.hintText.textContent=s.hint;el.progressText.textContent=(state.index+1)+" of "+s.questions.length;el.sectionSelect.value=String(state.section);el.prevBtn.disabled=state.section===0&&state.index===0;el.nextBtn.textContent=(state.section===sections.length-1&&state.index===s.questions.length-1)?"Start again ↻":"Next →";updateClassUI();}
+function updateClassUI(){var list=roster(),cls=state.currentClass||"No class",disabled=!list.length;el.leftClass.textContent=cls;el.rightClass.textContent=cls;[el.callLeft,el.callRight,el.mobileCallLeft,el.mobileCallRight].forEach(function(b){b.disabled=disabled;});el.calledHistory.textContent=list.length?"Called this round: "+state.called.length+" / "+list.length:"Add pupil names in Settings";}
+function buildSections(){sections.forEach(function(s,i){var o=document.createElement("option");o.value=i;o.textContent=s.name;el.sectionSelect.appendChild(o);});}
+function next(){var len=sections[state.section].questions.length;if(state.index<len-1){state.index++;}else if(state.section<sections.length-1){state.section++;state.index=0;}else{state.section=0;state.index=0;}render();}
+function prev(){if(state.index>0){state.index--;}else if(state.section>0){state.section--;state.index=sections[state.section].questions.length-1;}render();}
+function shuffle(){state.shuffled=!state.shuffled;resetOrders();if(state.shuffled){state.orders.forEach(function(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}});}state.index=0;el.shuffleBtn.textContent=state.shuffled?"↩︎ Order":"🔀 Shuffle";render();}
+function speak(name){try{if("speechSynthesis" in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(name);u.rate=.9;window.speechSynthesis.speak(u);}}catch(e){}}
+function callPupil(side){var list=roster();if(!list.length){openSettings();return;}if(state.called.length>=list.length){state.called=[];}var remaining=list.filter(function(n){return state.called.indexOf(n)===-1;});var name=remaining[Math.floor(Math.random()*remaining.length)];state.called.push(name);var nameEl=side==="left"?el.leftName:el.rightName;var mob=side==="left"?el.mobileLeftName:el.mobileRightName;var phone=side==="left"?el.phoneLeft:el.phoneRight;nameEl.textContent=name;mob.textContent=name;phone.classList.remove("ring");void phone.offsetWidth;phone.classList.add("ring");speak(name);updateClassUI();}
+function fillClassSelect(){el.classSelect.innerHTML="";Object.keys(state.classes).forEach(function(name){var o=document.createElement("option");o.value=name;o.textContent=name;el.classSelect.appendChild(o);});el.classSelect.value=state.currentClass;}
+function loadForm(){fillClassSelect();el.className.value=state.currentClass;el.rosterInput.value=roster().join("\n");el.settingsStatus.textContent="";}
+function openSettings(){loadForm();el.settingsOverlay.classList.add("open");setTimeout(function(){el.className.focus();},0);}
+function closeSettings(){el.settingsOverlay.classList.remove("open");}
+function saveSettings(){var old=state.currentClass;var name=el.className.value.trim()||old||"Class";var names=el.rosterInput.value.split(/\r?\n/).map(function(x){return x.trim();}).filter(Boolean);names=Array.from(new Set(names));if(name!==old){delete state.classes[old];}state.classes[name]=names;state.currentClass=name;state.called=[];saveStore();loadForm();render();el.settingsStatus.textContent="Saved "+names.length+" pupil"+(names.length===1?"":"s")+" in "+name+".";}
+function newClass(){var base="New Class",name=base,n=2;while(state.classes[name]!==undefined){name=base+" "+n++;}state.classes[name]=[];state.currentClass=name;state.called=[];saveStore();loadForm();el.className.select();render();}
+function deleteClass(){var keys=Object.keys(state.classes);if(keys.length<=1){el.settingsStatus.textContent="Keep at least one class. Rename this class instead.";return;}delete state.classes[state.currentClass];state.currentClass=Object.keys(state.classes)[0];state.called=[];saveStore();loadForm();render();el.settingsStatus.textContent="Class deleted.";}
+
+resetOrders();load();buildSections();render();
+el.sectionSelect.addEventListener("change",function(){state.section=Number(el.sectionSelect.value)||0;state.index=0;render();});
+el.prevBtn.addEventListener("click",prev);el.nextBtn.addEventListener("click",next);el.shuffleBtn.addEventListener("click",shuffle);
+el.settingsBtn.addEventListener("click",openSettings);el.closeSettings.addEventListener("click",closeSettings);
+el.settingsOverlay.addEventListener("click",function(e){if(e.target===el.settingsOverlay){closeSettings();}});
+el.classSelect.addEventListener("change",function(){state.currentClass=el.classSelect.value;state.called=[];el.className.value=state.currentClass;el.rosterInput.value=roster().join("\n");saveStore();render();});
+el.saveSettingsBtn.addEventListener("click",saveSettings);el.newClassBtn.addEventListener("click",newClass);el.deleteClassBtn.addEventListener("click",deleteClass);
+el.callLeft.addEventListener("click",function(){callPupil("left");});el.callRight.addEventListener("click",function(){callPupil("right");});el.mobileCallLeft.addEventListener("click",function(){callPupil("left");});el.mobileCallRight.addEventListener("click",function(){callPupil("right");});
+document.addEventListener("keydown",function(e){if(el.settingsOverlay.classList.contains("open")){if(e.key==="Escape"){closeSettings();}return;}if(["INPUT","TEXTAREA","SELECT"].indexOf(document.activeElement.tagName)!==-1){return;}if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();next();}if(e.key==="ArrowLeft"){e.preventDefault();prev();}if(e.key.toLowerCase()==="c"){callPupil(Math.random()<.5?"left":"right");}});
+})();
