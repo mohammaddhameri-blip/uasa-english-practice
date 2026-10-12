@@ -1,0 +1,7 @@
+/* Three seaside illustrations for the Year 2 beach writing drill. */
+(function(A){
+if(!A)return;
+A.scenes.sandcastle=function(){return A.beach()+A.child(74,185,.74,'bend',false)+'<path d="M128 174 h109 v33 H128z M145 144 h73 v30 h-73z M134 174 v-24 h17 v-16 h17 v10 h19 v-19 h18 v19 h17 v-12 h16 v42" fill="white"/><path d="M175 207 v-23 q10 -14 20 0 v23 M188 125 v-23 l28 8 l-28 8"/><path d="M245 178 h41 l-8 29 h-27z M252 178 q12 -22 24 0" fill="white"/><path d="M80 153 l22 44 M95 195 l13 -7"/>';};
+A.scenes.shells=function(){return A.beach()+A.child(122,181,.86,'bend',true)+A.shell(201,175,.74)+A.shell(258,185,.63)+A.shell(43,190,.59)+'<path d="M280 153 h26 v45 h-26z M282 153 q12 -21 24 0" fill="white"/><path d="M176 190 l7 -6 M293 182 q-6 -7 0 -11"/>';};
+A.scenes.picnic=function(){return A.beach()+'<path d="M24 172 h274 l-21 35 H44z" fill="white"/><path d="M44 174 l18 32 M87 174 l18 32 M130 174 l18 32 M174 174 l18 32 M217 174 l18 32 M259 174 l18 32"/>'+A.child(92,185,.62,'sit',true)+A.child(246,185,.63,'sit',false)+'<path d="M141 155 h60 v36 h-60z M147 155 q21 -34 47 0 M142 173 h58 M151 173 v18 M163 173 v18 M175 173 v18 M188 173 v18" fill="white"/><circle cx="144" cy="144" r="11"/><circle cx="199" cy="145" r="10"/><path d="M142 133 l5 10 M197 134 l4 11"/>';};
+})(window.Y2Art);
