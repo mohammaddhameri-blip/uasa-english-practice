@@ -79,7 +79,7 @@ function blackWhiteCartoon(markup){
   markup=markup.replace(/<(rect|path|circle|ellipse|polygon)([^>]*?)>/g,function(m,tag,attrs){
     if(/fill="#(?:ffffff|ededed|171717)"/i.test(attrs)&&!/\sstroke=/.test(attrs)){
       if(tag==='rect'&&/width="320"\s+height="212"/.test(attrs))return m;
-      return '<'+tag+attrs+' stroke="#191919" stroke-width="1.65">';
+      return '<'+tag+attrs.replace(/\/\s*$/,'')+' stroke="#191919" stroke-width="1.65"/>';
     }
     return m;
   });
