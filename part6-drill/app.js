@@ -28,8 +28,8 @@ var ids=["sectionSelect","questionLabel","questionText","hintText","progressText
 var el={};ids.forEach(function(id){el[id]=document.getElementById(id);});
 
 function resetOrders(){state.orders=sections.map(function(s){return s.questions.map(function(_,i){return i;});});}
-function defaults(){return {classes:{"Year 5":[],"Year 6":[]},currentClass:"Year 5"};}
-function load(){var d;try{d=JSON.parse(localStorage.getItem(KEY)||"null")||defaults();}catch(e){d=defaults();}state.classes=d.classes&&typeof d.classes==="object"?d.classes:defaults().classes;var keys=Object.keys(state.classes);if(!keys.length){state.classes={"Year 5":[]};keys=["Year 5"];}state.currentClass=d.currentClass&&state.classes[d.currentClass]!==undefined?d.currentClass:keys[0];}
+function defaults(){return {classes:{"6 Cemerlang":[],"6 Gemilang":[],"6 Terbilang":[]},currentClass:"6 Cemerlang"};}
+function load(){var d;try{d=JSON.parse(localStorage.getItem(KEY)||"null")||defaults();}catch(e){d=defaults();}state.classes=d.classes&&typeof d.classes==="object"?d.classes:defaults().classes;var keys=Object.keys(state.classes);var oldEmpty=keys.length===2&&keys.indexOf("Year 5")!==-1&&keys.indexOf("Year 6")!==-1&&Array.isArray(state.classes["Year 5"])&&state.classes["Year 5"].length===0&&Array.isArray(state.classes["Year 6"])&&state.classes["Year 6"].length===0;if(oldEmpty){var fresh=defaults();state.classes=fresh.classes;state.currentClass=fresh.currentClass;saveStore();return;}if(!keys.length){var fresh2=defaults();state.classes=fresh2.classes;keys=Object.keys(state.classes);}state.currentClass=d.currentClass&&state.classes[d.currentClass]!==undefined?d.currentClass:keys[0];}
 function saveStore(){localStorage.setItem(KEY,JSON.stringify({classes:state.classes,currentClass:state.currentClass}));}
 function roster(){var r=state.classes[state.currentClass];return Array.isArray(r)?r:[];}
 function currentQuestion(){return sections[state.section].questions[state.orders[state.section][state.index]];}
