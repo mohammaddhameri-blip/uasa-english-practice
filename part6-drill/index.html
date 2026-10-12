@@ -80,6 +80,34 @@
 </main>
 </div>
 
+<div id="callingModal" class="callout-backdrop" role="presentation">
+  <div id="calloutPhone" class="callout-phone" role="dialog" aria-modal="true" aria-label="Calling a pupil">
+    <div class="callout-screen">
+      <button id="closeCallingBtn" class="callout-close" type="button" aria-label="Close">×</button>
+      <div class="callout-title">CALLING</div>
+      <div id="calloutClass" class="callout-class">6 Cemerlang</div>
+      <div class="callout-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </div>
+      <div id="callHeading" class="callout-heading">Calling...</div>
+      <div id="calledName" class="callout-name cycling">—</div>
+      <div id="callStatus" class="callout-status">Finding a pupil...</div>
+      <div id="callRemaining" class="callout-remaining"></div>
+      <div class="callout-actions">
+        <button id="endCallBtn" class="callout-action hangup" type="button" aria-label="End call">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12c4-3 10-3 14 0l-2.5 3.4c-2.8-1.8-6.2-1.8-9 0Z"/></svg>
+        </button>
+        <button id="anotherCallBtn" class="callout-action newcall" type="button" aria-label="Call another pupil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/></svg>
+        </button>
+      </div>
+      <div class="callout-labels"><span>End</span><span>Call again</span></div>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
   <div class="modal">
     <div class="modal-head">
