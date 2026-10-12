@@ -18,6 +18,10 @@ header{background:#283f82;color:white;position:sticky;top:0;z-index:10;box-shado
 @media print{.phototop svg{max-height:210px;filter:none}}
 </style></head>
 <body><header><div class="bar"><div class="brand"><i>✏️ Y2</i> UASA Part 7 Writing</div><div class="push"></div><span class="chip header-chip" id="signedIn" hidden></span><button id="logout" class="btn small light" hidden>Change code</button></div></header><main class="wrap"><section id="screen"></section><footer>English Year 2 • Part 7 • 3 pictures × 5 marks = 15 marks · AI feedback is guidance, subject to teacher review.</footer></main>
+<script src="./line-art.js?v=2"></script>
+<script src="./line-art-play.js?v=2"></script>
+<script src="./line-art-stories.js?v=2"></script>
+<script src="./line-art-beach.js?v=2"></script>
 <script>
 'use strict';
 var API="https://qekcgsfeomjckctiubgm.supabase.co/functions/v1/year2-part7-writing",KEY="sb_publishable_yJbCYOLDeMreuqM01g_oqA_eF5YEWwq";
@@ -33,7 +37,7 @@ function person(x,y,shirt,s){return '<g transform="translate('+x+' '+y+') scale(
 function sky(){return '<rect width="320" height="212" fill="#def5fa"/><circle cx="276" cy="35" r="20" fill="#ffdd75"/><path d="M24 48 q9 -18 25 -7 q19 -11 28 7z M184 40 q8 -15 19 -5 q16 -9 23 5z" fill="#fff"/><path d="M0 152 Q80 129 162 151 T320 148 L320 212 H0Z" fill="#bce5ca"/><path d="M0 179 H320" stroke="#9acaad" stroke-width="2"/><path d="M27 166 l-7 -5 M34 167 l5 -7 M284 174 l8 -8" stroke="#66b090" stroke-width="2"/>';}
 function room(){return '<rect width="320" height="212" fill="#fff5dd"/><rect y="155" width="320" height="57" fill="#e2c19a"/><path d="M0 155 H320" stroke="#b58f71" stroke-width="3"/><rect x="230" y="26" width="65" height="66" rx="6" fill="#dff2f9" stroke="#8ab1c4" stroke-width="4"/><path d="M263 27 v64 M232 59 h62" stroke="#8ab1c4" stroke-width="3"/>';}
 function tree(x){return '<g transform="translate('+x+' 0)"><path d="M3 150 v-81" stroke="#96724c" stroke-width="12"/><circle cx="-8" cy="73" r="26" fill="#79c6a0"/><circle cx="20" cy="69" r="28" fill="#69b88b"/><circle cx="5" cy="47" r="27" fill="#98d8a7"/></g>';}
-function svgScene(kind){var indoor=['sweep','wash','balloons','sing','cake','cutcake','gifts'].indexOf(kind)>=0;var b=indoor?room():sky();var extra='';
+function svgScene(kind){if(window.lineArtScene && !["race","football","medal"].includes(kind)){var newArt=window.lineArtScene(kind);if(newArt)return newArt;}var indoor=['sweep','wash','balloons','sing','cake','cutcake','gifts'].indexOf(kind)>=0;var b=indoor?room():sky();var extra='';
 if(["sandcastle","shells","picnic"].includes(kind)){b='<rect width="320" height="212" fill="#ccf1fb"/><path d="M0 112 Q75 103 150 114 T320 111 L320 144 H0Z" fill="#6ebad8"/><path d="M0 133 Q75 122 160 135 T320 134 L320 212 H0Z" fill="#ffe1a5"/><path d="M0 145 Q125 129 320 146" fill="none" stroke="#ffffff" stroke-width="5"/><circle cx="285" cy="31" r="19" fill="#ffe27c"/>';}
 switch(kind){
 case 'parrots':extra=tree(283)+'<path d="M13 163 Q140 147 314 160" stroke="#a17c58" stroke-width="11" fill="none"/><path d="M48 152 L70 109 M133 149 L151 113" stroke="#a17c58" stroke-width="7"/><g transform="translate(71 98)"><ellipse cx="0" cy="23" rx="22" ry="37" fill="#e85b74"/><circle cx="-2" cy="-4" r="22" fill="#ff758d"/><path d="M-23 19 Q-34 77 -7 67 L1 17" fill="#719ad7"/><path d="M16 -5 l21 10 l-22 10z" fill="#ffca62"/><circle cx="7" cy="-11" r="4" fill="#283b52"/></g><g transform="translate(160 102)"><ellipse cx="0" cy="22" rx="22" ry="37" fill="#69c39c"/><circle cx="-3" cy="-3" r="22" fill="#7fe1af"/><path d="M-23 20 Q-36 75 -8 65 L-2 12" fill="#2f9fb8"/><path d="M15 -7 l19 12 l-20 9z" fill="#ffca62"/><circle cx="6" cy="-10" r="4" fill="#283b52"/></g>';break;
