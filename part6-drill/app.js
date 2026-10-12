@@ -43,8 +43,135 @@ function buildSections(){sections.forEach(function(s,i){var o=document.createEle
 function next(){var len=sections[state.section].questions.length;if(state.index<len-1){state.index++;}else if(state.section<sections.length-1){state.section++;state.index=0;}else{state.section=0;state.index=0;}render();}
 function prev(){if(state.index>0){state.index--;}else if(state.section>0){state.section--;state.index=sections[state.section].questions.length-1;}render();}
 function shuffle(){state.shuffled=!state.shuffled;resetOrders();if(state.shuffled){state.orders.forEach(function(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}});}state.index=0;el.shuffleBtn.textContent=state.shuffled?"↩︎ Order":"🔀 Shuffle";render();}
-function speak(name){try{if("speechSynthesis" in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(name);u.lang="ms-MY";u.rate=.82;u.pitch=1;u.volume=1;window.speechSynthesis.speak(u);}}catch(e){}}
-function callPupil(side){var list=roster();if(!list.length){openSettings();return;}if(state.called.length>=list.length){state.called=[];}var remaining=list.filter(function(n){return state.called.indexOf(n)===-1;});var name=remaining[Math.floor(Math.random()*remaining.length)];state.called.push(name);var nameEl=side==="left"?el.leftName:el.rightName;var mob=side==="left"?el.mobileLeftName:el.mobileRightName;var phone=side==="left"?el.phoneLeft:el.phoneRight;nameEl.textContent=name;mob.textContent=name;phone.classList.remove("ring");void phone.offsetWidth;phone.classList.add("ring");speak(name);updateClassUI();}
+var callingBusy=false,cycleTimer=null,audioCtx=null,dialNodes=[],activeCallSide="left";
+
+function ensureAudioCtx(){
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return null;
+    if(!audioCtx)audioCtx=new AC();
+    if(audioCtx.state==="suspended")audioCtx.resume();
+    return audioCtx;
+  }catch(e){return null;}
+}
+function startDialTone(){
+  stopDialTone();
+  var ctx=ensureAudioCtx();
+  if(!ctx)return;
+  var master=ctx.createGain();
+  master.gain.value=.055;
+  master.connect(ctx.destination);
+  [350,440].forEach(function(freq){
+    var o=ctx.createOscillator();
+    o.type="sine";
+    o.frequency.value=freq;
+    o.connect(master);
+    o.start();
+    dialNodes.push(o);
+  });
+  dialNodes.push(master);
+}
+function stopDialTone(){
+  dialNodes.forEach(function(n){
+    try{if(typeof n.stop==="function")n.stop();}catch(e){}
+    try{n.disconnect();}catch(e){}
+  });
+  dialNodes=[];
+}
+function playConnectSound(){
+  var ctx=ensureAudioCtx();
+  if(!ctx)return;
+  var o=ctx.createOscillator(),g=ctx.createGain();
+  o.type="sine";
+  o.frequency.setValueAtTime(720,ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(980,ctx.currentTime+.08);
+  g.gain.setValueAtTime(.001,ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.08,ctx.currentTime+.01);
+  g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.1);
+  o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.11);
+}
+function getNextPupil(){
+  var pupils=roster();
+  if(state.called.length>=pupils.length)state.called=[];
+  var remaining=pupils.filter(function(n){return state.called.indexOf(n)===-1;});
+  return remaining[Math.floor(Math.random()*remaining.length)];
+}
+function commitPupil(name){
+  state.called.push(name);
+  var nameEl=activeCallSide==="left"?el.leftName:el.rightName;
+  var mob=activeCallSide==="left"?el.mobileLeftName:el.mobileRightName;
+  nameEl.textContent=name;
+  mob.textContent=name;
+  updateClassUI();
+}
+function openCalling(side){
+  if(!roster().length){openSettings();return;}
+  activeCallSide=side||"left";
+  var modal=document.getElementById("callingModal");
+  modal.classList.add("open");
+  startCalling();
+}
+function closeCalling(){
+  if(cycleTimer){clearTimeout(cycleTimer);clearInterval(cycleTimer);}
+  cycleTimer=null;
+  callingBusy=false;
+  stopDialTone();
+  document.getElementById("callingModal").classList.remove("open");
+  document.getElementById("calloutPhone").classList.remove("is-calling");
+}
+function startCalling(){
+  if(callingBusy)return;
+  var pupils=roster();
+  if(!pupils.length)return;
+  callingBusy=true;
+  var phone=document.getElementById("calloutPhone");
+  var nameEl=document.getElementById("calledName");
+  var heading=document.getElementById("callHeading");
+  var status=document.getElementById("callStatus");
+  var remain=document.getElementById("callRemaining");
+  var another=document.getElementById("anotherCallBtn");
+  var cls=document.getElementById("calloutClass");
+  phone.classList.add("is-calling");
+  nameEl.classList.remove("selected");
+  nameEl.classList.add("cycling");
+  heading.textContent="Calling...";
+  status.textContent="Finding a pupil...";
+  remain.textContent="";
+  cls.textContent=state.currentClass;
+  another.disabled=true;
+  var pick=getNextPupil();
+  var startIndex=Math.floor(Math.random()*pupils.length);
+  var fullCycle=[];
+  for(var i=0;i<pupils.length;i++)fullCycle.push(pupils[(startIndex+i)%pupils.length]);
+  var idx=0,shown=0,delay=68;
+  var totalShows=fullCycle.length+10;
+  startDialTone();
+  function advance(){
+    if(shown>=totalShows){
+      nameEl.textContent=pick;
+      nameEl.classList.remove("cycling");
+      nameEl.classList.add("selected");
+      phone.classList.remove("is-calling");
+      heading.textContent="Connected";
+      status.textContent="Your turn.";
+      commitPupil(pick);
+      var left=pupils.length-state.called.length;
+      remain.textContent=left>0?left+" pupil"+(left===1?"":"s")+" remaining before names can repeat.":"Everyone has been called. The next call starts a new cycle.";
+      stopDialTone();
+      playConnectSound();
+      another.disabled=false;
+      callingBusy=false;
+      cycleTimer=null;
+      return;
+    }
+    nameEl.textContent=fullCycle[idx%fullCycle.length];
+    idx++;shown++;
+    if(shown>totalShows-8)delay+=30;
+    else if(shown>totalShows-14)delay+=12;
+    cycleTimer=setTimeout(advance,delay);
+  }
+  advance();
+}
 function fillClassSelect(){el.classSelect.innerHTML="";Object.keys(state.classes).forEach(function(name){var o=document.createElement("option");o.value=name;o.textContent=name;el.classSelect.appendChild(o);});el.classSelect.value=state.currentClass;}
 function loadForm(){fillClassSelect();el.className.value=state.currentClass;el.rosterInput.value=roster().join("\n");el.settingsStatus.textContent="";}
 function openSettings(){loadForm();el.settingsOverlay.classList.add("open");setTimeout(function(){el.className.focus();},0);}
@@ -53,7 +180,18 @@ function saveSettings(){var old=state.currentClass;var name=el.className.value.t
 function newClass(){var base="New Class",name=base,n=2;while(state.classes[name]!==undefined){name=base+" "+n++;}state.classes[name]=[];state.currentClass=name;state.called=[];saveStore();loadForm();el.className.select();render();}
 function deleteClass(){var keys=Object.keys(state.classes);if(keys.length<=1){el.settingsStatus.textContent="Keep at least one class. Rename this class instead.";return;}delete state.classes[state.currentClass];state.currentClass=Object.keys(state.classes)[0];state.called=[];saveStore();loadForm();render();el.settingsStatus.textContent="Class deleted.";}
 
-function bindPhone(phone,side){phone.setAttribute("role","button");phone.setAttribute("tabindex","0");phone.setAttribute("aria-label","Call a pupil from "+state.currentClass);phone.addEventListener("click",function(e){if(e.target&&e.target.closest&&e.target.closest("button"))return;callPupil(side);});phone.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();callPupil(side);}});}
+function bindPhone(phone,side){
+  phone.setAttribute("role","button");
+  phone.setAttribute("tabindex","0");
+  phone.setAttribute("aria-label","Call a pupil");
+  phone.addEventListener("click",function(e){
+    if(e.target&&e.target.closest&&e.target.closest("button"))return;
+    openCalling(side);
+  });
+  phone.addEventListener("keydown",function(e){
+    if(e.key==="Enter"||e.key===" "){e.preventDefault();openCalling(side);}
+  });
+}
 resetOrders();load();buildSections();render();bindPhone(el.phoneLeft,"left");bindPhone(el.phoneRight,"right");
 el.sectionSelect.addEventListener("change",function(){state.section=Number(el.sectionSelect.value)||0;state.index=0;render();});
 el.prevBtn.addEventListener("click",prev);el.nextBtn.addEventListener("click",next);el.shuffleBtn.addEventListener("click",shuffle);
@@ -61,6 +199,6 @@ el.settingsBtn.addEventListener("click",openSettings);el.closeSettings.addEventL
 el.settingsOverlay.addEventListener("click",function(e){if(e.target===el.settingsOverlay){closeSettings();}});
 el.classSelect.addEventListener("change",function(){state.currentClass=el.classSelect.value;state.called=[];el.className.value=state.currentClass;el.rosterInput.value=roster().join("\n");saveStore();render();});
 el.saveSettingsBtn.addEventListener("click",saveSettings);el.newClassBtn.addEventListener("click",newClass);el.deleteClassBtn.addEventListener("click",deleteClass);
-el.callLeft.addEventListener("click",function(){callPupil("left");});el.callRight.addEventListener("click",function(){callPupil("right");});el.mobileCallLeft.addEventListener("click",function(){callPupil("left");});el.mobileCallRight.addEventListener("click",function(){callPupil("right");});
-document.addEventListener("keydown",function(e){if(el.settingsOverlay.classList.contains("open")){if(e.key==="Escape"){closeSettings();}return;}if(["INPUT","TEXTAREA","SELECT"].indexOf(document.activeElement.tagName)!==-1){return;}if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();next();}if(e.key==="ArrowLeft"){e.preventDefault();prev();}if(e.key.toLowerCase()==="c"){callPupil(Math.random()<.5?"left":"right");}});
+el.callLeft.addEventListener("click",function(){openCalling("left");});el.callRight.addEventListener("click",function(){openCalling("right");});el.mobileCallLeft.addEventListener("click",function(){openCalling("left");});el.mobileCallRight.addEventListener("click",function(){openCalling("right");});document.getElementById("closeCallingBtn").addEventListener("click",closeCalling);document.getElementById("endCallBtn").addEventListener("click",closeCalling);document.getElementById("anotherCallBtn").addEventListener("click",startCalling);document.getElementById("callingModal").addEventListener("click",function(e){if(e.target===this)closeCalling();});
+document.addEventListener("keydown",function(e){if(document.getElementById("callingModal").classList.contains("open")){if(e.key==="Escape")closeCalling();return;}if(el.settingsOverlay.classList.contains("open")){if(e.key==="Escape"){closeSettings();}return;}if(["INPUT","TEXTAREA","SELECT"].indexOf(document.activeElement.tagName)!==-1){return;}if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();next();}if(e.key==="ArrowLeft"){e.preventDefault();prev();}if(e.key.toLowerCase()==="c"){openCalling(Math.random()<.5?"left":"right");}});
 })();
