@@ -16,6 +16,22 @@ header{background:#283f82;color:white;position:sticky;top:0;z-index:10;box-shado
 .cue{background:#fff;color:#171717;border-top:1.5px solid #222}
 @media(max-width:620px){.phototop svg{max-height:none}}
 @media print{.phototop svg{max-height:210px;filter:none}}
+
+/* Exact pupils' black-and-white cartoon picture stems (3 frames per image strip). */
+.stripPanel{width:100%;aspect-ratio:1;position:relative;overflow:hidden;background:white}
+.stripPanel img{position:absolute;top:0;display:block!important;width:300%!important;max-width:none!important;height:100%!important;aspect-ratio:auto!important;max-height:none!important;object-fit:fill!important}
+.stripPanel .stripFallback{display:none}
+.stripPanel.missing img{display:none!important}
+.stripPanel.missing .stripFallback{display:block;position:absolute;inset:0}
+.stripPanel.missing .stripFallback svg{width:100%;height:100%;display:block}
+.stripPanel:not(.missing)+.num{display:none}
+.stemPreview{position:relative;width:100%;height:100%;background:white}
+.stemPreview>img{display:block;width:100%;height:100%;object-fit:contain}
+.stemPreview .stripFallback{display:none}
+.stemPreview.missing>img{display:none}
+.stemPreview.missing .stripFallback{display:block;height:100%}
+.stemPreview.missing .stripFallback svg{width:100%;height:100%}
+@media print{.photos{grid-template-columns:repeat(3,minmax(0,1fr))}.stripPanel{aspect-ratio:1}}
 </style></head>
 <body><header><div class="bar"><div class="brand"><i>✏️ Y2</i> UASA Part 7 Writing</div><div class="push"></div><span class="chip header-chip" id="signedIn" hidden></span><button id="logout" class="btn small light" hidden>Change code</button></div></header><main class="wrap"><section id="screen"></section><footer>English Year 2 • Part 7 • 3 pictures × 5 marks = 15 marks · AI feedback is guidance, subject to teacher review.</footer></main>
 <script src="./line-art.js?v=2"></script>
@@ -33,6 +49,23 @@ var DATA=[
 {id:"d5",title:"A Trip to the Zoo",icon:"🦜",to:"Khadijah",from:"Amin",intro:"How are you? Last Sunday, my family and I went to the zoo.",prompt:"You went to the zoo with your family last Sunday. Tell your friend Khadijah about it.",stages:[["parrots","saw – beautiful – parrots"],["lunch","ate – lunch – family"],["photos","took – photos – camera"]]},
 {id:"d6",title:"A Day at the Beach",icon:"🏖️",to:"Rachel",from:"Joey",intro:"How are you? Last Sunday, my family and I went to the beach.",prompt:"You went to the beach with your family last Sunday. Tell your friend Rachel about it.",stages:[["sandcastle","built – big – sandcastle"],["shells","collected – pretty – shells"],["picnic","had – picnic – family"]]}
 ];
+var STEM_STRIPS={d1:"stem-playground.png",d2:"stem-helping.png",d3:"stem-birthday.png",d4:"stem-sports.png",d5:"stem-zoo.png",d6:"stem-beach.png"};
+var STEM_CUES={
+ d1:["went – tall – slide","played – swings – friend","kicked – football – field"],
+ d2:["made – bed – tidy","washed – dishes – sink","swept – floor – broom"],
+ d3:["blew – candles – birthday cake","ate – pizza – friends","received – present – happy"],
+ d4:["ran – race – fast","played – football – field","won – medal – proud"],
+ d5:["saw – two – parrots","ate – lunch – family","took – photo – elephant"],
+ d6:["built – sandcastle – beach","swam – sea – happily","had – picnic – family"]
+};
+function stemPhoto(d,i){
+ var src="./"+STEM_STRIPS[d.id],cue=STEM_CUES[d.id][i],old=svgScene(d.stages[i][0]);
+ return '<div class="stripPanel missing"><img alt="'+esc(d.title)+': picture '+(i+1)+'" loading="lazy" decoding="async" src="'+src+'" data-cue="'+esc(cue)+'" style="left:-'+(100*i)+'%" onload="this.parentElement.classList.remove(\'missing\');this.closest(\'.photo\').querySelector(\'.cue\').textContent=this.dataset.cue"><div class="stripFallback">'+old+'</div></div><span class="num">'+(i+1)+'</span>';
+}
+function stemPreview(d){
+ var url="./"+STEM_STRIPS[d.id];
+ return '<div class="stemPreview missing"><img alt="Picture sequence for '+esc(d.title)+'" loading="lazy" src="'+url+'" onload="this.parentElement.classList.remove(\'missing\')"><div class="stripFallback">'+svgScene(d.stages[0][0])+'</div></div>';
+}
 function person(x,y,shirt,s){return '<g transform="translate('+x+' '+y+') scale('+(s||1)+')" stroke="#35566a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M-10 25 L-13 48 M10 25 L13 48" stroke-width="7"/><path d="M-14 48 h10 M5 48 h11" stroke-width="5"/><path d="M-12 2 L-25 19 M12 2 L25 19" stroke-width="7"/><rect x="-16" y="-6" width="32" height="33" rx="12" fill="'+shirt+'"/><circle cx="0" cy="-23" r="19" fill="#ffdab8"/><path d="M-18 -25 Q-23 -48 2 -43 Q20 -42 19 -24 Q9 -37 -2 -36 Q-12 -28 -18 -25" fill="#344151"/><circle cx="-7" cy="-22" r="1.8" fill="#263649" stroke="none"/><circle cx="7" cy="-22" r="1.8" fill="#263649" stroke="none"/><path d="M-6 -14 Q0 -7 7 -14" fill="none" stroke="#ad6260" stroke-width="2"/></g>';}
 function sky(){return '<rect width="320" height="212" fill="#def5fa"/><circle cx="276" cy="35" r="20" fill="#ffdd75"/><path d="M24 48 q9 -18 25 -7 q19 -11 28 7z M184 40 q8 -15 19 -5 q16 -9 23 5z" fill="#fff"/><path d="M0 152 Q80 129 162 151 T320 148 L320 212 H0Z" fill="#bce5ca"/><path d="M0 179 H320" stroke="#9acaad" stroke-width="2"/><path d="M27 166 l-7 -5 M34 167 l5 -7 M284 174 l8 -8" stroke="#66b090" stroke-width="2"/>';}
 function room(){return '<rect width="320" height="212" fill="#fff5dd"/><rect y="155" width="320" height="57" fill="#e2c19a"/><path d="M0 155 H320" stroke="#b58f71" stroke-width="3"/><rect x="230" y="26" width="65" height="66" rx="6" fill="#dff2f9" stroke="#8ab1c4" stroke-width="4"/><path d="M263 27 v64 M232 59 h62" stroke="#8ab1c4" stroke-width="3"/>';}
@@ -98,8 +131,8 @@ function count(id){return state.summary.filter(function(x){return x.drill_id===i
 function topbar(){qs("signedIn").hidden=!state.person;qs("logout").hidden=!state.person;if(state.person)qs("signedIn").textContent=state.person.name+" · "+state.person.className}
 function board(){var h='<div class="titleRow"><h2>🏆 Leaderboard</h2><button class="btn small ghost" id="refreshBoard">↻ Refresh</button></div><p class="tip">Best marks from each of the six drills · Total /90</p><div style="overflow:auto"><table class="board"><thead><tr><th>#</th><th>Pupil</th><th>Drills</th><th>Best total</th></tr></thead><tbody>';if(!state.leaderboard.length)h+='<tr><td colspan="4" class="tip">No marked attempts yet.</td></tr>';state.leaderboard.forEach(function(p,i){h+='<tr><td class="rank">'+(i+1)+'</td><td><b>'+esc(p.name)+'</b><div class="tip">'+esc(p.className)+'</div></td><td>'+p.completed+'/6</td><td><b>'+p.total+'/90</b></td></tr>'});return h+'</tbody></table></div>'}
 function welcome(){screen.innerHTML='<section class="hero"><div><span class="chip">Year 2 · English Writing</span><h1>Look. Write. Improve. 🌟</h1><p>Six picture stories, friendly AI feedback, and unlimited writing practice.</p></div><div class="deco">🖼️✏️</div></section><div class="grid2"><section class="panel login"><h2>Enter your pupil code</h2><p class="tip">Use your Year 2 pupil code, or your registered tester code (TST- / TEST-).</p><form id="loginForm"><label for="code">Pupil code</label><input id="code" placeholder="Enter pupil code" required autocomplete="off" spellcheck="false" maxlength="22" value="'+esc(state.code)+'"><div class="buttons"><button class="btn primary" type="submit">Start writing →</button></div><p id="err" class="err '+(state.error?"":"hidden")+'">'+esc(state.error)+'</p></form><div class="note">You can attempt every drill again to improve your score. Your best mark counts towards the leaderboard.</div><div class="checklist"><span>✓ Punctuation 1</span><span>✓ Grammar 2</span><span>✓ Adjectives 1</span><span>✓ New details 1</span><span>Conjunctions optional</span></div></section><section class="panel" id="boardPanel">'+board()+'</section></div>'}
-function dashboard(){var p=state.person;var h='<section class="hero"><div><span class="chip">'+esc(p.className)+'</span>'+(p.isTester?'<span class="chip">Tester mode · excluded from pupil leaderboard</span>':'')+'<h1>Hello, '+esc(p.name.split(/\\s+/)[0])+'! 👋</h1><p>Choose a picture story and write about all three pictures. You can try every exercise more than once.</p></div><div class="deco">🌈📝</div></section><div class="titleRow"><h2>Choose a writing drill</h2><span class="chip">6 drills · 18 pictures</span></div><div class="cards">';DATA.forEach(function(d,i){h+='<article class="tile"><div class="art">'+svgScene(d.stages[0][0])+'</div><div class="txt"><span class="chip">Drill '+(i+1)+'</span><h3>'+esc(d.title)+'</h3><p>'+esc(d.prompt)+'</p><div class="tilefoot"><span class="tip">'+(count(d.id)?'Best '+best(d.id)+'/15 · '+count(d.id)+' attempt(s)':'Not attempted yet')+'</span><button class="btn small primary" data-open="'+d.id+'">Write →</button></div></div></article>'});h+='</div><div class="panel" style="margin-top:22px">'+board()+'</div>';screen.innerHTML=h}
-function picture(d,i){return '<div class="photo"><div class="phototop"><span class="num">'+(i+1)+'</span>'+svgScene(d.stages[i][0])+'</div><div class="cue">'+esc(d.stages[i][1])+'</div></div>'}
+function dashboard(){var p=state.person;var h='<section class="hero"><div><span class="chip">'+esc(p.className)+'</span>'+(p.isTester?'<span class="chip">Tester mode · excluded from pupil leaderboard</span>':'')+'<h1>Hello, '+esc(p.name.split(/\\s+/)[0])+'! 👋</h1><p>Choose a picture story and write about all three pictures. You can try every exercise more than once.</p></div><div class="deco">🌈📝</div></section><div class="titleRow"><h2>Choose a writing drill</h2><span class="chip">6 drills · 18 pictures</span></div><div class="cards">';DATA.forEach(function(d,i){h+='<article class="tile"><div class="art">'+stemPreview(d)+'</div><div class="txt"><span class="chip">Drill '+(i+1)+'</span><h3>'+esc(d.title)+'</h3><p>'+esc(d.prompt)+'</p><div class="tilefoot"><span class="tip">'+(count(d.id)?'Best '+best(d.id)+'/15 · '+count(d.id)+' attempt(s)':'Not attempted yet')+'</span><button class="btn small primary" data-open="'+d.id+'">Write →</button></div></div></article>'});h+='</div><div class="panel" style="margin-top:22px">'+board()+'</div>';screen.innerHTML=h}
+function picture(d,i){return '<div class="photo"><div class="phototop">'+stemPhoto(d,i)+'</div><div class="cue">'+esc(d.stages[i][1])+'</div></div>'}
 function formPaper(d){var guided=d.id==="d1"||d.id==="d2",ans=draft(d.id);
 if(!guided&&(ans[1].trim()||ans[2].trim())){ans=[ans.filter(function(x){return x.trim()}).join("\n"),"",""];saveDraft(d.id,ans)}
 var h='<div class="ribbon noPrint"><button class="btn light small" id="back">← All drills</button><span class="chip">'+esc(state.person.name)+' · '+(count(d.id)?count(d.id)+' previous attempt(s)':'New drill')+'</span></div><article class="paper"><h1 class="examtitle">PART 7</h1><div class="marks">[15 marks]</div><p class="instruction">'+esc(d.prompt)+' Use the words given to complete the message.</p><p class="scrollHint noPrint">Swipe left to see pictures 2 and 3 →</p><div class="photos">'+[0,1,2].map(function(i){return picture(d,i)}).join("")+'</div><div class="letter"><p>Dear '+esc(d.to)+',</p><p style="text-indent:18px">'+esc(d.intro)+'</p>';
