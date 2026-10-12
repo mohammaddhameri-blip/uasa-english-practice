@@ -62,6 +62,14 @@ var sections=[
 "What might you do if you finished your homework early?",
 "How would you spend a weekend with your family?",
 "Why might a pupil choose to join a school club?"
+]},
+{name:"I. Full Part 6 Tasks",fullTask:true,hint:"Each task has three prompts. One or two prompts use less predictable wording, so read carefully before writing.",questions:[
+"Your pencil case is missing and you think you left it at your friend Christine's home. Write an email to Christine asking her to help you find it. Write your email in 30–50 words.\n\nIn your email:\n• tell her when you last used it\n• describe your pencil case\n• suggest where she should look for it",
+"Your school is organising a holiday programme. Write an email to your friend Adam about an activity you would like to join. Write your email in 30–50 words.\n\nIn your email:\n• tell him when the programme starts\n• say which activity you would choose\n• explain why that activity is a good choice for you",
+"Your cousin Mira is joining your family on a short holiday. Write an email to Mira about the trip. Write your email in 30–50 words.\n\nIn your email:\n• tell her where your family is going\n• recommend one activity you can do there\n• explain what she should bring and why",
+"Your class will welcome a new pupil next week. Write an email to your friend Daniel about helping the new pupil. Write your email in 30–50 words.\n\nIn your email:\n• tell him when the new pupil will start school\n• suggest one way your class can make the pupil feel welcome\n• explain why it is important to help the pupil",
+"Your teacher has asked your class to plan an end-of-term party. Write an email to your friend Aina about your ideas. Write your email in 30–50 words.\n\nIn your email:\n• tell her where the party will be held\n• tell her what food you would like to bring\n• recommend one activity for the class and give a reason",
+"Your friend Jason missed the announcement about Sports Day. Write an email to Jason about the event. Write your email in 30–50 words.\n\nIn your email:\n• tell him when Sports Day will take place\n• advise him what to wear or bring\n• explain what he should do to prepare"
 ]}];
 
 var KEY="part6-drill-settings-v1";
@@ -82,7 +90,7 @@ function load(){var d,base=defaults();try{d=JSON.parse(localStorage.getItem(KEY)
 function saveStore(){localStorage.setItem(KEY,JSON.stringify({classes:state.classes,currentClass:state.currentClass}));}
 function roster(){var r=state.classes[state.currentClass];return Array.isArray(r)?r:[];}
 function currentQuestion(){return sections[state.section].questions[state.orders[state.section][state.index]];}
-function render(){var s=sections[state.section];el.questionLabel.textContent=s.name;el.questionText.textContent=currentQuestion();el.hintText.textContent=s.hint;el.progressText.textContent=(state.index+1)+" of "+s.questions.length;el.sectionSelect.value=String(state.section);el.prevBtn.disabled=state.section===0&&state.index===0;el.nextBtn.textContent=(state.section===sections.length-1&&state.index===s.questions.length-1)?"Start again ↻":"Next →";updateClassUI();}
+function render(){var s=sections[state.section];el.questionLabel.textContent=s.name;el.questionText.textContent=currentQuestion();el.questionText.classList.toggle("full-task",!!s.fullTask);el.hintText.textContent=s.hint;el.progressText.textContent=(state.index+1)+" of "+s.questions.length;el.sectionSelect.value=String(state.section);el.prevBtn.disabled=state.section===0&&state.index===0;el.nextBtn.textContent=(state.section===sections.length-1&&state.index===s.questions.length-1)?"Start again ↻":"Next →";updateClassUI();}
 function updateClassUI(){var list=roster(),cls=state.currentClass||"No class",disabled=!list.length;el.leftClass.textContent=cls;el.rightClass.textContent=cls;[el.callLeft,el.callRight,el.mobileCallLeft,el.mobileCallRight].forEach(function(b){b.disabled=disabled;});el.calledHistory.textContent=list.length?"Called this round: "+state.called.length+" / "+list.length:"Add pupil names in Settings";}
 function buildSections(){sections.forEach(function(s,i){var o=document.createElement("option");o.value=i;o.textContent=s.name;el.sectionSelect.appendChild(o);});}
 function next(){var len=sections[state.section].questions.length;if(state.index<len-1){state.index++;}else if(state.section<sections.length-1){state.section++;state.index=0;}else{state.section=0;state.index=0;}render();}
