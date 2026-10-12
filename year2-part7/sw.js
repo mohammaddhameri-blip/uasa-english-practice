@@ -1,4 +1,4 @@
-const CACHE='year2-part7-v7';
+const CACHE='year2-part7-v8';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./line-art.js','./line-art-play.js','./line-art-stories.js','./line-art-beach.js','./stem-playground.jpg','./stem-helping.jpg','./stem-birthday.jpg','./stem-sports.jpg','./stem-zoo.jpg','./stem-beach.jpg'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('year2-part7-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
