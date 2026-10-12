@@ -7,3 +7,34 @@ main{flex:1;padding:18px}.stage{max-width:1280px;margin:0 auto;display:grid;grid
 @media(max-width:900px){.stage{grid-template-columns:1fr}.phone-wrap{display:none}.mobile-phones{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mobile-phones button{border:0;border-radius:16px;background:#0f172a;color:#fff;padding:14px 10px;font-weight:900;min-height:64px}.mobile-phones span{display:block;font-size:12px;color:#cbd5e1;margin-top:4px}.question-card{min-height:330px;padding:24px 18px}.type-select{width:100%}.type-select select{max-width:none;flex:1}}
 @media(max-width:560px){header{padding:10px 12px}.brand p{display:none}.brand h1{font-size:16px}.head-actions span{display:none}main{padding:12px}.question-card{border-radius:18px;min-height:300px}.question{font-size:34px}.two-col{grid-template-columns:1fr}.nav .btn{flex:1}.progress{width:100%;text-align:right}.mobile-phones{grid-template-columns:1fr}.modal-body{padding:16px}.modal-actions{padding:0 16px 16px}.overlay{padding-left:10px;padding-right:10px}}
 .phone:focus-visible{outline:4px solid #60a5fa;outline-offset:4px}
+
+
+/* Year 2-style pupil call-out */
+.callout-backdrop{position:fixed;inset:0;background:#1b233675;display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
+.callout-backdrop.open{display:flex}
+.callout-phone{width:min(390px,94vw);background:#151a24;border:9px solid #2a3343;border-radius:38px;padding:13px;box-shadow:0 22px 70px #0006;position:relative}
+.callout-phone::before{content:"";display:block;width:105px;height:7px;border-radius:6px;background:#4b5567;margin:2px auto 12px}
+.callout-screen{min-height:570px;border-radius:25px;background:linear-gradient(180deg,#edf6ff,#ffffff 46%,#f7f0ff);padding:28px 20px 20px;text-align:center;position:relative;overflow:hidden}
+.callout-close{position:absolute;right:16px;top:13px;border:0;background:transparent;color:#667085;box-shadow:none;font-size:28px;padding:3px 8px}
+.callout-title{font-size:14px;letter-spacing:.16em;color:#7a8497;font-weight:900}
+.callout-class{font-size:14px;font-weight:900;color:#697386;margin-top:8px}
+.callout-avatar{width:94px;height:94px;border-radius:50%;background:#dff7ee;margin:20px auto 13px;display:grid;place-items:center;position:relative;color:#16a34a}
+.callout-avatar svg{width:47px;height:47px}
+.callout-phone.is-calling .callout-avatar::before,.callout-phone.is-calling .callout-avatar::after{content:"";position:absolute;inset:-7px;border:3px solid #79d1b0;border-radius:50%;animation:callPulse 1.35s infinite;opacity:0}
+.callout-phone.is-calling .callout-avatar::after{animation-delay:.45s}
+@keyframes callPulse{0%{transform:scale(.78);opacity:0}35%{opacity:.72}100%{transform:scale(1.38);opacity:0}}
+.callout-heading{font-size:27px;font-weight:800;color:#697386;margin:4px 0 8px}
+.callout-name{font-size:clamp(24px,6vw,34px);font-weight:900;line-height:1.15;color:#0f172a;min-height:116px;display:flex;align-items:center;justify-content:center;padding:0 4px;word-break:normal}
+.callout-name.cycling{color:#5d6780}
+.callout-name.selected{color:#0f172a}
+.callout-status{font-size:19px;font-weight:700;color:#64748b;min-height:28px}
+.callout-remaining{font-size:13px;line-height:1.35;color:#8a94a7;min-height:38px;margin-top:7px}
+.callout-actions{display:flex;justify-content:center;gap:38px;margin-top:12px}
+.callout-action{width:68px;height:68px;border:0;border-radius:50%;padding:0;display:grid;place-items:center;color:#fff}
+.callout-action svg{width:31px;height:31px}
+.callout-action.hangup{background:#e04f55}
+.callout-action.newcall{background:#16a34a}
+.callout-action:disabled{opacity:.38;cursor:not-allowed}
+.callout-labels{display:flex;justify-content:center;gap:40px;color:#7b8494;font-size:13px;font-weight:700;margin-top:5px}
+.callout-labels span{width:68px;text-align:center}
+@media(max-width:560px){.callout-screen{min-height:520px;padding-left:14px;padding-right:14px}.callout-phone{border-width:7px}.callout-name{font-size:25px;min-height:120px}}
