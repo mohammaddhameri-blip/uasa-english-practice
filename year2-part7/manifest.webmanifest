@@ -1,12 +1,12 @@
 {
-  "name": "Year 2 Picture Writing Lab",
-  "short_name": "Y2 Writing",
-  "description": "Interactive Year 2 English Part 7 drills and teacher marking",
+  "name": "Year 2 UASA Part 7 Writing",
+  "short_name": "Y2 Part 7",
+  "description": "Six UASA Part 7 picture-writing drills with AI marking, pupil login and leaderboard",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f8fc",
-  "theme_color": "#17324a",
+  "theme_color": "#283f82",
   "icons": [
     {
       "src": "./icon.svg",
