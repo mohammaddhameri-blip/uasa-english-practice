@@ -40,20 +40,25 @@ var DATA=[
 {id:"d2",title:"Helping at Home",icon:"🧹",to:"Amir",from:"Adam",intro:"How are you? Last Saturday, I helped my mother at home.",prompt:"You helped your mother at home last Saturday. Tell your friend Amir about it.",stages:[["sweep","swept – ground – broom"],["wash","washed – dishes – sink"],["plants","watered – plants – garden"]]},
 {id:"d3",title:"A Birthday Party",icon:"🎂",to:"Mei Mei",from:"Hana",intro:"How are you? Last Sunday, I went to my cousin's birthday party.",prompt:"You went to your cousin's birthday party last Sunday. Tell your friend Mei Mei about it.",stages:[["balloons","put up – balloons – colourful"],["sing","sang – birthday song – cake"],["cake","ate – cake – delicious"]]},
 {id:"d4",title:"School Sports Day",icon:"🏅",to:"Daniel",from:"Ben",intro:"How are you? Last Friday, I took part in my school sports day.",prompt:"You took part in your school sports day last Friday. Tell your friend Daniel about it.",stages:[["race","ran – race – fast"],["football","played – football – field"],["medal","finished – race – proud"]]},
-{id:"d5",title:"A Trip to the Zoo",icon:"🦜",to:"Khadijah",from:"Amin",intro:"How are you? Last Sunday, my family and I went to the zoo.",prompt:"You went to the zoo with your family last Sunday. Tell your friend Khadijah about it.",stages:[["parrots","saw – beautiful – parrots"],["lunch","ate – lunch – family"],["photos","took – photos – camera"]]},
+{id:"d5",title:"A Trip to the Zoo",icon:"🦜",to:"Khadijah",from:"Amin",intro:"How are you? Last Sunday, my family and I went to the zoo.",prompt:"You went to the zoo with your family last Sunday. Tell your friend Khadijah about it.",stages:[["koalas","saw – koalas – tree"],["lunch","sat – lunch – family"],["photos","took – photos – camel"]]},
 {id:"d6",title:"A Day at the Beach",icon:"🏖️",to:"Rachel",from:"Joey",intro:"How are you? Last Sunday, my family and I went to the beach.",prompt:"You went to the beach with your family last Sunday. Tell your friend Rachel about it.",stages:[["sandcastle","built – big – sandcastle"],["shells","collected – pretty – shells"],["picnic","had – picnic – family"]]}
 ];
-var STEM_STRIPS={d1:"stem-playground.jpg",d2:"stem-helping.jpg",d3:"stem-birthday.jpg",d4:"stem-sports.jpg",d5:"stem-zoo.jpg",d6:"stem-beach.jpg"};
+var STEM_STRIPS={d1:"stem-playground.jpg",d2:"stem-helping.jpg",d3:"stem-birthday.jpg",d4:"stem-sports.jpg",d5:"stem-zoo-koalas-camel.png",d6:"stem-beach.jpg"};
 var STEM_CUES={
  d1:["went – tall – slide","played – swings – friend","kicked – football – field"],
  d2:["made – bed – tidy","washed – dishes – sink","swept – floor – broom"],
  d3:["blew – candles – birthday cake","ate – pizza – friends","received – present – happy"],
  d4:["ran – race – fast","played – football – field","won – medal – proud"],
- d5:["saw – two – parrots","ate – lunch – family","took – photo – elephant"],
+ d5:["saw – koalas – tree","sat – lunch – family","took – photos – camel"],
  d6:["built – sandcastle – beach","swam – sea – happily","had – picnic – family"]
 };
 function stemPhoto(d,i){
  var src="./"+STEM_STRIPS[d.id];
+ if(d.id==='d5'){
+  // Frame bounds in the approved 1832 x 859 illustration; retain its proportions.
+  var frames=[[16,584],[617,599],[1233,584]],f=frames[i];
+  return '<div class="stripPanel" style="aspect-ratio:'+f[1]+'/650"><img alt="'+esc(['Two koalas on a tree','A family sitting together for lunch','A child taking photos of a camel'][i])+'" loading="eager" decoding="async" src="'+src+'" style="width:'+(1832/f[1]*100)+'%!important;height:'+(859/650*100)+'%!important;left:'+(-f[0]/f[1]*100)+'%;top:'+(-105/650*100)+'%" onerror="this.parentElement.classList.add(\'loadError\')"><span class="stemImageError">Picture failed to load. Please refresh the page.</span></div>';
+ }
  return '<div class="stripPanel"><img alt="'+esc(d.title)+': picture '+(i+1)+'" loading="eager" decoding="async" src="'+src+'" style="left:-'+(100*i)+'%" onerror="this.parentElement.classList.add(\'loadError\')"><span class="stemImageError">Picture failed to load. Please refresh the page.</span></div>';
 }
 function stemPreview(d){
