@@ -38,3 +38,41 @@ main{flex:1;padding:18px}.stage{max-width:1280px;margin:0 auto;display:grid;grid
 .callout-labels{display:flex;justify-content:center;gap:40px;color:#7b8494;font-size:13px;font-weight:700;margin-top:5px}
 .callout-labels span{width:68px;text-align:center}
 @media(max-width:560px){.callout-screen{min-height:520px;padding-left:14px;padding-right:14px}.callout-phone{border-width:7px}.callout-name{font-size:25px;min-height:120px}}
+
+
+/* Floating call-out trigger: left side */
+.callout-fab{
+  position:fixed;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:60;
+  width:58px;
+  height:58px;
+  border:3px solid #d6e3f4;
+  border-radius:50%;
+  background:rgba(255,255,255,.97);
+  color:#2563eb;
+  box-shadow:0 10px 28px rgba(35,66,105,.22);
+  display:grid;
+  place-items:center;
+  padding:0;
+  cursor:pointer;
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+}
+.callout-fab svg{width:34px;height:34px;fill:currentColor}
+.callout-fab:hover,.callout-fab:focus-visible{
+  border-color:#9bb7ff;
+  box-shadow:0 12px 32px rgba(79,124,255,.28);
+  outline:none;
+}
+.callout-fab:active{transform:translateY(-50%) scale(.94)}
+/* The floating icon replaces the old large side-phone triggers. */
+.phone-wrap,.mobile-phones{display:none !important}
+.stage{grid-template-columns:minmax(0,1fr) !important;max-width:980px}
+@media(max-width:560px){
+  .callout-fab{left:8px;width:52px;height:52px}
+  .callout-fab svg{width:30px;height:30px}
+  main{padding-left:66px}
+}
