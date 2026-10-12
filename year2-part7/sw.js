@@ -1,5 +1,5 @@
-const CACHE='year2-part7-v5';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./line-art.js','./line-art-play.js','./line-art-stories.js','./line-art-beach.js'];
+const CACHE='year2-part7-v7';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./line-art.js','./line-art-play.js','./line-art-stories.js','./line-art-beach.js','./stem-playground.jpg','./stem-helping.jpg','./stem-birthday.jpg','./stem-sports.jpg','./stem-zoo.jpg','./stem-beach.jpg'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('year2-part7-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==location.origin||!url.pathname.includes('/year2-part7/'))return;event.respondWith(fetch(event.request).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}return response;}).catch(()=>caches.match(event.request)));});
