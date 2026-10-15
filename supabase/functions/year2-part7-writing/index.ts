@@ -132,7 +132,7 @@ function publicStudent(s){return {name:s.display_name,className:s.class_name,cod
 // Their full registered name remains unchanged in the database and login.
 function leaderboardGivenName(fullName){
  const tokens=String(fullName||"").trim().split(/\s+/).filter(Boolean);
- const generic=/^(?:mohammad|mohamad|mohammed|mohamed|muhammad|muhamad|muhammed|muhamed|mohd|muhd|md|mhd)$/i;
+ const generic=/^(?:mohammad|mohamad|mohammed|mohamed|muhammad|muhamad|muhammed|muhamed|mohd|muhd|md|mhd|nur|nurul)$/i;
  const given=tokens.find(token=>!generic.test(token.replace(/[.\u2019'\u002c]/g,"")));
  return given||"Pupil";
 }
