@@ -110,7 +110,7 @@ const spells=[["It has long ears and likes carrots.","r"],["It has a hard shell 
 const bank=["party","balloons","cake","games","gave","garden"];
 const cloze=[26,27,28,29,30];
 const cues=["saw - beautiful - butterflies","ate - sandwiches - family","played - football - brother"];
-const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters, full stops and commas","Sequencing connector","Joining word (and / with)"];
+const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters, full stops and commas","Sequencing connector","Language: conjunction or preposition"];
 const instructions=[
 "Read the text in each question carefully. Choose the correct answer A, B or C.",
 "Read the passage and choose the correct word for each blank.",
@@ -118,7 +118,7 @@ const instructions=[
 "Read the descriptions of places A, B and C. Match each sentence to a place.",
 "Read the animal descriptions. The first letter is given. Type the whole word, or the missing letters.",
 "Complete the message using five words from the word bank.",
-"Look at the three pictures. Write complete sentences using all three word cues for each picture. For full marks, start Picture 1 with First, Picture 2 with Next, and Picture 3 with Then, using a comma after each connector. Use and or with meaningfully in every picture's writing. Remember capital letters, full stops and commas."
+"Look at the three pictures. Write complete sentences using all three word cues for each picture. For full marks, you must start Picture 1 with First, Picture 2 with Next, and Picture 3 with Then, using a comma after each connector. For each picture, use at least one conjunction (and) OR a preposition (with, in, at, under, on) correctly. Remember capital letters, full stops and commas."
 ];
 let S={code:"",name:"",className:"",isTester:false,part:0,ans:{},writing:["","",""],started:0,submitted:false,submitting:false,autoTried:false,submissionId:"",serverResult:null};
 let clockInterval,boardShowingTesters=false;
@@ -258,7 +258,7 @@ function htmlPart(p){
  '<div class="grid3">'+cues.map((c,i)=>'<div class="illustration">'+trialPicture(i)+'<div class="caption"><strong>Picture '+(i+1)+'</strong><br><span class="tag">'+esc(c)+'</span></div></div>').join("")+'</div>'+
  '<div class="prompt">Dear Hana,<br><br>How are you? Last Sunday, my family and I went to the park.</div>'+
  cues.map((cue,i)=>'<label for="write'+i+'">Picture '+(i+1)+' — '+esc(cue)+'</label><textarea id="write'+i+'" placeholder="Write a sentence or sentences about picture '+(i+1)+'..." oninput="updatePictureAnswer('+i+',this.value)">'+esc(S.writing[i]||"")+'</textarea>').join("")+
- '<div class="prompt">Your friend,<br>Ali</div><p class="hint">5 marks per picture: use all 3 cues (1), clear meaning (1), punctuation (1), First / Next / Then (1), and a joining word such as and or with (1).</p>';
+ '<div class="prompt">Your friend,<br>Ali</div><p class="hint">5 marks per picture: use all 3 cues (1), clear meaning (1), punctuation (1), First / Next / Then (1), and at least one correctly used conjunction (and) OR preposition (with, in, at, under, on) (1).</p>';
 }
 function changePart(d){goto(S.part+d)}
 function goto(p){if(p<0||p>6)return;S.part=p;save();render();window.scrollTo({top:0,behavior:"smooth"})}
