@@ -88,13 +88,13 @@ const spells=[["It has long ears and likes carrots.","rabbit"],["It has a hard s
 const bank=["party","balloons","cake","games","gave","garden"];
 const cloze=["party","balloons","cake","games","gave"];
 const cues=["saw - beautiful - butterflies","ate - sandwiches - family","played - football - brother"];
-const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters and full stops","Sequencing connector","Conjunction"];
+const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters, full stops and commas","Sequencing connector","Conjunction"];
 const instructions=[
 "Read the text in each question carefully. Choose the correct answer A, B or C.",
 "Read the passage and choose the correct word for each blank.",
 "Read the passage and choose the correct answer for each question.",
 "Read the descriptions of places A, B and C. Match each sentence to a place.",
-"Read the animal descriptions. Write the word. The first letter is given.",
+"Read the animal descriptions. The first letter is given. Type the whole word, or the missing letters.",
 "Complete the message using five words from the word bank.",
 "Use the words under each picture to complete the message. Write sentences with capital letters and full stops."
 ];
@@ -183,14 +183,14 @@ function finish(){
 function scoreBase(){
  let parts=[0,0,0,0,0,0,0];
  for(let i=0;i<20;i++)if(S.ans["q"+(i+1)]===mc[i].a)parts[i<5?0:i<9?1:i<14?2:3]++;
- for(let i=0;i<5;i++)if(norm(S.ans["q"+(i+21)])===spells[i][1])parts[4]++;
+ for(let i=0;i<5;i++){let v=norm(S.ans["q"+(i+21)]);if(v===spells[i][1]||v===spells[i][1].slice(1))parts[4]++;}
  for(let i=0;i<5;i++)if(norm(S.ans["q"+(i+26)])===cloze[i])parts[5]+=2;
  parts[6]=(S.rubric||[]).reduce((acc,a)=>acc+(Array.isArray(a)?a.filter(Boolean).length:0),0);
  return parts;
 }
 function norm(s){return String(s||"").trim().toLowerCase()}
 function countMarked(){return(S.rubric||[]).reduce((sum,a)=>sum+(Array.isArray(a)?a.filter(Boolean).length:0),0)}
-function setMark(i,j,v){S.rubric[i][j]=v;save();renderResult()}
+function setMark(i,j,v){S.rubric[i][j]=v;S.reviewed=false;save();renderResult()}
 function renderResult(){
  let p=scoreBase(),base=p.slice(0,6).reduce((a,b)=>a+b,0),final=base+p[6];
  let allReviewed=(S.reviewed===true);
