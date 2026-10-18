@@ -46,6 +46,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 /* Picture-writing artwork: use matching black-and-white Year 2 tile artwork. */
 .trialScene{position:relative;width:100%;aspect-ratio:1;overflow:hidden;background:white}
 .trialScene>img{position:absolute;max-width:none!important;display:block;width:300%;height:100%;object-fit:fill}
+.trialScene>img[hidden]{display:none!important}
 .trialScene>svg,.trialFallback,.trialFallback svg{display:block;width:100%;height:100%;aspect-ratio:auto}
 .trialFallback{position:absolute;inset:0;background:white}
 .trialFallback[hidden]{display:none!important}
@@ -117,7 +118,7 @@ const instructions=[
 "Read the descriptions of places A, B and C. Match each sentence to a place.",
 "Read the animal descriptions. The first letter is given. Type the whole word, or the missing letters.",
 "Complete the message using five words from the word bank.",
-"Look at the three pictures. Write complete sentences using all three word cues for each picture. For full marks, begin Picture 1 with First, Picture 2 with Next, and Picture 3 with Then. Use and or with in your writing for every picture. Remember capital letters, full stops and commas."
+"Look at the three pictures. Write complete sentences using all three word cues for each picture. For full marks, start Picture 1 with First, Picture 2 with Next, and Picture 3 with Then, using a comma after each connector. Use and or with meaningfully in every picture's writing. Remember capital letters, full stops and commas."
 ];
 let S={code:"",name:"",className:"",isTester:false,part:0,ans:{},writing:["","",""],started:0,submitted:false,submitting:false,autoTried:false,submissionId:"",serverResult:null};
 let clockInterval,boardShowingTesters=false;
