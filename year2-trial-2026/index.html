@@ -43,50 +43,52 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 <div class="kicker">UASA-Style Practice Exam</div><h2>Year 2 English Trial Paper</h2>
 <p>This practice paper follows the same 7-part structure as the official exam. The passages, questions and pictures are different.</p>
 <div class="two"><div class="mini"><strong>Time</strong>1 hour 15 minutes</div><div class="mini"><strong>Total</strong>50 marks</div></div>
-<label for="pupil">Pupil's name</label><input type="text" id="pupil" autocomplete="name" placeholder="Enter your name" maxlength="80">
-<label for="className">Class</label><input type="text" id="className" placeholder="Example: 2 Terbilang" maxlength="45">
-<p class="hint">Your progress is saved on this device. Parts 1–6 are marked automatically. Part 7 requires teacher review.</p>
-<button class="primary" id="start" onclick="startExam()">Start Exam →</button>
+<label for="pupilCode">Pupil code / tester code</label><input type="text" id="pupilCode" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="Enter your assigned pupil code or TST-012" maxlength="22">
+<p class="hint">Use your existing Year 2 school code. All 12 tester codes (TST-001 to TST-012) are accepted. Progress is saved separately for each code on this device. Part 7 is AI-marked using the exam-specific writing rubric.</p>
+<p id="loginError" style="color:#ac3131" role="alert"></p>
+<div class="actions"><button class="primary" id="start" onclick="startExam()">Log in &amp; Start →</button><button class="secondary" onclick="openBoard()">🏆 Public leaderboard</button></div>
 </section>
 <section id="exam" class="lay">
 <aside class="sidebar" id="nav"></aside>
 <main class="pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="partTitle"></h2><span class="pill" id="partMarks"></span></div>
-<div id="content"></div>
+<div id="content"></div><p id="submitStatus" role="status" style="color:#245a9d"></p>
 <div class="actions"><button class="secondary" id="prev" onclick="changePart(-1)">← Previous</button><span class="hint" id="steps"></span><button class="primary" id="next" onclick="changePart(1)">Next →</button></div>
 </main></section>
 <section id="result" class="card"></section>
+<section id="leaderboard" class="card" style="max-width:900px;margin:auto"></section>
 <div class="bottomnote">Made for educational practice · Not the official examination paper</div>
 </div>
 <script>
 "use strict";
-const KEY="year2_uasa_trial_2026_v1";
+const KEY="year2_uasa_trial_2026_v2",SESSION_KEY="year2_uasa_trial_active";
+const API="https://qekcgsfeomjckctiubgm.supabase.co/functions/v1/year2-uasa-trial",PUBKEY="sb_publishable_yJbCYOLDeMreuqM01g_oqA_eF5YEWwq";
 const partNames=["Short Texts","Grammar Cloze","Reading","Matching","Spelling","Message","Picture Writing"];
 const max=[5,4,5,6,5,10,15];
 const mc=[
-{n:1,kind:"Notice",text:"The Book Shop is open from 9 a.m. to 5 p.m. Come and buy storybooks and colouring books!",q:"What can you buy at the shop?",opts:["Shoes","Books","Cakes"],a:"B"},
-{n:2,kind:"Dear Mum,",text:"I am going to the swimming pool with Sara. We will swim together. I will be home at 4 o'clock.\n\nLove,\nNina",q:"Where is Nina going?",opts:["The library","The playground","The swimming pool"],a:"C"},
-{n:3,kind:"Notice",text:"The school bus leaves at seven o'clock tomorrow morning. Please come to school early.",q:"When will the bus leave?",opts:["At 7 o'clock","At 8 o'clock","At 9 o'clock"],a:"A"},
-{n:4,kind:"Notice",text:"There is a sports day on Thursday. Please wear your sports shoes and bring a bottle of water.",q:"What should pupils bring?",opts:["A toy","A bottle of water","A storybook"],a:"B"},
-{n:5,kind:"Hi Arif,",text:"I am at the playground. My sister is on the swing. I am going down the slide. My father is sitting on a bench. See you soon!\n\nTom",q:"What is Tom doing?",opts:["Going down the slide","Sitting on a bench","Playing on the swing"],a:"A"},
-{n:6,q:"(6) I wake up ___ eight o'clock.",opts:["on","at","in"],a:"B"},
-{n:7,q:"(7) I help my mother in the ___.",opts:["kitchen","bedroom","bathroom"],a:"A"},
-{n:8,q:"(8) My brother and I ___ our bicycles.",opts:["riding","rides","ride"],a:"C"},
-{n:9,q:"(9) We ___ happy.",opts:["am","is","are"],a:"C"},
-{n:10,q:"When did Amir visit the garden?",opts:["On Monday","On Friday","On Sunday"],a:"B"},
-{n:11,q:"How did the class go there?",opts:["They walked","By bus","By car"],a:"A"},
-{n:12,q:"What did they see in the pond?",opts:["Ducks","Frogs","Fish"],a:"C"},
-{n:13,q:"What did Amir eat for lunch?",opts:["Rice and chicken","Bread and eggs","Noodles"],a:"A"},
-{n:14,q:"What did Amir use to water the plants?",opts:["A bucket","A watering can","A bottle"],a:"B"},
-{n:15,q:"This place has a swing.",a:"C"},
-{n:16,q:"You can borrow a storybook here.",a:"A"},
-{n:17,q:"Children can swim here.",a:"B"},
-{n:18,q:"You can read quietly here.",a:"A"},
-{n:19,q:"This place has a slide.",a:"C"},
-{n:20,q:"You can play in the water here.",a:"B"}
+{n:1,kind:"Notice",text:"The Book Shop is open from 9 a.m. to 5 p.m. Come and buy storybooks and colouring books!",q:"What can you buy at the shop?",opts:["Shoes","Books","Cakes"]},
+{n:2,kind:"Dear Mum,",text:"I am going to the swimming pool with Sara. We will swim together. I will be home at 4 o'clock.\n\nLove,\nNina",q:"Where is Nina going?",opts:["The library","The playground","The swimming pool"]},
+{n:3,kind:"Notice",text:"The school bus leaves at seven o'clock tomorrow morning. Please come to school early.",q:"When will the bus leave?",opts:["At 7 o'clock","At 8 o'clock","At 9 o'clock"]},
+{n:4,kind:"Notice",text:"There is a sports day on Thursday. Please wear your sports shoes and bring a bottle of water.",q:"What should pupils bring?",opts:["A toy","A bottle of water","A storybook"]},
+{n:5,kind:"Hi Arif,",text:"I am at the playground. My sister is on the swing. I am going down the slide. My father is sitting on a bench. See you soon!\n\nTom",q:"What is Tom doing?",opts:["Going down the slide","Sitting on a bench","Playing on the swing"]},
+{n:6,q:"(6) I wake up ___ eight o'clock.",opts:["on","at","in"]},
+{n:7,q:"(7) I help my mother in the ___.",opts:["kitchen","bedroom","bathroom"]},
+{n:8,q:"(8) My brother and I ___ our bicycles.",opts:["riding","rides","ride"]},
+{n:9,q:"(9) We ___ happy.",opts:["am","is","are"]},
+{n:10,q:"When did Amir visit the garden?",opts:["On Monday","On Friday","On Sunday"]},
+{n:11,q:"How did the class go there?",opts:["They walked","By bus","By car"]},
+{n:12,q:"What did they see in the pond?",opts:["Ducks","Frogs","Fish"]},
+{n:13,q:"What did Amir eat for lunch?",opts:["Rice and chicken","Bread and eggs","Noodles"]},
+{n:14,q:"What did Amir use to water the plants?",opts:["A bucket","A watering can","A bottle"]},
+{n:15,q:"This place has a swing."},
+{n:16,q:"You can borrow a storybook here."},
+{n:17,q:"Children can swim here."},
+{n:18,q:"You can read quietly here."},
+{n:19,q:"This place has a slide."},
+{n:20,q:"You can play in the water here."}
 ];
-const spells=[["It has long ears and likes carrots.","rabbit"],["It has a hard shell and moves slowly.","turtle"],["It lives in the sea and can jump out of the water.","dolphin"],["It has a very long neck and spots.","giraffe"],["It has black and white stripes.","zebra"]];
+const spells=[["It has long ears and likes carrots.","r"],["It has a hard shell and moves slowly.","t"],["It lives in the sea and can jump out of the water.","d"],["It has a very long neck and spots.","g"],["It has black and white stripes.","z"]];
 const bank=["party","balloons","cake","games","gave","garden"];
-const cloze=["party","balloons","cake","games","gave"];
+const cloze=[26,27,28,29,30];
 const cues=["saw - beautiful - butterflies","ate - sandwiches - family","played - football - brother"];
 const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters, full stops and commas","Sequencing connector","Conjunction"];
 const instructions=[
@@ -98,27 +100,54 @@ const instructions=[
 "Complete the message using five words from the word bank.",
 "Use the words under each picture to complete the message. Write sentences with capital letters and full stops."
 ];
-let S={name:"",className:"",part:0,ans:{},writing:["","",""],rubric:[Array(5).fill(false),Array(5).fill(false),Array(5).fill(false)],started:0,submitted:false};
-let clockInterval;
+let S={code:"",name:"",className:"",isTester:false,part:0,ans:{},writing:["","",""],started:0,submitted:false,submitting:false,autoTried:false,submissionId:"",serverResult:null};
+let clockInterval,boardShowingTesters=false;
 function el(id){return document.getElementById(id)}
 function esc(t){return String(t??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function get(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.name&&typeof s.started==="number"){S=Object.assign(S,s);return true}}catch(e){}return false}
-function show(page){["welcome","exam","result"].forEach(id=>el(id).style.display=id===page?(id==="exam"?"grid":"block"):"none")}
-function startExam(){
- const n=el("pupil").value.trim(),cl=el("className").value.trim();
- if(!n||!cl){alert("Please enter your name and class.");return}
- S={name:n,className:cl,part:0,ans:{},writing:["","",""],rubric:[Array(5).fill(false),Array(5).fill(false),Array(5).fill(false)],started:Date.now(),submitted:false};
+function cacheKey(code){return KEY+"_"+encodeURIComponent(code)}
+function save(){
+ if(!S.code)return;
+ try{const v={...S};delete v.code;delete v.submitting;localStorage.setItem(cacheKey(S.code),JSON.stringify(v))}catch(e){}
+}
+function get(code){
+ try{
+  const s=JSON.parse(localStorage.getItem(cacheKey(code)));
+  if(s&&s.name&&typeof s.started==="number"&&s.started>0){S={...S,...s,code,submitting:false};return true}
+ }catch(e){}
+ return false;
+}
+function show(page){["welcome","exam","result","leaderboard"].forEach(id=>el(id).style.display=id===page?(id==="exam"?"grid":"block"):"none")}
+async function api(data){
+ const response=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","apikey":PUBKEY},body:JSON.stringify(data)});
+ const body=await response.json().catch(()=>({}));
+ if(!response.ok||body.success===false)throw Error(body.error||"Unable to reach the exam service.");
+ return body;
+}
+function identity(code,pupil,restored){
+ const old=S;
+ if(!restored)S={code,name:pupil.name,className:pupil.className,isTester:pupil.isTester,part:0,ans:{},writing:["","",""],started:Date.now(),submitted:false,submitting:false,autoTried:false,submissionId:"",serverResult:null};
+ else S={...old,code,name:pupil.name,className:pupil.className,isTester:pupil.isTester,submitting:false};
+ try{sessionStorage.setItem(SESSION_KEY,code)}catch(e){}
  save();render();tick();
+}
+async function startExam(){
+ const inp=el("pupilCode"),code=(inp.value||"").trim().toUpperCase().replace(/\s+/g,"");
+ if(!code){el("loginError").textContent="Enter your pupil code first.";return}
+ const btn=el("start");btn.disabled=true;btn.textContent="Checking code...";el("loginError").textContent="";
+ try{
+  const x=await api({action:"login",pupilCode:code});
+  const restored=get(code);
+  identity(code,x.pupil,restored);
+ }catch(e){el("loginError").textContent=e.message}
+ finally{btn.disabled=false;btn.textContent="Log in & Start →"}
 }
 function tick(){
  clearInterval(clockInterval);
  const update=()=>{
- if(!S.started)return;
- let rest=Math.max(0,75*60-Math.floor((Date.now()-S.started)/1000));
- const hh=Math.floor(rest/3600),mm=Math.floor((rest%3600)/60),ss=rest%60;
- el("time").textContent=[hh,mm,ss].map(x=>String(x).padStart(2,"0")).join(":");
- if(rest===0&&!S.submitted){S.submitted=true;save();render()}
+  if(!S.started||S.submitted||!S.code)return;
+  const rest=Math.max(0,75*60-Math.floor((Date.now()-S.started)/1000));
+  el("time").textContent=[Math.floor(rest/3600),Math.floor(rest%3600/60),rest%60].map(x=>String(x).padStart(2,"0")).join(":");
+  if(rest===0&&!S.autoTried&&!S.submitting){S.autoTried=true;save();finish(true)}
  };
  update();clockInterval=setInterval(update,1000);
 }
@@ -135,7 +164,7 @@ function nav(){
  for(let p=0;p<7;p++){
  let range=p===0?"1–5":p===1?"6–9":p===2?"10–14":p===3?"15–20":p===4?"21–25":p===5?"26–30":"Writing";
  out+='<button class="'+(p===S.part?"active":"")+'" onclick="goto('+p+')">Part '+(p+1)+' <small>'+esc(partNames[p])+' · '+range+'</small></button>';
- }el("nav").innerHTML=out;
+ }out+='<button onclick="openBoard()">🏆 Leaderboard</button><button onclick="switchUser()">⇄ Switch pupil</button>';el("nav").innerHTML=out;
 }
 function chooseHTML(d){
  let opts=d.opts||["The Library","The Swimming Pool","The Playground"];
@@ -165,49 +194,104 @@ function htmlPart(p){
 function changePart(d){goto(S.part+d)}
 function goto(p){if(p<0||p>6)return;S.part=p;save();render();window.scrollTo({top:0,behavior:"smooth"})}
 function render(){
- if(!S.started){show("welcome");return}
+ if(!S.code||!S.started){show("welcome");return}
  if(S.submitted){show("result");renderResult();return}
  show("exam");nav();
  el("partTitle").textContent="Part "+(S.part+1)+" — "+partNames[S.part];
  el("partMarks").textContent=max[S.part]+" marks";
  el("content").innerHTML=htmlPart(S.part);
+ const expired=Date.now()-S.started>=75*60*1000;
+ if(expired){el("content").querySelectorAll("input,textarea").forEach(x=>x.disabled=true)}
  el("prev").disabled=S.part===0;
- el("next").textContent=S.part===6?"Finish Exam ✓":"Next →";
- el("next").onclick=S.part===6?finish:()=>changePart(1);
- el("steps").textContent="Part "+(S.part+1)+" of 7 · "+esc(S.name);
+ el("next").textContent=S.part===6?(expired?"Submit saved work →":"Finish Exam ✓"):"Next →";
+ el("next").onclick=S.part===6?()=>finish(false):()=>changePart(1);
+ el("next").disabled=Boolean(S.submitting);
+ el("steps").textContent="Part "+(S.part+1)+" of 7 · "+S.name;
 }
-function finish(){
- if(!confirm("Submit your trial exam? You will not be able to edit your answers afterwards."))return;
- S.submitted=true;save();render();window.scrollTo(0,0);
+function uuid(){
+ if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
+ return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{
+  const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16);
+ });
 }
-function scoreBase(){
- let parts=[0,0,0,0,0,0,0];
- for(let i=0;i<20;i++)if(S.ans["q"+(i+1)]===mc[i].a)parts[i<5?0:i<9?1:i<14?2:3]++;
- for(let i=0;i<5;i++){let v=norm(S.ans["q"+(i+21)]);if(v===spells[i][1]||v===spells[i][1].slice(1))parts[4]++;}
- for(let i=0;i<5;i++)if(norm(S.ans["q"+(i+26)])===cloze[i])parts[5]+=2;
- parts[6]=(S.rubric||[]).reduce((acc,a)=>acc+(Array.isArray(a)?a.filter(Boolean).length:0),0);
- return parts;
+async function finish(auto=false){
+ if(S.submitting||S.submitted||!S.code)return;
+ if(!auto&&!confirm("Submit your answers for server marking? You cannot change them after submission."))return;
+ S.submitting=true;
+ if(!S.submissionId)S.submissionId=uuid();
+ save();
+ if(el("next"))el("next").disabled=true;
+ if(el("submitStatus"))el("submitStatus").textContent="Saving your exam and marking Part 7. Please wait...";
+ try{
+  const objective=Array.from({length:20},(_,i)=>S.ans["q"+(i+1)]||"");
+  const words=Array.from({length:10},(_,i)=>S.ans["q"+(i+21)]||"");
+  const resp=await api({action:"submit",pupilCode:S.code,submissionId:S.submissionId,objectiveAnswers:objective,wordAnswers:words,
+   writingAnswers:S.writing,elapsedSeconds:Math.min(4500,Math.floor((Date.now()-S.started)/1000))});
+  S.serverResult=resp;S.submitted=true;S.submitting=false;save();render();window.scrollTo(0,0);
+ }catch(e){
+  S.submitting=false;S.submitError=e.message;save();
+  render();
+  if(el("submitStatus"))el("submitStatus").textContent="⚠ "+e.message+" You can retry. Your answers are saved.";
+  if(!auto)alert(e.message+" Your answers are saved on this device.");
+ }
 }
-function norm(s){return String(s||"").trim().toLowerCase()}
-function countMarked(){return(S.rubric||[]).reduce((sum,a)=>sum+(Array.isArray(a)?a.filter(Boolean).length:0),0)}
-function setMark(i,j,v){S.rubric[i][j]=v;S.reviewed=false;save();renderResult()}
 function renderResult(){
- let p=scoreBase(),base=p.slice(0,6).reduce((a,b)=>a+b,0),final=base+p[6];
- let allReviewed=(S.reviewed===true);
- let out='<div class="kicker">Trial Exam Results</div><h2>'+esc(S.name)+' · '+esc(S.className)+'</h2><div class="statusbox"><div class="muted">Parts 1–6 (automatically marked)</div><div class="score">'+base+' / 35</div><div class="muted">Part 7: '+(allReviewed? p[6]+' / 15':'Awaiting teacher review (15 marks)')+'</div>'+(allReviewed?'<h2>Total: '+final+' / 50 · '+(final*2)+'%</h2>':'<p><strong>Total /50:</strong> Incomplete until Part 7 is reviewed.</p>')+'</div>';
- out+='<h3 style="margin-top:22px">Part-by-part scores</h3><div class="grid3">'+p.map((x,i)=>'<div class="mini"><strong>Part '+(i+1)+'</strong>'+(!allReviewed&&i===6?'Pending':x+' / '+max[i])+'</div>').join("")+'</div>';
- out+='<h3 style="margin-top:26px">Part 7 — Teacher review</h3><p class="hint">Tick each criterion only when it is met in the pupil’s writing. The same five criteria apply to all three pictures. This is manual review, not AI scoring.</p>';
- out+=cues.map((cue,i)=>'<div class="context-card"><h3>Picture '+(i+1)+' — '+esc(cue)+'</h3><div class="prompt">'+esc(S.writing[i]||"(No answer)")+'</div>'+rlabels.map((label,j)=>'<label class="rubric" style="margin:0;font-weight:500">'+esc(label)+' (1 mark)<input type="checkbox" '+(S.rubric[i][j]?'checked':'')+' onchange="setMark('+i+','+j+',this.checked)"></label>').join("")+'</div>').join("");
- out+='<div class="actions"><button class="secondary" onclick="downloadResult()">⬇ Export results (JSON)</button><button class="primary" onclick="approveMarking()">Approve Part 7 Marking</button><button class="danger" onclick="newAttempt()">New attempt</button></div>';
- if(allReviewed)out+='<p class="hint">Teacher review approved. Changes to rubric checkboxes update the scores; approve again to confirm revisions.</p>';
+ const d=S.serverResult||{},s=d.scores;
+ let out='<div class="kicker">Server-marked trial exam</div><h2>'+esc(S.name)+' · '+esc(S.className)+(S.isTester?' <span class="tag">Tester</span>':'')+'</h2>';
+ if(!s){
+  out+='<p>We could not restore your submitted score on this device. Your saved answers are still here.</p><button class="secondary" onclick="S.submitted=false;save();render()">Return to saved answers</button>';
+  el("result").innerHTML=out;return;
+ }
+ out+='<div class="statusbox"><div class="muted">Total mark</div><div class="score">'+Number(s.total)+' / 50</div><h3>'+Number(s.total)*2+'%</h3><p class="hint">Parts 1–6 were automatically marked; Part 7 was AI-marked using the agreed exam-specific five-mark-per-picture rubric.</p></div>';
+ const groups=[["Parts 1–4",s.objective,20],["Part 5",s.spelling,5],["Part 6",s.cloze,10],["Part 7",s.writing,15]];
+ out+='<h3 style="margin-top:25px">Scores</h3><div class="grid3">'+groups.map(g=>'<div class="mini"><strong>'+g[0]+'</strong>'+g[1]+' / '+g[2]+'</div>').join("")+'</div>';
+ out+='<h3 style="margin-top:25px">Part 7 writing feedback</h3>';
+ out+=(d.feedback||[]).map((f,i)=>'<div class="context-card"><h3>Picture '+(i+1)+' — '+f.score+'/5</h3><p>'+esc(f.feedback)+'</p><p class="hint">'+rlabels.map((v,j)=>esc(v)+': '+(Number(f[["word_cues","meaning","punctuation","sequencing","conjunction"][j]])===1?'✓':'✗')).join(' · ')+'</p></div>').join("");
+ if(S.isTester)out+='<p class="hint">Tester scores are not shown in the main pupil leaderboard. Use “Show testers” on the leaderboard to view them.</p>';
+ out+='<div class="actions"><button class="secondary" onclick="openBoard()">🏆 Public leaderboard</button><button class="secondary" onclick="downloadResult()">⬇ Save result</button><button class="primary" onclick="newAttempt()">Try again</button><button class="secondary" onclick="switchUser()">Switch pupil</button></div>';
  el("result").innerHTML=out;
 }
-function approveMarking(){if(!confirm("Approve the selected Part 7 scores as the teacher review?"))return;S.reviewed=true;save();renderResult()}
 function downloadResult(){
- let p=scoreBase();const report={paper:"Year 2 English UASA Trial 2026",name:S.name,className:S.className,date:new Date(S.started).toISOString(),answers:S.ans,writing:S.writing,writingRubric:S.rubric,approved:S.reviewed||false,parts:p,baseScore:p.slice(0,6).reduce((a,b)=>a+b,0),total:(S.reviewed?p.reduce((a,b)=>a+b,0):null)};
- const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Year2_UASA_Trial_"+S.name.replace(/[^A-Za-z0-9_-]/g,"_")+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ const d={paper:"Year 2 English UASA Trial 2026",name:S.name,className:S.className,marked:S.submitted,
+   date:new Date(S.started).toISOString(),scores:S.serverResult?.scores||null,feedback:S.serverResult?.feedback||[],writing:S.writing};
+ const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="Year2_UASA_Trial_"+S.name.replace(/[^A-Za-z0-9_-]/g,"_")+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function newAttempt(){if(!confirm("Delete this attempt from this device and start over? Export your results first if needed."))return;localStorage.removeItem(KEY);location.reload()}
-if(get()){if(!Array.isArray(S.rubric)||S.rubric.length!==3)S.rubric=[Array(5).fill(false),Array(5).fill(false),Array(5).fill(false)];render();tick()}
+function newAttempt(){
+ if(!confirm("Start a new attempt? Your previous result will stay on the public leaderboard."))return;
+ const {code,name,className,isTester}=S;
+ S={code,name,className,isTester,part:0,ans:{},writing:["","",""],started:Date.now(),submitted:false,submitting:false,autoTried:false,submissionId:"",serverResult:null};
+ save();render();tick();window.scrollTo(0,0);
+}
+function switchUser(){
+ if(S.submitting){alert("Please wait for marking to finish.");return}
+ try{sessionStorage.removeItem(SESSION_KEY)}catch(e){}
+ S={code:"",name:"",className:"",isTester:false,part:0,ans:{},writing:["","",""],started:0,submitted:false,submitting:false,autoTried:false,submissionId:"",serverResult:null};
+ show("welcome");el("pupilCode").value="";el("loginError").textContent="";el("time").textContent="01:15:00";window.scrollTo(0,0);
+}
+function openBoard(){show("leaderboard");renderBoard();window.scrollTo(0,0)}
+async function renderBoard(){
+ const home=S.code?'Your exam':'Back to login';
+ el("leaderboard").innerHTML='<div class="kicker">Public results</div><h2>🏆 Year 2 Trial Leaderboard</h2><p>Each pupil’s best completed score (out of 50). Only given names and classes appear publicly; pupil codes are never displayed.</p>'+
+ '<div class="actions"><button class="secondary" onclick="render()">← '+home+'</button><label style="margin:0;display:flex;align-items:center;gap:9px"><input type="checkbox" id="showTesters" '+(boardShowingTesters?"checked":"")+' onchange="boardShowingTesters=this.checked;renderBoard()"> Show testers’ results</label></div>'+
+ '<div id="boardRows" style="margin-top:20px" role="status">Loading leaderboard...</div>';
+ try{
+  const data=await api({action:"leaderboard",showTesters:boardShowingTesters});
+  let leaders=data.leaders||[];
+  if(!leaders.length){el("boardRows").innerHTML='<p>No completed trial attempts yet. Be the first pupil on the leaderboard!</p>';return}
+  el("boardRows").innerHTML='<div style="overflow:auto"><table style="border-collapse:collapse;width:100%;min-width:340px"><thead><tr style="background:#e8f2fe"><th style="padding:12px;text-align:left">Rank</th><th style="text-align:left">Given name</th><th style="text-align:left">Class</th><th style="text-align:right;padding:12px">Best /50</th></tr></thead><tbody>'+
+   leaders.map(x=>'<tr style="border-bottom:1px solid #e3ebf5"><td style="padding:13px">'+x.rank+'</td><td><strong>'+esc(x.name)+'</strong>'+(x.isTester?' <span class="tag">Tester</span>':'')+'</td><td>'+esc(x.className)+'</td><td style="text-align:right;padding:13px"><strong>'+Number(x.score)+'</strong></td></tr>').join("")+
+   '</tbody></table></div><p class="hint" style="margin-top:15px">Rankings update after exams finish marking.</p>';
+ }catch(e){el("boardRows").innerHTML='<p role="alert" style="color:#ab3939">Could not load scores: '+esc(e.message)+'</p><button class="secondary" onclick="renderBoard()">Retry</button>'}
+}
+async function resumeSession(){
+ let code="";try{code=sessionStorage.getItem(SESSION_KEY)||""}catch(e){}
+ if(!code)return;
+ try{
+  const x=await api({action:"login",pupilCode:code});
+  if(get(code))identity(code,x.pupil,true);
+ }catch(e){try{sessionStorage.removeItem(SESSION_KEY)}catch(err){}}
+}
+resumeSession();
 </script>
 </body></html>
