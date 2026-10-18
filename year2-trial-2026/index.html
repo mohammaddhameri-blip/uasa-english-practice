@@ -317,7 +317,7 @@ function renderResult(){
  out+='<h3 style="margin-top:25px">Part 7 writing feedback</h3>';
  out+=(d.feedback||[]).map((f,i)=>'<div class="context-card"><h3>Picture '+(i+1)+' — '+f.score+'/5</h3><p>'+esc(f.feedback)+'</p><p class="hint">'+rlabels.map((v,j)=>esc(v)+': '+(Number(f[["word_cues","meaning","punctuation","sequencing","conjunction"][j]])===1?'✓':'✗')).join(' · ')+'</p></div>').join("");
  if(S.isTester)out+='<p class="hint">Tester scores are not shown in the main pupil leaderboard. Use “Show testers” on the leaderboard to view them.</p>';
- out+='<div class="actions"><button class="secondary" onclick="openBoard()">🏆 Public leaderboard</button><button class="secondary" onclick="downloadResult('pdf')">⬇ Save PDF</button><button class="secondary" onclick="downloadResult('png')">⬇ Save PNG</button><button class="primary" onclick="newAttempt()">Try again</button><button class="secondary" onclick="switchUser()">Switch pupil</button></div>';
+ out+='<div class="actions"><button class="secondary" onclick="openBoard()">🏆 Public leaderboard</button><button class="secondary" onclick="downloadResult(&quot;pdf&quot;)">⬇ Save PDF</button><button class="secondary" onclick="downloadResult(&quot;png&quot;)">⬇ Save PNG</button><button class="primary" onclick="newAttempt()">Try again</button><button class="secondary" onclick="switchUser()">Switch pupil</button></div>';
  el("result").innerHTML=out;
 }
 
