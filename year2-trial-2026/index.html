@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#164e94">
+<title>Year 2 English UASA Trial Paper 2026</title>
+<style>
+:root{--navy:#12345d;--blue:#1368c4;--pale:#eaf4ff;--gold:#ffcf66;--ink:#1d3048;--line:#d5e3f1}
+*{box-sizing:border-box}body{margin:0;background:#f1f6fe;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:16px}
+.top{background:linear-gradient(115deg,#153c72,#1974cd);color:white;padding:15px clamp(15px,4vw,40px);display:flex;justify-content:space-between;align-items:center;gap:8px;box-shadow:0 2px 12px #19386625}
+.top h1{font-size:clamp(1.08rem,2.5vw,1.5rem);margin:0}.top small{font-size:.81rem;opacity:.87}.timer{font-variant-numeric:tabular-nums;border:1px solid #8fbff9;border-radius:10px;padding:8px 10px;font-size:1.04rem;font-weight:700;white-space:nowrap}
+.shell{max-width:1180px;margin:21px auto;padding:0 15px}.card,.pane,.sidebar{background:#fff;border-radius:17px;box-shadow:0 6px 24px #244b7720;border:1px solid #e0e9f5}
+.card{padding:clamp(20px,4vw,32px)}.welcome{max-width:650px;margin:45px auto}.kicker{color:#145dba;font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:.78rem}
+h2{color:#153967;margin:9px 0 12px;font-size:1.38rem}h3{margin:0 0 10px;font-size:1.1rem;color:#19436e}p{line-height:1.65}
+label{display:block;font-size:.9rem;font-weight:700;margin:14px 0 7px}
+input[type=text],select,textarea{border:1px solid #9eb7d5;border-radius:9px;padding:12px;font-size:1rem;background:white;color:#142f4c;width:100%}
+textarea{min-height:104px;resize:vertical;line-height:1.6}
+button{cursor:pointer;border:0;border-radius:10px;padding:11px 17px;font-size:.96rem;font-weight:700;transition:background .15s}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #f5b521;outline-offset:2px}
+.primary{color:white;background:#1367cc}.primary:hover{background:#064fa2}.secondary{color:#16467e;background:#e5effc}.secondary:hover{background:#d7e7fa}.danger{background:#ffeee8;color:#a4382a}.pill{background:#e1f2ff;color:#0b5aa5;border-radius:50px;padding:5px 10px;font-size:.77rem;font-weight:700}
+.lay{display:grid;grid-template-columns:195px 1fr;align-items:start;gap:17px}.sidebar{padding:16px;position:sticky;top:15px}.sidebar button{display:block;width:100%;text-align:left;padding:12px 12px;margin:7px 0;background:#eff5fe;color:#18416c;border:1px solid transparent}.sidebar button.active{background:#1766c7;color:#fff}.sidebar button small{display:block;font-weight:500;margin-top:3px;opacity:.75}
+.pane{padding:clamp(18px,3vw,30px)}.rule{background:#eaf5ff;border-left:4px solid #56a1e7;padding:12px 15px;border-radius:6px;margin:16px 0 21px;font-size:.95rem}
+.prompt{padding:19px 22px;background:#fffefa;border:1px solid #dce6ef;border-radius:13px;white-space:pre-line;line-height:1.85;font-family:Georgia,"Times New Roman",serif;font-size:1.06rem;margin:16px 0}
+.prompt strong{display:block;text-align:center}.option{display:flex;gap:12px;align-items:center;padding:14px;border:2px solid #d8e6f5;border-radius:12px;margin:9px 0;cursor:pointer;background:#fff}
+.option:has(input:checked){border-color:#0e6ed2;background:#eaf4ff}.option input{height:19px;width:19px;accent-color:#176bc7}
+.question{margin:24px 0 28px;padding-bottom:24px;border-bottom:1px solid #e3eaf2}.question:last-child{border-bottom:none}
+.qnum{font-weight:800;color:#1265b7;margin-right:5px}.actions{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:19px;border-top:1px solid var(--line);padding-top:20px}
+.wordbank{padding:16px;background:#fff4d4;border-radius:11px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.wordbank span{background:#fff;border:1px solid #f6d07d;border-radius:7px;padding:7px 12px;font-weight:600}
+.blank{max-width:300px}.rowq{display:grid;grid-template-columns:minmax(100px,1fr) minmax(145px,250px);gap:12px;align-items:center;margin:15px 0;padding:12px;border:1px solid #e3ebf5;border-radius:9px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.illustration{border:1px solid #a8bfd5;border-radius:9px;overflow:hidden;background:#fff}
+.illustration svg{display:block;width:100%;height:auto;aspect-ratio:1.55}.caption{padding:11px;font-size:.94rem}.context-card{padding:15px;border:1px solid #dce6f0;border-radius:12px;margin:12px 0}.context-card h3{margin:0;font-size:1rem}
+.hint{font-size:.88rem;color:#546e89}.statusbox{background:#f7faff;padding:15px;border:1px solid #d7e7f7;border-radius:12px}.rubric{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #e1e8f0}.rubric input{width:21px;height:21px;accent-color:#1265c2}
+.score{font-size:2rem;font-weight:800;color:#095ba9}.muted{color:#677e93}
+#exam,#result{display:none}.bottomnote{text-align:center;font-size:.8rem;color:#6a829b;margin:27px 0}.two{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.mini{background:#ecf4ff;padding:10px;border-radius:8px}.mini strong{display:block}.tag{color:#225588;background:#e3f0fd;border-radius:5px;padding:3px 6px;font-size:.81rem}
+@media(max-width:740px){.lay{display:block}.sidebar{position:static;display:flex;overflow:auto;gap:8px;margin-bottom:13px;padding:8px}.sidebar button{flex:0 0 auto;width:auto;font-size:.85rem;margin:0;padding:11px}.sidebar button small{display:none}.grid3{grid-template-columns:1fr}.illustration svg{max-height:230px}.top{padding:12px}.rowq{grid-template-columns:1fr}.two{grid-template-columns:1fr}.option{padding:11px}}
+@media print{.top,.sidebar,.actions,.bottomnote{display:none!important}body{background:white}.lay{display:block}.pane{box-shadow:none;border:0;padding:0}}
+</style>
+</head>
+<body>
+<header class="top"><div><h1>📘 Year 2 English · UASA Trial</h1><small>2026 · 7 Parts · 50 Marks</small></div><div class="timer" id="time">01:15:00</div></header>
+<div class="shell">
+<section id="welcome" class="card welcome">
+<div class="kicker">UASA-Style Practice Exam</div><h2>Year 2 English Trial Paper</h2>
+<p>This practice paper follows the same 7-part structure as the official exam. The passages, questions and pictures are different.</p>
+<div class="two"><div class="mini"><strong>Time</strong>1 hour 15 minutes</div><div class="mini"><strong>Total</strong>50 marks</div></div>
+<label for="pupil">Pupil's name</label><input type="text" id="pupil" autocomplete="name" placeholder="Enter your name" maxlength="80">
+<label for="className">Class</label><input type="text" id="className" placeholder="Example: 2 Terbilang" maxlength="45">
+<p class="hint">Your progress is saved on this device. Parts 1–6 are marked automatically. Part 7 requires teacher review.</p>
+<button class="primary" id="start" onclick="startExam()">Start Exam →</button>
+</section>
+<section id="exam" class="lay">
+<aside class="sidebar" id="nav"></aside>
+<main class="pane"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="partTitle"></h2><span class="pill" id="partMarks"></span></div>
+<div id="content"></div>
+<div class="actions"><button class="secondary" id="prev" onclick="changePart(-1)">← Previous</button><span class="hint" id="steps"></span><button class="primary" id="next" onclick="changePart(1)">Next →</button></div>
+</main></section>
+<section id="result" class="card"></section>
+<div class="bottomnote">Made for educational practice · Not the official examination paper</div>
+</div>
+<script>
+"use strict";
+const KEY="year2_uasa_trial_2026_v1";
+const partNames=["Short Texts","Grammar Cloze","Reading","Matching","Spelling","Message","Picture Writing"];
+const max=[5,4,5,6,5,10,15];
+const mc=[
+{n:1,kind:"Notice",text:"The Book Shop is open from 9 a.m. to 5 p.m. Come and buy storybooks and colouring books!",q:"What can you buy at the shop?",opts:["Shoes","Books","Cakes"],a:"B"},
+{n:2,kind:"Dear Mum,",text:"I am going to the swimming pool with Sara. We will swim together. I will be home at 4 o'clock.\n\nLove,\nNina",q:"Where is Nina going?",opts:["The library","The playground","The swimming pool"],a:"C"},
+{n:3,kind:"Notice",text:"The school bus leaves at seven o'clock tomorrow morning. Please come to school early.",q:"When will the bus leave?",opts:["At 7 o'clock","At 8 o'clock","At 9 o'clock"],a:"A"},
+{n:4,kind:"Notice",text:"There is a sports day on Thursday. Please wear your sports shoes and bring a bottle of water.",q:"What should pupils bring?",opts:["A toy","A bottle of water","A storybook"],a:"B"},
+{n:5,kind:"Hi Arif,",text:"I am at the playground. My sister is on the swing. I am going down the slide. My father is sitting on a bench. See you soon!\n\nTom",q:"What is Tom doing?",opts:["Going down the slide","Sitting on a bench","Playing on the swing"],a:"A"},
+{n:6,q:"(6) I wake up ___ eight o'clock.",opts:["on","at","in"],a:"B"},
+{n:7,q:"(7) I help my mother in the ___.",opts:["kitchen","bedroom","bathroom"],a:"A"},
+{n:8,q:"(8) My brother and I ___ our bicycles.",opts:["riding","rides","ride"],a:"C"},
+{n:9,q:"(9) We ___ happy.",opts:["am","is","are"],a:"C"},
+{n:10,q:"When did Amir visit the garden?",opts:["On Monday","On Friday","On Sunday"],a:"B"},
+{n:11,q:"How did the class go there?",opts:["They walked","By bus","By car"],a:"A"},
+{n:12,q:"What did they see in the pond?",opts:["Ducks","Frogs","Fish"],a:"C"},
+{n:13,q:"What did Amir eat for lunch?",opts:["Rice and chicken","Bread and eggs","Noodles"],a:"A"},
+{n:14,q:"What did Amir use to water the plants?",opts:["A bucket","A watering can","A bottle"],a:"B"},
+{n:15,q:"This place has a swing.",a:"C"},
+{n:16,q:"You can borrow a storybook here.",a:"A"},
+{n:17,q:"Children can swim here.",a:"B"},
+{n:18,q:"You can read quietly here.",a:"A"},
+{n:19,q:"This place has a slide.",a:"C"},
+{n:20,q:"You can play in the water here.",a:"B"}
+];
+const spells=[["It has long ears and likes carrots.","rabbit"],["It has a hard shell and moves slowly.","turtle"],["It lives in the sea and can jump out of the water.","dolphin"],["It has a very long neck and spots.","giraffe"],["It has black and white stripes.","zebra"]];
+const bank=["party","balloons","cake","games","gave","garden"];
+const cloze=["party","balloons","cake","games","gave"];
+const cues=["saw - beautiful - butterflies","ate - sandwiches - family","played - football - brother"];
+const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters and full stops","Sequencing connector","Conjunction"];
+const instructions=[
+"Read the text in each question carefully. Choose the correct answer A, B or C.",
+"Read the passage and choose the correct word for each blank.",
+"Read the passage and choose the correct answer for each question.",
+"Read the descriptions of places A, B and C. Match each sentence to a place.",
+"Read the animal descriptions. Write the word. The first letter is given.",
+"Complete the message using five words from the word bank.",
+"Use the words under each picture to complete the message. Write sentences with capital letters and full stops."
+];
+let S={name:"",className:"",part:0,ans:{},writing:["","",""],rubric:[Array(5).fill(false),Array(5).fill(false),Array(5).fill(false)],started:0,submitted:false};
+let clockInterval;
+function el(id){return document.getElementById(id)}
+function esc(t){return String(t??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function get(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.name&&typeof s.started==="number"){S=Object.assign(S,s);return true}}catch(e){}return false}
+function show(page){["welcome","exam","result"].forEach(id=>el(id).style.display=id===page?(id==="exam"?"grid":"block"):"none")}
+function startExam(){
+ const n=el("pupil").value.trim(),cl=el("className").value.trim();
+ if(!n||!cl){alert("Please enter your name and class.");return}
+ S={name:n,className:cl,part:0,ans:{},writing:["","",""],rubric:[Array(5).fill(false),Array(5).fill(false),Array(5).fill(false)],started:Date.now(),submitted:false};
+ save();render();tick();
+}
+function tick(){
+ clearInterval(clockInterval);
+ const update=()=>{
+ if(!S.started)return;
+ let rest=Math.max(0,75*60-Math.floor((Date.now()-S.started)/1000));
+ const hh=Math.floor(rest/3600),mm=Math.floor((rest%3600)/60),ss=rest%60;
+ el("time").textContent=[hh,mm,ss].map(x=>String(x).padStart(2,"0")).join(":");
+ if(rest===0&&!S.submitted){S.submitted=true;save();render()}
+ };
+ update();clockInterval=setInterval(update,1000);
+}
+function scene(i){
+ const svgstart='<svg viewBox="0 0 310 195" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Black and white cartoon scene"><g fill="white" stroke="#263b4c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">';
+ const end='</g></svg>';
+ const tree='<path d="M45 165 V70 M60 165 V68 M37 106 l-19 -17 M54 115 l20 -30"/><path d="M23 88C2 77 19 49 34 51C30 22 60 20 70 43C93 29 111 53 94 75C113 94 89 111 75 97C58 116 35 109 23 88Z"/>';
+ if(i===0)return svgstart+tree+'<path d="M10 172Q150 152 300 171"/><path d="M165 76 C115 25 121 104 157 103 C117 137 155 141 166 112C182 139 210 121 184 102 C221 76 194 32 167 76Z"/><path d="M166 77V124M166 77l-12 -19M166 77l12 -19"/><path d="M251 42C226 22 218 50 245 63C218 81 244 89 251 74C267 89 289 77 260 62C285 49 265 20 251 42Z"/><path d="M251 42v35"/><path d="M109 167v-35m-9 3q8 -13 12 0m-11 4q12 -8 20 0"/><circle cx="110" cy="129" r="9"/><path d="M238 172v-22"/><circle cx="238" cy="145" r="8"/><path d="M211 172v-15"/><circle cx="211" cy="154" r="7"/>'+end;
+ if(i===1)return svgstart+'<path d="M10 165q120 -8 290 0"/><path d="M45 52V161M60 57V160"/><path d="M32 82C15 51 45 34 64 47C88 27 108 53 100 69C123 98 73 105 61 88C42 104 23 99 32 82Z"/><path d="M85 166l30 -26h102l31 26Z"/><circle cx="117" cy="82" r="19"/><circle cx="192" cy="77" r="19"/><circle cx="263" cy="88" r="16"/><path d="M115 102v36m-15 -28l-15 28m40 -28l16 25M192 96v44m-14 -32l-13 28m41 -28l14 27M263 104v40m-10 -28l-14 22"/><path d="M134 150l15 -11 16 11Z M181 152l11 -10 11 10Z"/><rect x="216" y="130" width="13" height="21"/><path d="M229 135l7 -5"/>'+end;
+ return svgstart+tree+'<path d="M10 172q150 -7 290 0"/><circle cx="126" cy="68" r="19"/><path d="M126 89v55m0 -42l-33 31m33 -31l35 29m-35 13l-28 30m28 -30l27 24"/><circle cx="247" cy="73" r="17"/><path d="M247 90v53m0 -39l-26 20m26 -20l30 18m-30 21l-30 27m30 -27l22 27"/><circle cx="186" cy="161" r="15"/><path d="M181 148l8 -1 7 8 -6 10 -10 -2 -4 -8Z"/><path d="M173 160l-2 7m28 -14l8 -5M183 174l4 8"/><path d="M286 165V100H300 M300 100V165"/>'+end;
+}
+function nav(){
+ let out="";
+ for(let p=0;p<7;p++){
+ let range=p===0?"1–5":p===1?"6–9":p===2?"10–14":p===3?"15–20":p===4?"21–25":p===5?"26–30":"Writing";
+ out+='<button class="'+(p===S.part?"active":"")+'" onclick="goto('+p+')">Part '+(p+1)+' <small>'+esc(partNames[p])+' · '+range+'</small></button>';
+ }el("nav").innerHTML=out;
+}
+function chooseHTML(d){
+ let opts=d.opts||["The Library","The Swimming Pool","The Playground"];
+ return '<div class="question"><div><span class="qnum">'+d.n+'.</span> '+esc(d.q)+'</div>'+
+ opts.map((x,j)=>{const a="ABC"[j];return '<label class="option" style="font-weight:500"><input type="radio" name="q'+d.n+'" value="'+a+'" '+(S.ans["q"+d.n]===a?"checked":"")+' onchange="setAns('+d.n+',this.value)"><strong>'+a+'</strong><span>'+esc(x)+'</span></label>'}).join("")+'</div>';
+}
+function setAns(n,v){S.ans["q"+n]=v;save()}
+function spell(n,desc,word){
+ let v=S.ans["q"+n]||"";
+ return '<div class="rowq"><div><span class="qnum">'+n+'.</span> '+esc(desc)+'</div><div><span style="font-weight:800">'+word[0]+'</span> <input aria-label="Question '+n+' answer" class="blank" type="text" value="'+esc(v)+'" placeholder="'+word[0]+'...' oninput="setAns('+n+',this.value)" autocomplete="off" spellcheck="false" maxlength="22"></div></div>';
+}
+function write(i){S.writing[i]=el("write"+i).value;save()}
+function htmlPart(p){
+ let s='<div class="rule">'+esc(instructions[p])+'</div>';
+ if(p===0)return s+mc.slice(0,5).map(d=>'<div class="prompt"><strong>'+esc(d.kind)+'</strong>'+esc(d.text)+'</div>'+chooseHTML(d)).join("");
+ if(p===1)return s+'<div class="prompt"><strong>My Weekend</strong>On Saturday, I wake up (6) ______ eight o\'clock. I help my mother in the (7) ______. She cooks lunch. In the afternoon, my brother and I (8) ______ our bicycles. We (9) ______ happy.</div>'+mc.slice(5,9).map(chooseHTML).join("");
+ if(p===2)return s+'<div class="prompt"><strong>A Visit to the Garden</strong>Last Friday, Amir went to the school garden with his teacher and classmates. They walked there after breakfast. Amir was happy because he likes plants. First, they saw many yellow sunflowers. Next, the teacher showed them a small pond with colourful fish.<br><br>At lunchtime, they sat under a tree and ate rice and chicken. After lunch, Amir watered the young plants with a green watering can. Before going home, he drew a picture of his favourite flower. It was a fun day.</div>'+mc.slice(9,14).map(chooseHTML).join("");
+ if(p===3)return s+'<div class="grid3">'+[['A','The Library','It is a quiet place with many books. You can read and borrow storybooks there.','📚'],['B','The Swimming Pool','You can swim and play in the water here. Remember to follow the safety rules.','🏊'],['C','The Playground','This place has a slide and a swing. Children can run and play there.','🛝']].map(x=>'<div class="context-card"><h3>'+x[0]+'. '+x[1]+'</h3><div style="font-size:3rem;text-align:center">'+x[3]+'</div><p>'+x[2]+'</p></div>').join("")+'</div>'+mc.slice(14,20).map(chooseHTML).join("");
+ if(p===4)return s+'<p class="hint">Example: This animal says meow. → <strong>cat</strong></p>'+spells.map((x,i)=>spell(i+21,x[0],x[1])).join("");
+ if(p===5)return s+'<div class="prompt">Dear Mia,<br><br>How are you? Last Saturday, I went to my cousin\'s <strong>(26) _____</strong>.<br>We put colourful <strong>(27) _____</strong> on the wall.<br>My mother baked a chocolate <strong>(28) _____</strong>.<br>We played fun <strong>(29) _____</strong> with our friends.<br>Before going home, I <strong>(30) _____</strong> my cousin a present.<br>It was a wonderful day!<br><br>Your friend,<br>Adam</div><h3>Word Bank</h3><div class="wordbank">'+bank.map(x=>'<span>'+x+'</span>').join("")+'</div>'+cloze.map((x,i)=>'<div class="rowq"><div><span class="qnum">'+(26+i)+'.</span> Write the missing word.</div><input type="text" value="'+esc(S.ans["q"+(26+i)]||"")+'" placeholder="Type the word" oninput="setAns('+(26+i)+',this.value)" autocomplete="off"></div>').join("");
+ return s+'<p><strong>You went to the park with your family last Sunday</strong> and you want to tell your friend, Hana, about it.</p>'+
+ '<div class="grid3">'+cues.map((c,i)=>'<div class="illustration">'+scene(i)+'<div class="caption"><strong>Picture '+(i+1)+'</strong><br><span class="tag">'+esc(c)+'</span></div></div>').join("")+'</div>'+
+ '<div class="prompt">Dear Hana,<br><br>How are you? Last Sunday, my family and I went to the park.</div>'+
+ cues.map((cue,i)=>'<label for="write'+i+'">Picture '+(i+1)+' — '+esc(cue)+'</label><textarea id="write'+i+'" placeholder="Write a sentence or sentences about picture '+(i+1)+'..." oninput="write('+i+')">'+esc(S.writing[i]||"")+'</textarea>').join("")+
+ '<div class="prompt">Your friend,<br>Ali</div><p class="hint">Teacher marking: 5 marks per picture (cues, meaningful message, punctuation, sequencing connector and conjunction).</p>';
+}
+function changePart(d){goto(S.part+d)}
+function goto(p){if(p<0||p>6)return;S.part=p;save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function render(){
+ if(!S.started){show("welcome");return}
+ if(S.submitted){show("result");renderResult();return}
+ show("exam");nav();
+ el("partTitle").textContent="Part "+(S.part+1)+" — "+partNames[S.part];
+ el("partMarks").textContent=max[S.part]+" marks";
+ el("content").innerHTML=htmlPart(S.part);
+ el("prev").disabled=S.part===0;
+ el("next").textContent=S.part===6?"Finish Exam ✓":"Next →";
+ el("next").onclick=S.part===6?finish:()=>changePart(1);
+ el("steps").textContent="Part "+(S.part+1)+" of 7 · "+esc(S.name);
+}
+function finish(){
+ if(!confirm("Submit your trial exam? You will not be able to edit your answers afterwards."))return;
+ S.submitted=true;save();render();window.scrollTo(0,0);
+}
+function scoreBase(){
+ let parts=[0,0,0,0,0,0,0];
+ for(let i=0;i<20;i++)if(S.ans["q"+(i+1)]===mc[i].a)parts[i<5?0:i<9?1:i<14?2:3]++;
+ for(let i=0;i<5;i++)if(norm(S.ans["q"+(i+21)])===spells[i][1])parts[4]++;
+ for(let i=0;i<5;i++)if(norm(S.ans["q"+(i+26)])===cloze[i])parts[5]+=2;
+ parts[6]=(S.rubric||[]).reduce((acc,a)=>acc+(Array.isArray(a)?a.filter(Boolean).length:0),0);
+ return parts;
+}
+function norm(s){return String(s||"").trim().toLowerCase()}
+function countMarked(){return(S.rubric||[]).reduce((sum,a)=>sum+(Array.isArray(a)?a.filter(Boolean).length:0),0)}
+function setMark(i,j,v){S.rubric[i][j]=v;save();renderResult()}
+function renderResult(){
+ let p=scoreBase(),base=p.slice(0,6).reduce((a,b)=>a+b,0),final=base+p[6];
+ let allReviewed=(S.reviewed===true);
+ let out='<div class="kicker">Trial Exam Results</div><h2>'+esc(S.name)+' · '+esc(S.className)+'</h2><div class="statusbox"><div class="muted">Parts 1–6 (automatically marked)</div><div class="score">'+base+' / 35</div><div class="muted">Part 7: '+(allReviewed? p[6]+' / 15':'Awaiting teacher review (15 marks)')+'</div>'+(allReviewed?'<h2>Total: '+final+' / 50 · '+(final*2)+'%</h2>':'<p><strong>Total /50:</strong> Incomplete until Part 7 is reviewed.</p>')+'</div>';
+ out+='<h3 style="margin-top:22px">Part-by-part scores</h3><div class="grid3">'+p.map((x,i)=>'<div class="mini"><strong>Part '+(i+1)+'</strong>'+(!allReviewed&&i===6?'Pending':x+' / '+max[i])+'</div>').join("")+'</div>';
+ out+='<h3 style="margin-top:26px">Part 7 — Teacher review</h3><p class="hint">Tick each criterion only when it is met in the pupil’s writing. The same five criteria apply to all three pictures. This is manual review, not AI scoring.</p>';
+ out+=cues.map((cue,i)=>'<div class="context-card"><h3>Picture '+(i+1)+' — '+esc(cue)+'</h3><div class="prompt">'+esc(S.writing[i]||"(No answer)")+'</div>'+rlabels.map((label,j)=>'<label class="rubric" style="margin:0;font-weight:500">'+esc(label)+' (1 mark)<input type="checkbox" '+(S.rubric[i][j]?'checked':'')+' onchange="setMark('+i+','+j+',this.checked)"></label>').join("")+'</div>').join("");
+ out+='<div class="actions"><button class="secondary" onclick="downloadResult()">⬇ Export results (JSON)</button><button class="primary" onclick="approveMarking()">Approve Part 7 Marking</button><button class="danger" onclick="newAttempt()">New attempt</button></div>';
+ if(allReviewed)out+='<p class="hint">Teacher review approved. Changes to rubric checkboxes update the scores; approve again to confirm revisions.</p>';
+ el("result").innerHTML=out;
+}
+function approveMarking(){if(!confirm("Approve the selected Part 7 scores as the teacher review?"))return;S.reviewed=true;save();renderResult()}
+function downloadResult(){
+ let p=scoreBase();const report={paper:"Year 2 English UASA Trial 2026",name:S.name,className:S.className,date:new Date(S.started).toISOString(),answers:S.ans,writing:S.writing,writingRubric:S.rubric,approved:S.reviewed||false,parts:p,baseScore:p.slice(0,6).reduce((a,b)=>a+b,0),total:(S.reviewed?p.reduce((a,b)=>a+b,0):null)};
+ const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Year2_UASA_Trial_"+S.name.replace(/[^A-Za-z0-9_-]/g,"_")+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function newAttempt(){if(!confirm("Delete this attempt from this device and start over? Export your results first if needed."))return;localStorage.removeItem(KEY);location.reload()}
+if(get()){if(!Array.isArray(S.rubric)||S.rubric.length!==3)S.rubric=[Array(5).fill(false),Array(5).fill(false),Array(5).fill(false)];render();tick()}
+</script>
+</body></html>
