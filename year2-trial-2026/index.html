@@ -317,15 +317,162 @@ function renderResult(){
  out+='<h3 style="margin-top:25px">Part 7 writing feedback</h3>';
  out+=(d.feedback||[]).map((f,i)=>'<div class="context-card"><h3>Picture '+(i+1)+' — '+f.score+'/5</h3><p>'+esc(f.feedback)+'</p><p class="hint">'+rlabels.map((v,j)=>esc(v)+': '+(Number(f[["word_cues","meaning","punctuation","sequencing","conjunction"][j]])===1?'✓':'✗')).join(' · ')+'</p></div>').join("");
  if(S.isTester)out+='<p class="hint">Tester scores are not shown in the main pupil leaderboard. Use “Show testers” on the leaderboard to view them.</p>';
- out+='<div class="actions"><button class="secondary" onclick="openBoard()">🏆 Public leaderboard</button><button class="secondary" onclick="downloadResult()">⬇ Save result</button><button class="primary" onclick="newAttempt()">Try again</button><button class="secondary" onclick="switchUser()">Switch pupil</button></div>';
+ out+='<div class="actions"><button class="secondary" onclick="openBoard()">🏆 Public leaderboard</button><button class="secondary" onclick="downloadResult('pdf')">⬇ Save PDF</button><button class="secondary" onclick="downloadResult('png')">⬇ Save PNG</button><button class="primary" onclick="newAttempt()">Try again</button><button class="secondary" onclick="switchUser()">Switch pupil</button></div>';
  el("result").innerHTML=out;
 }
-function downloadResult(){
- const d={paper:"Year 2 English UASA Trial 2026",name:S.name,className:S.className,marked:S.submitted,
-   date:new Date(S.started).toISOString(),scores:S.serverResult?.scores||null,feedback:S.serverResult?.feedback||[],writing:S.writing};
- const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="Year2_UASA_Trial_"+S.name.replace(/[^A-Za-z0-9_-]/g,"_")+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+
+function resultReportPages(){
+ const data=S.serverResult||{},score=data.scores;
+ if(!S.submitted||!score)throw Error("A marked result is required before downloading.");
+ const W=1240,H=1754,L=80,R=1160,INK="#20354e",BLUE="#164e94";
+ const pages=[];let cv,ctx,y;
+ function page(){
+  cv=document.createElement("canvas");cv.width=W;cv.height=H;
+  ctx=cv.getContext("2d");if(!ctx)throw Error("Your browser cannot create the result image.");
+  ctx.fillStyle="#ffffff";ctx.fillRect(0,0,W,H);ctx.fillStyle=BLUE;ctx.fillRect(0,0,W,16);
+  ctx.fillStyle=BLUE;ctx.font="bold 38px Arial, sans-serif";
+  ctx.fillText("YEAR 2 ENGLISH - UASA TRIAL 2026",L,83);
+  ctx.fillStyle="#607790";ctx.font="23px Arial, sans-serif";
+  ctx.fillText("Pupil result report - 50 marks",L,127);
+  ctx.strokeStyle="#c8d9ec";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(L,151);ctx.lineTo(R,151);ctx.stroke();
+  y=195;pages.push(cv);
+ }
+ function space(h){if(y+h>H-111)page();}
+ function write(str,font="24px Arial, sans-serif",colour=INK,height=34,x=L){
+  space(height);ctx.fillStyle=colour;ctx.font=font;
+  ctx.fillText(String(str),x,y);y+=height;
+ }
+ function wrap(text,font,width){
+  ctx.font=font;const result=[];
+  for(const section of String(text==null?"":text).split(/\r?\n/)){
+   if(!section.trim()){result.push("");continue;}
+   let current="";
+   for(const word of section.trim().split(/\s+/)){
+    const candidate=current?current+" "+word:word;
+    if(current&&ctx.measureText(candidate).width>width){result.push(current);current=word;}
+    else current=candidate;
+   }
+   if(current)result.push(current);
+  }
+  return result;
+ }
+ function para(text,opts={}){
+  const font=opts.font||"24px Arial, sans-serif",height=opts.height||36,x=opts.x||L;
+  const lines=wrap(text,font,R-x);
+  for(const line of lines)write(line,font,opts.colour||INK,height,x);
+  y+=opts.gap==null?14:opts.gap;
+ }
+ function heading(title){
+  space(75);y+=20;ctx.fillStyle="#eaf3ff";ctx.fillRect(L,y-30,R-L,51);
+  write(title,"bold 27px Arial, sans-serif",BLUE,65,L+15);
+ }
+ function divider(){
+  space(20);ctx.strokeStyle="#dce5f1";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.stroke();y+=24;
+ }
+ page();
+ write("Pupil: "+(S.name||"Pupil"),"bold 31px Arial, sans-serif",INK,47);
+ write("Class: "+(S.className||"-"),"24px Arial, sans-serif","#546d87",39);
+ const examDate=S.started?new Date(S.started).toLocaleDateString("en-MY",{year:"numeric",month:"long",day:"numeric"}):new Date().toLocaleDateString("en-MY");
+ write("Exam date: "+examDate,"24px Arial, sans-serif","#546d87",39);
+ y+=17;
+ space(160);ctx.fillStyle="#eaf4ff";ctx.fillRect(L,y-41,R-L,150);
+ ctx.fillStyle=BLUE;ctx.font="bold 65px Arial, sans-serif";ctx.fillText(Number(score.total)+" / 50",L+22,y+33);
+ ctx.font="bold 48px Arial, sans-serif";ctx.fillText((Number(score.total)*2)+"%",R-195,y+30);
+ y+=155;
+ heading("Score breakdown");
+ for(const group of [["Parts 1-4",score.objective,20],["Part 5 - Spelling",score.spelling,5],["Part 6 - Message",score.cloze,10],["Part 7 - Picture writing",score.writing,15]]){
+  space(47);ctx.fillStyle=INK;ctx.font="24px Arial, sans-serif";ctx.fillText(group[0],L+12,y);
+  ctx.font="bold 25px Arial, sans-serif";ctx.fillStyle=BLUE;
+  ctx.textAlign="right";ctx.fillText(Number(group[1])+" / "+group[2],R-12,y);ctx.textAlign="left";
+  y+=43;
+ }
+ heading("Part 7 - Writing feedback");
+ const marks=[["word_cues","All 3 word cues"],["meaning","Meaningful message"],["punctuation","Punctuation"],["sequencing","Correct First / Next / Then"],["conjunction","Conjunction OR preposition"]];
+ const feedback=Array.isArray(data.feedback)?data.feedback:[];
+ for(let i=0;i<3;i++){
+  const f=feedback[i]||{};
+  space(100);write("Picture "+(i+1)+" - "+Number(f.score||0)+" / 5","bold 28px Arial, sans-serif",BLUE,48);
+  para("Word cues: "+cues[i],{font:"22px Arial, sans-serif",colour:"#53708b",height:33,gap:4});
+  write("Pupil's writing:","bold 22px Arial, sans-serif",INK,34);
+  para((S.writing&&S.writing[i])||"(No answer provided)",{font:"23px Arial, sans-serif",height:34,gap:10});
+  write("Marking criteria:","bold 22px Arial, sans-serif",INK,34);
+  for(const [key,label] of marks){
+   write(label+": "+(Number(f[key])===1?"1 / 1":"0 / 1"),"21px Arial, sans-serif",INK,31,L+10);
+  }
+  y+=8;write("AI feedback:","bold 22px Arial, sans-serif",INK,34);
+  para(f.feedback||"No feedback available.",{font:"22px Arial, sans-serif",height:33,gap:12});
+  divider();
+ }
+ para("This is an automatically marked school practice examination, not an official examination certificate.",
+      {font:"19px Arial, sans-serif",colour:"#64778d",height:30,gap:0});
+ for(let i=0;i<pages.length;i++){
+  const pctx=pages[i].getContext("2d");
+  pctx.strokeStyle="#dce5f1";pctx.beginPath();pctx.moveTo(L,H-88);pctx.lineTo(R,H-88);pctx.stroke();
+  pctx.fillStyle="#64778d";pctx.font="20px Arial, sans-serif";
+  pctx.fillText("Year 2 UASA-style English trial - pupil copy",L,H-54);
+  pctx.textAlign="right";pctx.fillText("Page "+(i+1)+" of "+pages.length,R,H-54);pctx.textAlign="left";
+ }
+ return pages;
 }
+function downloadReportBlob(blob,name){
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+function pagesToPdf(pages){
+ const encode=new TextEncoder(),pieces=[];let position=0,offsets=[0];
+ function push(bytes){pieces.push(bytes);position+=bytes.length;}
+ function str(s){return encode.encode(s);}
+ function obj(id,body){
+  offsets[id]=position;push(str(id+" 0 obj\n"));push(str(body));push(str("\nendobj\n"));
+ }
+ push(str("%PDF-1.4\n%\u00e2\u00e3\u00cf\u00d3\n"));
+ const count=pages.length,last=2+3*count;
+ obj(1,"<< /Type /Catalog /Pages 2 0 R >>");
+ obj(2,"<< /Type /Pages /Count "+count+" /Kids ["+
+       pages.map((_,i)=>(3+3*i)+" 0 R").join(" ")+"] >>");
+ for(let i=0;i<count;i++){
+  const a=3+i*3,b=a+1,im=a+2,canvas=pages[i],jpeg=atob(canvas.toDataURL("image/jpeg",0.88).split(",")[1]);
+  const imageBytes=new Uint8Array(jpeg.length);
+  for(let j=0;j<jpeg.length;j++)imageBytes[j]=jpeg.charCodeAt(j);
+  obj(a,"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] "+
+         "/Resources << /XObject << /Im0 "+im+" 0 R >> >> /Contents "+b+" 0 R >>");
+  const commands=str("q\n595.28 0 0 841.89 0 0 cm\n/Im0 Do\nQ\n");
+  offsets[b]=position;push(str(b+" 0 obj\n<< /Length "+commands.length+" >>\nstream\n"));
+  push(commands);push(str("endstream\nendobj\n"));
+  offsets[im]=position;
+  push(str(im+" 0 obj\n<< /Type /XObject /Subtype /Image /Width "+canvas.width+
+     " /Height "+canvas.height+" /ColorSpace /DeviceRGB /BitsPerComponent 8 "+
+     "/Filter /DCTDecode /Length "+imageBytes.length+" >>\nstream\n"));
+  push(imageBytes);push(str("\nendstream\nendobj\n"));
+ }
+ const xref=position;
+ let footer="xref\n0 "+(last+1)+"\n0000000000 65535 f \n";
+ for(let i=1;i<=last;i++)footer+=String(offsets[i]).padStart(10,"0")+" 00000 n \n";
+ footer+="trailer\n<< /Size "+(last+1)+" /Root 1 0 R >>\nstartxref\n"+xref+"\n%%EOF\n";
+ push(str(footer));return new Blob(pieces,{type:"application/pdf"});
+}
+function downloadResult(format){
+ if(!S.submitted||!S.serverResult?.scores){alert("Please finish the exam and wait for marking first.");return;}
+ const type=format==="png"?"png":"pdf";
+ try{
+  const pages=resultReportPages();
+  const filename="Year2_UASA_Trial_"+String(S.name||"Pupil").replace(/[^A-Za-z0-9_-]/g,"_")+
+   "_"+new Date(S.started||Date.now()).toISOString().slice(0,10);
+  if(type==="pdf"){downloadReportBlob(pagesToPdf(pages),filename+".pdf");return;}
+  if(pages.length>5){alert("This result is too long for one PNG image. Please save it as a PDF instead.");return;}
+  const combined=document.createElement("canvas");combined.width=pages[0].width;
+  combined.height=pages.length*pages[0].height;
+  const ctx=combined.getContext("2d");
+  if(!ctx)throw Error("Your browser could not prepare the result image.");
+  pages.forEach((p,i)=>ctx.drawImage(p,0,i*p.height));
+  combined.toBlob(blob=>{
+   if(blob)downloadReportBlob(blob,filename+".png");
+   else alert("Could not create PNG. Please try downloading PDF.");
+  },"image/png");
+ }catch(err){console.error("Result export failed",err);alert("Could not save the result: "+(err.message||"Please try again."));}
+}
+
 function newAttempt(){
  if(!confirm("Start a new attempt? Your previous result will stay on the public leaderboard."))return;
  const {code,name,className,isTester}=S;
