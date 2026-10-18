@@ -15,6 +15,14 @@ h2{color:#153967;margin:9px 0 12px;font-size:1.38rem}h3{margin:0 0 10px;font-siz
 label{display:block;font-size:.9rem;font-weight:700;margin:14px 0 7px}
 input[type=text],select,textarea{border:1px solid #9eb7d5;border-radius:9px;padding:12px;font-size:1rem;background:white;color:#142f4c;width:100%}
 textarea{min-height:104px;resize:vertical;line-height:1.6}
+.letter-message{line-height:1.9;font-family:Georgia,"Times New Roman",serif;white-space:normal;overflow-wrap:normal;word-break:normal}
+.letter-message p{line-height:1.95;margin:0 0 16px}
+.letter-message .letter-salutation{margin-bottom:16px}
+.letter-message .letter-signoff{margin-top:16px;margin-bottom:0}
+.letter-message .inline-blank{display:inline-flex;align-items:center;gap:5px;vertical-align:middle;white-space:nowrap;margin:2px 3px;font:inherit;font-weight:500;color:#19436e}
+.letter-message input[type=text]{width:118px;max-width:34vw;min-width:96px;padding:7px 9px;border:1px solid #8baacd;border-bottom:2px solid #327dc4;border-radius:6px;background:#fff;font:normal 1rem system-ui,-apple-system,"Segoe UI",Arial,sans-serif;text-align:left}
+.letter-message input[type=text]:focus{background:#eff7ff}
+
 button{cursor:pointer;border:0;border-radius:10px;padding:11px 17px;font-size:.96rem;font-weight:700;transition:background .15s}
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #f5b521;outline-offset:2px}
 .primary{color:white;background:#1367cc}.primary:hover{background:#064fa2}.secondary{color:#16467e;background:#e5effc}.secondary:hover{background:#d7e7fa}.danger{background:#ffeee8;color:#a4382a}.pill{background:#e1f2ff;color:#0b5aa5;border-radius:50px;padding:5px 10px;font-size:.77rem;font-weight:700}
@@ -32,7 +40,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .hint{font-size:.88rem;color:#546e89}.statusbox{background:#f7faff;padding:15px;border:1px solid #d7e7f7;border-radius:12px}.rubric{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #e1e8f0}.rubric input{width:21px;height:21px;accent-color:#1265c2}
 .score{font-size:2rem;font-weight:800;color:#095ba9}.muted{color:#677e93}
 #exam,#result{display:none}.bottomnote{text-align:center;font-size:.8rem;color:#6a829b;margin:27px 0}.two{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.mini{background:#ecf4ff;padding:10px;border-radius:8px}.mini strong{display:block}.tag{color:#225588;background:#e3f0fd;border-radius:5px;padding:3px 6px;font-size:.81rem}
-@media(max-width:740px){.lay{display:block}.sidebar{position:static;display:flex;overflow:auto;gap:8px;margin-bottom:13px;padding:8px}.sidebar button{flex:0 0 auto;width:auto;font-size:.85rem;margin:0;padding:11px}.sidebar button small{display:none}.grid3{grid-template-columns:1fr}.illustration svg{max-height:230px}.top{padding:12px}.rowq{grid-template-columns:1fr}.two{grid-template-columns:1fr}.option{padding:11px}}
+@media(max-width:900px){.lay{display:block}.sidebar{position:static;display:flex;overflow:auto;gap:8px;margin-bottom:13px;padding:8px}.sidebar button{flex:0 0 auto;width:auto;font-size:.85rem;margin:0;padding:11px}.sidebar button small{display:none}.grid3{grid-template-columns:1fr}.illustration svg{max-height:230px}.top{padding:12px}.rowq{grid-template-columns:1fr}.two{grid-template-columns:1fr}.option{padding:11px}}
 @media print{.top,.sidebar,.actions,.bottomnote{display:none!important}body{background:white}.lay{display:block}.pane{box-shadow:none;border:0;padding:0}}
 </style>
 </head>
@@ -176,7 +184,15 @@ function spell(n,desc,word){
  let v=S.ans["q"+n]||"";
  return '<div class="rowq"><div><span class="qnum">'+n+'.</span> '+esc(desc)+'</div><div><span style="font-weight:800">'+word[0]+'</span> <input aria-label="Question '+n+' answer" class="blank" type="text" value="'+esc(v)+'" placeholder="'+word[0]+'..." oninput="setAns('+n+',this.value)" autocomplete="off" spellcheck="false" maxlength="22"></div></div>';
 }
-function write(i){S.writing[i]=el("write"+i).value;save()}
+// Avoid naming this handler "write": inline browser event handlers can resolve document.write(), replacing the whole page.
+function updatePictureAnswer(index,value){
+ if(!Number.isInteger(index)||index<0||index>2)return;
+ S.writing[index]=String(value ?? "");
+ save();
+}
+function inlineBlank(n){
+ return '<label class="inline-blank" for="trialBlank'+n+'"><span>('+n+')</span><input id="trialBlank'+n+'" type="text" aria-label="Question '+n+', fill in the missing word" autocomplete="off" spellcheck="false" maxlength="24" placeholder="______" value="'+esc(S.ans["q"+n]||"")+'" oninput="setAns('+n+',this.value)"></label>';
+}
 function htmlPart(p){
  let s='<div class="rule">'+esc(instructions[p])+'</div>';
  if(p===0)return s+mc.slice(0,5).map(d=>'<div class="prompt"><strong>'+esc(d.kind)+'</strong>'+esc(d.text)+'</div>'+chooseHTML(d)).join("");
@@ -184,11 +200,17 @@ function htmlPart(p){
  if(p===2)return s+'<div class="prompt"><strong>A Visit to the Garden</strong>Last Friday, Amir went to the school garden with his teacher and classmates. They walked there after breakfast. Amir was happy because he likes plants. First, they saw many yellow sunflowers. Next, the teacher showed them a small pond with colourful fish.<br><br>At lunchtime, they sat under a tree and ate rice and chicken. After lunch, Amir watered the young plants with a green watering can. Before going home, he drew a picture of his favourite flower. It was a fun day.</div>'+mc.slice(9,14).map(chooseHTML).join("");
  if(p===3)return s+'<div class="grid3">'+[['A','The Library','It is a quiet place with many books. You can read and borrow storybooks there.','📚'],['B','The Swimming Pool','You can swim and play in the water here. Remember to follow the safety rules.','🏊'],['C','The Playground','This place has a slide and a swing. Children can run and play there.','🛝']].map(x=>'<div class="context-card"><h3>'+x[0]+'. '+x[1]+'</h3><div style="font-size:3rem;text-align:center">'+x[3]+'</div><p>'+x[2]+'</p></div>').join("")+'</div>'+mc.slice(14,20).map(chooseHTML).join("");
  if(p===4)return s+'<p class="hint">Example: This animal says meow. → <strong>cat</strong></p>'+spells.map((x,i)=>spell(i+21,x[0],x[1])).join("");
- if(p===5)return s+'<div class="prompt">Dear Mia,<br><br>How are you? Last Saturday, I went to my cousin\'s <strong>(26) _____</strong>.<br>We put colourful <strong>(27) _____</strong> on the wall.<br>My mother baked a chocolate <strong>(28) _____</strong>.<br>We played fun <strong>(29) _____</strong> with our friends.<br>Before going home, I <strong>(30) _____</strong> my cousin a present.<br>It was a wonderful day!<br><br>Your friend,<br>Adam</div><h3>Word Bank</h3><div class="wordbank">'+bank.map(x=>'<span>'+x+'</span>').join("")+'</div>'+cloze.map((x,i)=>'<div class="rowq"><div><span class="qnum">'+(26+i)+'.</span> Write the missing word.</div><input type="text" value="'+esc(S.ans["q"+(26+i)]||"")+'" placeholder="Type the word" oninput="setAns('+(26+i)+',this.value)" autocomplete="off"></div>').join("");
+ if(p===5)return s+
+ '<div class="prompt letter-message">'+
+ '<p class="letter-salutation">Dear Mia,</p>'+
+ '<p>How are you? Last Saturday, I went to my cousin\'s '+inlineBlank(26)+'. We put colourful '+inlineBlank(27)+' on the wall. My mother baked a chocolate '+inlineBlank(28)+'. We played fun '+inlineBlank(29)+' with our friends. Before going home, I '+inlineBlank(30)+' my cousin a present. It was a wonderful day!</p>'+
+ '<p class="letter-signoff">Your friend,<br>Adam</p>'+
+ '</div>'+
+ '<h3>Word Bank</h3><div class="wordbank">'+bank.map(x=>'<span>'+esc(x)+'</span>').join("")+'</div>';
  return s+'<p><strong>You went to the park with your family last Sunday</strong> and you want to tell your friend, Hana, about it.</p>'+
  '<div class="grid3">'+cues.map((c,i)=>'<div class="illustration">'+scene(i)+'<div class="caption"><strong>Picture '+(i+1)+'</strong><br><span class="tag">'+esc(c)+'</span></div></div>').join("")+'</div>'+
  '<div class="prompt">Dear Hana,<br><br>How are you? Last Sunday, my family and I went to the park.</div>'+
- cues.map((cue,i)=>'<label for="write'+i+'">Picture '+(i+1)+' — '+esc(cue)+'</label><textarea id="write'+i+'" placeholder="Write a sentence or sentences about picture '+(i+1)+'..." oninput="write('+i+')">'+esc(S.writing[i]||"")+'</textarea>').join("")+
+ cues.map((cue,i)=>'<label for="write'+i+'">Picture '+(i+1)+' — '+esc(cue)+'</label><textarea id="write'+i+'" placeholder="Write a sentence or sentences about picture '+(i+1)+'..." oninput="updatePictureAnswer('+i+',this.value)">'+esc(S.writing[i]||"")+'</textarea>').join("")+
  '<div class="prompt">Your friend,<br>Ali</div><p class="hint">Marking rubric: 5 marks per picture (cues, meaningful message, punctuation, sequencing connector and conjunction).</p>';
 }
 function changePart(d){goto(S.part+d)}
