@@ -42,6 +42,14 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 #exam,#result{display:none}.bottomnote{text-align:center;font-size:.8rem;color:#6a829b;margin:27px 0}.two{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.mini{background:#ecf4ff;padding:10px;border-radius:8px}.mini strong{display:block}.tag{color:#225588;background:#e3f0fd;border-radius:5px;padding:3px 6px;font-size:.81rem}
 @media(max-width:900px){.lay{display:block}.sidebar{position:static;display:flex;overflow:auto;gap:8px;margin-bottom:13px;padding:8px}.sidebar button{flex:0 0 auto;width:auto;font-size:.85rem;margin:0;padding:11px}.sidebar button small{display:none}.grid3{grid-template-columns:1fr}.illustration svg{max-height:230px}.top{padding:12px}.rowq{grid-template-columns:1fr}.two{grid-template-columns:1fr}.option{padding:11px}}
 @media print{.top,.sidebar,.actions,.bottomnote{display:none!important}body{background:white}.lay{display:block}.pane{box-shadow:none;border:0;padding:0}}
+
+/* Picture-writing artwork: use matching black-and-white Year 2 tile artwork. */
+.trialScene{position:relative;width:100%;aspect-ratio:1;overflow:hidden;background:white}
+.trialScene>img{position:absolute;max-width:none!important;display:block;width:300%;height:100%;object-fit:fill}
+.trialScene>svg,.trialFallback,.trialFallback svg{display:block;width:100%;height:100%;aspect-ratio:auto}
+.trialFallback{position:absolute;inset:0;background:white}
+.trialFallback[hidden]{display:none!important}
+@media print{.trialScene{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -66,6 +74,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 <section id="leaderboard" class="card" style="max-width:900px;margin:auto"></section>
 <div class="bottomnote">Made for educational practice · Not the official examination paper</div>
 </div>
+<script src="../year2-part7/line-art.js?v=2"></script>
+<script src="../year2-part7/line-art-play.js?v=2"></script>
+<script src="../year2-part7/line-art-stories.js?v=2"></script>
 <script>
 "use strict";
 const KEY="year2_uasa_trial_2026_v2",SESSION_KEY="year2_uasa_trial_active";
@@ -98,7 +109,7 @@ const spells=[["It has long ears and likes carrots.","r"],["It has a hard shell 
 const bank=["party","balloons","cake","games","gave","garden"];
 const cloze=[26,27,28,29,30];
 const cues=["saw - beautiful - butterflies","ate - sandwiches - family","played - football - brother"];
-const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters, full stops and commas","Sequencing connector","Conjunction"];
+const rlabels=["All 3 word cues used","Cues used meaningfully","Capital letters, full stops and commas","Sequencing connector","Joining word (and / with)"];
 const instructions=[
 "Read the text in each question carefully. Choose the correct answer A, B or C.",
 "Read the passage and choose the correct word for each blank.",
@@ -106,7 +117,7 @@ const instructions=[
 "Read the descriptions of places A, B and C. Match each sentence to a place.",
 "Read the animal descriptions. The first letter is given. Type the whole word, or the missing letters.",
 "Complete the message using five words from the word bank.",
-"Use the words under each picture to complete the message. Write sentences with capital letters and full stops."
+"Look at the three pictures. Write complete sentences using all three word cues for each picture. For full marks, begin Picture 1 with First, Picture 2 with Next, and Picture 3 with Then. Use and or with in your writing for every picture. Remember capital letters, full stops and commas."
 ];
 let S={code:"",name:"",className:"",isTester:false,part:0,ans:{},writing:["","",""],started:0,submitted:false,submitting:false,autoTried:false,submissionId:"",serverResult:null};
 let clockInterval,boardShowingTesters=false;
@@ -167,6 +178,41 @@ function scene(i){
  if(i===1)return svgstart+'<path d="M10 165q120 -8 290 0"/><path d="M45 52V161M60 57V160"/><path d="M32 82C15 51 45 34 64 47C88 27 108 53 100 69C123 98 73 105 61 88C42 104 23 99 32 82Z"/><path d="M85 166l30 -26h102l31 26Z"/><circle cx="117" cy="82" r="19"/><circle cx="192" cy="77" r="19"/><circle cx="263" cy="88" r="16"/><path d="M115 102v36m-15 -28l-15 28m40 -28l16 25M192 96v44m-14 -32l-13 28m41 -28l14 27M263 104v40m-10 -28l-14 22"/><path d="M134 150l15 -11 16 11Z M181 152l11 -10 11 10Z"/><rect x="216" y="130" width="13" height="21"/><path d="M229 135l7 -5"/>'+end;
  return svgstart+tree+'<path d="M10 172q150 -7 290 0"/><circle cx="126" cy="68" r="19"/><path d="M126 89v55m0 -42l-33 31m33 -31l35 29m-35 13l-28 30m28 -30l27 24"/><circle cx="247" cy="73" r="17"/><path d="M247 90v53m0 -39l-26 20m26 -20l30 18m-30 21l-30 27m30 -27l22 27"/><circle cx="186" cy="161" r="15"/><path d="M181 148l8 -1 7 8 -6 10 -10 -2 -4 -8Z"/><path d="M173 160l-2 7m28 -14l8 -5M183 174l4 8"/><path d="M286 165V100H300 M300 100V165"/>'+end;
 }
+
+function trialButterfly(x,y,s){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')" fill="white" stroke="#181818" stroke-width="2.5" stroke-linecap="round">'+
+ '<path d="M0 0 C-13 -37 -45 -26 -30 -6 C-55 8 -31 35 -3 10 M0 0 C13 -37 45 -26 30 -6 C55 8 31 35 3 10"/>'+
+ '<path d="M0 -8 Q-4 13 0 24 Q4 13 0 -8 M-1 -7 l-9 -12 M1 -7 l9 -12"/>'+
+ '<circle cx="-19" cy="-5" r="4"/><circle cx="19" cy="-5" r="4"/></g>';
+}
+function trialFlower(x,y,s){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')" fill="white" stroke="#191919" stroke-width="2.2">'+
+ '<path d="M0 -6 V43 M0 22 Q-21 10 -26 25 Q-11 36 0 22 M0 24 Q18 9 25 22 Q12 35 0 24"/>'+
+ '<ellipse cx="0" cy="-21" rx="10" ry="18"/><ellipse cx="-15" cy="-9" rx="17" ry="10"/>'+
+ '<ellipse cx="15" cy="-9" rx="17" ry="10"/><circle cx="0" cy="-10" r="9"/></g>';
+}
+function trialGarden(){
+ const A=window.Y2Art;if(!A||!A.child)return scene(0);
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="A smiling boy seeing beautiful butterflies among flowers at the park">'+
+ '<g fill="white" stroke="#191919" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">'+
+ '<path d="M0 275 Q90 260 163 278 T320 270 M0 306 Q155 288 320 306"/>'+
+ A.cloud(206,44)+A.tree(40,285,1.25)+A.child(108,293,1.12,'reach',false)+
+ trialFlower(217,263,.76)+trialFlower(269,268,.66)+trialFlower(301,269,.54)+trialFlower(178,294,.39)+
+ trialButterfly(189,123,.61)+trialButterfly(265,136,.68)+trialButterfly(239,85,.50)+trialButterfly(302,194,.38)+
+ '<path d="M17 305 l9 -12 M49 303 l11 -14 M157 302 l12 -9 M299 304 l10 -11"/></g>'+
+ '<rect x="2" y="2" width="316" height="316" rx="4" fill="none" stroke="#191919" stroke-width="2"/></svg>';
+}
+function trialPicture(i){
+ if(i===0)return '<div class="trialScene">'+trialGarden()+'</div>';
+ const picnic=i===1,src=picnic?'../year2-part7/stem-zoo-koalas-camel.png':'../year2-part7/stem-sports.jpg';
+ const style=picnic?'width:305.843%!important;height:132.154%!important;left:-103.005%;top:-16.154%':'left:-100%;top:0';
+ const alt=picnic?'A family eating lunch and sandwiches together on a picnic mat':'Two boys playing football near a goal';
+ const backup=picnic?((window.Y2Art&&window.Y2Art.svg('lunch'))||scene(1)):scene(2);
+ return '<div class="trialScene"'+(picnic?' style="aspect-ratio:599/650"':'')+'>'+
+ '<img src="'+src+'" alt="'+esc(alt)+'" loading="eager" decoding="async" style="'+style+'" onerror="this.hidden=true;this.nextElementSibling.hidden=false">'+
+ '<div class="trialFallback" hidden>'+backup+'</div></div>';
+}
+
 function nav(){
  let out="";
  for(let p=0;p<7;p++){
@@ -208,10 +254,10 @@ function htmlPart(p){
  '</div>'+
  '<h3>Word Bank</h3><div class="wordbank">'+bank.map(x=>'<span>'+esc(x)+'</span>').join("")+'</div>';
  return s+'<p><strong>You went to the park with your family last Sunday</strong> and you want to tell your friend, Hana, about it.</p>'+
- '<div class="grid3">'+cues.map((c,i)=>'<div class="illustration">'+scene(i)+'<div class="caption"><strong>Picture '+(i+1)+'</strong><br><span class="tag">'+esc(c)+'</span></div></div>').join("")+'</div>'+
+ '<div class="grid3">'+cues.map((c,i)=>'<div class="illustration">'+trialPicture(i)+'<div class="caption"><strong>Picture '+(i+1)+'</strong><br><span class="tag">'+esc(c)+'</span></div></div>').join("")+'</div>'+
  '<div class="prompt">Dear Hana,<br><br>How are you? Last Sunday, my family and I went to the park.</div>'+
  cues.map((cue,i)=>'<label for="write'+i+'">Picture '+(i+1)+' — '+esc(cue)+'</label><textarea id="write'+i+'" placeholder="Write a sentence or sentences about picture '+(i+1)+'..." oninput="updatePictureAnswer('+i+',this.value)">'+esc(S.writing[i]||"")+'</textarea>').join("")+
- '<div class="prompt">Your friend,<br>Ali</div><p class="hint">Marking rubric: 5 marks per picture (cues, meaningful message, punctuation, sequencing connector and conjunction).</p>';
+ '<div class="prompt">Your friend,<br>Ali</div><p class="hint">5 marks per picture: use all 3 cues (1), clear meaning (1), punctuation (1), First / Next / Then (1), and a joining word such as and or with (1).</p>';
 }
 function changePart(d){goto(S.part+d)}
 function goto(p){if(p<0||p>6)return;S.part=p;save();render();window.scrollTo({top:0,behavior:"smooth"})}
