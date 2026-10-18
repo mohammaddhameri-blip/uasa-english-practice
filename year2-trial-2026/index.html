@@ -174,7 +174,7 @@ function chooseHTML(d){
 function setAns(n,v){S.ans["q"+n]=v;save()}
 function spell(n,desc,word){
  let v=S.ans["q"+n]||"";
- return '<div class="rowq"><div><span class="qnum">'+n+'.</span> '+esc(desc)+'</div><div><span style="font-weight:800">'+word[0]+'</span> <input aria-label="Question '+n+' answer" class="blank" type="text" value="'+esc(v)+'" placeholder="'+word[0]+'...' oninput="setAns('+n+',this.value)" autocomplete="off" spellcheck="false" maxlength="22"></div></div>';
+ return '<div class="rowq"><div><span class="qnum">'+n+'.</span> '+esc(desc)+'</div><div><span style="font-weight:800">'+word[0]+'</span> <input aria-label="Question '+n+' answer" class="blank" type="text" value="'+esc(v)+'" placeholder="'+word[0]+'..." oninput="setAns('+n+',this.value)" autocomplete="off" spellcheck="false" maxlength="22"></div></div>';
 }
 function write(i){S.writing[i]=el("write"+i).value;save()}
 function htmlPart(p){
@@ -189,7 +189,7 @@ function htmlPart(p){
  '<div class="grid3">'+cues.map((c,i)=>'<div class="illustration">'+scene(i)+'<div class="caption"><strong>Picture '+(i+1)+'</strong><br><span class="tag">'+esc(c)+'</span></div></div>').join("")+'</div>'+
  '<div class="prompt">Dear Hana,<br><br>How are you? Last Sunday, my family and I went to the park.</div>'+
  cues.map((cue,i)=>'<label for="write'+i+'">Picture '+(i+1)+' — '+esc(cue)+'</label><textarea id="write'+i+'" placeholder="Write a sentence or sentences about picture '+(i+1)+'..." oninput="write('+i+')">'+esc(S.writing[i]||"")+'</textarea>').join("")+
- '<div class="prompt">Your friend,<br>Ali</div><p class="hint">Teacher marking: 5 marks per picture (cues, meaningful message, punctuation, sequencing connector and conjunction).</p>';
+ '<div class="prompt">Your friend,<br>Ali</div><p class="hint">Marking rubric: 5 marks per picture (cues, meaningful message, punctuation, sequencing connector and conjunction).</p>';
 }
 function changePart(d){goto(S.part+d)}
 function goto(p){if(p<0||p>6)return;S.part=p;save();render();window.scrollTo({top:0,behavior:"smooth"})}
