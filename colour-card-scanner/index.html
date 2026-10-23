@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>ColourCard Scan | Smartboard Prototype</title>
+<link rel="stylesheet" href="./styles.css">
+<script src="./app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><div class="mark">▦</div><div><strong>ColourCard Scan</strong><small>Smartboard webcam prototype · v0.1</small></div></div>
+ <div class="topright"><span id="status" class="status" role="status">Camera off</span><span class="privacy">Camera processing stays on this device</span></div>
+</header>
+<main class="shell">
+ <section class="controls panel" aria-label="Camera and classroom controls">
+  <div class="toolbar">
+   <label>Class <input id="className" type="text" value="5T" maxlength="24" aria-label="Class name"></label>
+   <label>Rows <input id="rows" type="number" value="4" min="1" max="10"></label>
+   <label>Columns <input id="cols" type="number" value="7" min="1" max="12"></label>
+   <button id="buildGrid" class="secondary">Set grid</button>
+   <button id="startCamera" class="primary">▶ Start camera</button>
+   <button id="stopCamera" class="secondary" disabled>■ Stop</button>
+   <button id="demo" class="secondary">Try demo cards</button>
+  </div>
+  <div class="toolbar compact">
+   <label class="check"><input id="mirror" type="checkbox"> Mirror camera</label>
+   <label>Camera <select id="cameraDevice" aria-label="Choose camera"><option value="">Default camera</option></select></label>
+   <label>Sensitivity <input id="sensitivity" type="range" min="4" max="85" value="16"><output id="sensitivityValue">16</output></label>
+   <label>Stable frames <select id="stableFrames"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+  </div>
+  <div class="help" id="cameraHelp">Choose <b>Start camera</b>, allow webcam access, then use <b>Calibrate</b> to align the grid with pupils' card positions. HTTPS and webcam permission are required.</div>
+ </section>
+ <div class="workspace">
+  <section class="viewer panel">
+    <div class="viewerHead"><div><h1>Classroom camera</h1><p>One perspective-adjusted zone per pupil. Tap a zone to edit its answer or seat assignment.</p></div><span class="count" id="counter">0 / 28 recorded</span></div>
+    <div class="tabbar" role="group" aria-label="Grid interaction mode">
+      <button id="modeReview" class="mode active" aria-pressed="true">Review answers</button>
+      <button id="modeCalibrate" class="mode" aria-pressed="false">Calibrate grid</button>
+      <button id="resetGrid" class="secondary small">Reset geometry</button>
+    </div>
+    <div id="cameraStage" class="cameraStage" aria-label="Camera view and adjustable detection grid">
+     <video id="video" autoplay muted playsinline aria-label="Live webcam"></video>
+     <div class="stagePlaceholder" id="placeholder"><span>▦</span><strong>Camera preview</strong><small>Start the camera or try demo cards</small></div>
+     <canvas id="overlay" aria-label="Perspective detection zones"></canvas>
+     <div class="stageLabel" id="stageLabel">CAMERA OFF · PREVIEW GRID</div>
+    </div>
+    <div class="stageBottom">
+      <span id="modeHint">Review mode: tap any numbered cell to edit an answer.</span>
+      <span class="legend"><i class="swatch a"></i> A <i class="swatch b"></i> B <i class="swatch c"></i> C <i class="swatch d"></i> D</span>
+    </div>
+    <div class="toolbar after">
+     <button id="newQuestion" class="secondary">↺ Clear answers</button>
+     <button id="freeze" class="primary">Freeze & mark</button>
+     <button id="resume" class="secondary" disabled>Resume scanning</button>
+     <button id="exportCsv" class="secondary">Export results CSV</button>
+    </div>
+  </section>
+  <aside class="sidebar">
+   <section class="panel inset">
+    <h2>Zone editor</h2><p class="fine">Select a numbered grid cell to edit the corresponding pupil.</p>
+    <div class="selected"><b id="selectedNumber">Seat 01</b><span id="selectedDetection">No answer</span></div>
+    <label>Assigned pupil <input id="pupilName" type="text" placeholder="Pupil name"></label>
+    <div class="optionlabel">Record answer manually</div>
+    <div class="manual" id="manualButtons">
+      <button class="answer a" data-answer="A">A</button><button class="answer b" data-answer="B">B</button>
+      <button class="answer c" data-answer="C">C</button><button class="answer d" data-answer="D">D</button>
+      <button class="answer clear" data-answer="">Clear</button>
+    </div>
+   </section>
+   <section class="panel inset">
+    <div class="headrow"><h2>Seating roster</h2><button id="showRoster" class="textbutton">Edit list</button></div>
+    <p class="fine">Seat numbers follow the grid left-to-right, back row first.</p>
+    <div class="rosterGrid" id="rosterGrid" aria-label="Pupil response summary"></div>
+    <div id="rosterEditor" hidden>
+     <label>One pupil per line, in seat order <textarea id="rosterText" rows="7" placeholder="Pupil 1&#10;Pupil 2&#10;Pupil 3"></textarea></label>
+     <button id="applyRoster" class="secondary">Apply names</button>
+    </div>
+   </section>
+   <section class="panel inset">
+    <h2>Classroom layouts</h2>
+    <p class="fine">Layouts and answers save locally in this browser. Export a backup before using another device.</p>
+    <div class="stackbuttons">
+     <button id="saveLayout" class="secondary">Save this class</button>
+     <button id="loadLayout" class="secondary">Load saved class</button>
+     <button id="exportLayout" class="secondary">Download layout JSON</button>
+     <label class="filebutton">Import layout JSON <input type="file" id="importLayout" accept=".json,application/json"></label>
+    </div>
+   </section>
+  </aside>
+ </div>
+ <section class="panel questions">
+  <div class="headrow"><div><h2>Practice question</h2><p class="fine">A built-in example for checking answer recording, not a full question bank.</p></div><span id="markingStatus" class="fine">Not marked</span></div>
+  <label>Question <textarea id="question" rows="2">Where should Faris wait if it rains?</textarea></label>
+  <div class="answersGrid">
+    <label class="questionOption a">A · Yellow<input id="choiceA" value="Near the school field"></label>
+    <label class="questionOption b">B · Green<input id="choiceB" value="At the main gate"></label>
+    <label class="questionOption c">C · Magenta<input id="choiceC" value="Under the covered walkway"></label>
+    <label class="questionOption d">D · Cyan<input id="choiceD" value="Outside the canteen"></label>
+  </div>
+  <div class="toolbar compact questionFoot"><label>Correct answer <select id="correctAnswer"><option>A</option><option>B</option><option selected>C</option><option>D</option></select></label><span class="fine">Only <b>Freeze & mark</b> calculates the score.</span></div>
+  <div class="results" id="results" hidden aria-live="polite"></div>
+ </section>
+ <footer>Prototype · webcam processed locally · colour detection is experimental and requires classroom calibration · no facial recognition</footer>
+</main>
+</body>
+</html>
