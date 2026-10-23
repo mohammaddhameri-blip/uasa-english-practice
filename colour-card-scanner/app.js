@@ -59,13 +59,13 @@ function draw(){
  for(let i=0;i<s.rows*s.cols;i++){
   const poly=zonePoints(i),v=s.answers[i],isCurrent=i===s.selected;
   path(poly,w,h);
-  ctx.fillStyle=v?hexAlpha(HEX[v.letter],s.demo?.24:.17):isCurrent?"rgba(113,180,255,.15)":"rgba(0,0,0,.045)";
+  ctx.fillStyle=v?hexAlpha(HEX[v.letter],s.demo ? .24 : .17):isCurrent?"rgba(113,180,255,.15)":"rgba(0,0,0,.045)";
   ctx.fill();ctx.lineWidth=isCurrent?2.5:1.15;ctx.strokeStyle=isCurrent?"#e6f4ff":s.mode==="calibrate"?"rgba(255,215,126,.9)":"rgba(208,229,255,.6)";ctx.stroke();
   const p=center(poly),fontSize=clamp(w/(s.cols*5.6),11,23);
   const lab=(i+1).toString().padStart(2,"0")+(v?" · "+v.letter:"");
   ctx.font="700 "+fontSize+"px system-ui";ctx.textAlign="center";ctx.textBaseline="middle";
   const tw=ctx.measureText(lab).width;
-  ctx.fillStyle="rgba(5,15,28,.76)";ctx.beginPath();ctx.roundRect(p.x*w-tw/2-7,p.y*h-fontSize*.75,tw+14,fontSize*1.5,5);ctx.fill();
+  ctx.fillStyle="rgba(5,15,28,.76)";ctx.beginPath();ctx.rect(p.x*w-tw/2-7,p.y*h-fontSize*.75,tw+14,fontSize*1.5);ctx.fill();
   ctx.fillStyle=v?HEX[v.letter]:"#fff";ctx.fillText(lab,p.x*w,p.y*h);
   if(s.demo&&v){const px=p.x*w,py=p.y*h-fontSize*1.85,cardSize=Math.min(w/s.cols*.34,h/s.rows*.4);ctx.fillStyle=HEX[v.letter];ctx.fillRect(px-cardSize*.5,py-cardSize*.6,cardSize,cardSize*.95)}
  }
@@ -95,7 +95,7 @@ function renderEditor(){
 }
 function renderCounters(){const n=s.answers.filter(x=>x).length;$("counter").textContent=n+" / "+s.answers.length+" recorded"}
 function renderAll(){renderCounters();renderRoster();renderEditor();draw();if(s.frozen)showResults()}
-function selectZone(i){if(i<0||i>=s.rows*s.cols)return;s.selected=i;renderAll()}
+function selectZone(i){if(i<0||i>=s.rows*s.cols)return;s.selected=i;$("pupilName").value=s.pupils[i]||"";renderAll()}
 function manualAnswer(colour){s.answers[s.selected]=colour?{letter:colour,source:"manual",locked:true}:null;s.candidates[s.selected]={colour:"",n:0};renderAll();putSaved()}
 function clearAnswers(){s.answers.fill(null);s.candidates=Array.from({length:s.rows*s.cols},()=>({colour:"",n:0}));s.frozen=false;$("freeze").disabled=false;$("resume").disabled=true;$("results").hidden=true;$("markingStatus").textContent="Not marked";renderAll();putSaved()}
 function showResults(){const answered=s.answers.filter(x=>x).length,correct=s.answers.filter(x=>x&&x.letter===$("correctAnswer").value).length;
