@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#204663">
+<meta name="description" content="Kehadiran 5 Terbilang. Rekod kehadiran sepenuhnya luar talian.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23204663'/%3E%3Cpath d='M16 33 28 44 50 19' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+
+<!-- KEHADIRAN_PUBLIC_APP_TEMPLATE_V1 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none';">
+<title>Kehadiran · 5 Terbilang</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f8fa;color:#152536;font-size:15px}
+*{box-sizing:border-box}body{margin:0;padding:0}button,select,input{font:inherit}
+header{background:#204663;color:white;padding:17px max(16px,calc((100% - 1060px)/2));box-shadow:0 1px 5px #0002}
+header h1{margin:0;font-size:1.35rem;letter-spacing:.1px;font-weight:700}
+header p{margin:4px 0 0;color:#e3edf5;font-size:.86rem}
+main{max-width:1100px;margin:auto;padding:16px}
+.toolbar{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0 0 12px}
+.datefield{display:grid;gap:5px;font-size:.86rem;font-weight:700}
+.datefield input{border:1px solid #cad4db;border-radius:8px;padding:9px 10px;background:#fff;color:#152536;min-height:42px}
+.summary{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:.91rem}
+.summary strong{font-variant-numeric:tabular-nums}.missing{color:#ab3c2e}.status{font-size:.79rem;color:#3c6b57;margin-bottom:12px;min-height:18px}
+.tablewrap{overflow-x:auto;background:white;border:1px solid #d6dfe6;border-radius:10px;box-shadow:0 3px 13px #182c3d09}
+table{border-collapse:collapse;table-layout:fixed;width:100%;min-width:380px}
+col.tickcol{width:56px}col.namecol{width:54%}col.reasoncol{width:calc(46% - 56px)}
+th{background:#eef2f6;color:#28394b;text-align:left;font-size:.87rem;padding:11px 9px;border-bottom:1px solid #ccd8e1}
+th:first-child,td:first-child{text-align:center}
+td{vertical-align:middle;padding:10px 9px;border-bottom:1px solid #e4e9ed;font-size:.9rem}
+tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafbfc}tbody tr.absent{background:#fff9f5}tbody tr:hover{background:#f4f8fb}
+.check{width:22px;height:22px;accent-color:#237552;cursor:pointer;vertical-align:middle}
+.name{font-weight:600;line-height:1.38;overflow-wrap:anywhere}.index{display:block;color:#7c8b95;font-size:.72rem;font-weight:400;margin-bottom:2px}
+.reason-empty{color:#8b98a2;font-size:1rem}.reasonControls{display:grid;gap:6px}
+.reasonControls select{width:100%;max-width:100%;font-size:.83rem;border:1px solid #c4ced6;padding:9px 24px 9px 8px;border-radius:6px;background-color:#fff;color:#203447;min-height:39px;white-space:normal}
+.reasonControls select.needs{border-color:#dc8b63;background-color:#fff8f1}.reasonControls select:disabled{background:#f2f4f6;color:#a1a8b1}
+.actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:14px 0 10px}
+button,.actionlink{border:1px solid #c4d1db;border-radius:8px;background:white;color:#213b52;padding:10px 13px;min-height:42px;cursor:pointer;font-weight:600;font-size:.86rem}
+button.primary{background:#204663;color:white;border-color:#204663}button:active{transform:translateY(1px)}button:hover{filter:brightness(.96)}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #7fbadf;outline-offset:1px}
+.footnote{color:#596b79;font-size:.78rem;line-height:1.6;margin-top:4px}.privacy{max-width:820px}
+.hideinput{display:none}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:640px){header{padding:15px 14px}header h1{font-size:1.22rem}main{padding:12px}.toolbar{align-items:center}.summary{gap:8px;font-size:.82rem}col.tickcol{width:43px}col.namecol{width:49%}col.reasoncol{width:calc(51% - 43px)}td{padding:9px 6px;font-size:.79rem}.name{line-height:1.32}th{padding:11px 6px;font-size:.78rem}.reasonControls select{font-size:.75rem;padding:8px 20px 8px 5px;min-height:41px}.index{font-size:.68rem}.check{width:23px;height:23px}}
+@media print{header{color:black;background:white;box-shadow:none;padding:0 0 9px}header p,.actions,.status,.footnote{display:none}.tablewrap{border:0;box-shadow:none}main{padding:0}body{background:white}td,th{border:1px solid #d1d1d1}tr{break-inside:avoid}.reasonControls select{border:0;padding:0;appearance:none}}
+</style>
+</head>
+<body>
+<header><h1>Rekod Kehadiran · 5 Terbilang</h1><p>Tahun 2026 · 29 murid · Luar talian</p></header>
+<main>
+<section class="toolbar" aria-label="Tarikh dan ringkasan">
+<label class="datefield">Tarikh kehadiran<input id="dateInput" type="date" aria-label="Tarikh kehadiran"></label>
+<div class="summary" aria-live="polite"><span>Hadir: <strong id="presentNum">29</strong></span><span>Tidak hadir: <strong id="absentNum">0</strong></span><span class="missing">Belum pilih sebab: <strong id="missingNum">0</strong></span></div>
+</section>
+<div id="saveStatus" role="status" class="status">Disimpan secara automatik dalam peranti ini.</div>
+<section class="tablewrap" aria-label="Senarai kehadiran">
+<table>
+<colgroup><col class="tickcol"><col class="namecol"><col class="reasoncol"></colgroup>
+<thead><tr><th scope="col">✓</th><th scope="col">Nama Murid</th><th scope="col">Sebab Tidak Hadir</th></tr></thead>
+<tbody id="rosterBody"></tbody>
+</table>
+</section>
+<div class="actions">
+<button type="button" id="checkUpdates" style="display:none" onclick="AttendanceNative.checkForUpdates()">Semak kemas kini</button>
+<button type="button" id="configureUpdates" style="display:none" onclick="AttendanceNative.configureUpdateUrl()">Tetapkan sumber kemas kini</button>
+<button type="button" class="primary" id="exportCsv">Muat turun CSV</button>
+<button type="button" id="backup">Sandaran rekod</button>
+<button type="button" id="restore">Pulihkan sandaran</button>
+<button type="button" id="resetDay">Tetap semula tarikh ini</button>
+<input class="hideinput" id="restoreInput" type="file" accept="application/json,.json" aria-label="Pilih fail sandaran">
+</div>
+<p id="updateStatus" class="footnote" style="display:none" aria-live="polite"></p>
+<p class="footnote privacy">Tandakan ✓ untuk hadir. Buang tanda ✓ untuk tidak hadir, kemudian pilih <strong>Kategori Tidak Hadir</strong> dan <strong>Sebab Tidak Hadir</strong>. Rekod setiap tarikh disimpan secara automatik pada peranti ini sahaja. Simpan fail sandaran jika bertukar peranti atau membersihkan data pelayar.</p>
+</main>
+<script src="roster.js"></script>
+<script>
+'use strict';
+const ROSTER = Array.isArray(window.KEHADIRAN_ROSTER) ? window.KEHADIRAN_ROSTER : [];
+const REASONS = {"AKTIVITI LUAR SEKOLAH":["WAKIL SEKOLAH"],"ANCAMAN KESELAMATAN":["BINATANG LIAR/BUAS/BERBISA","DICULIK","GANGGUAN MISTIK/MAKHLUK HALUS","GANGGUAN KUMPULAN KONGSI GELAP","KEBAKARAN","PENGGANAS/LANUN","RUSUHAN DI LUAR KAWASAN SEKOLAH","UGUTAN DARIPADA PIHAK LUAR","MANGSA BULI","MANGSA SEKSUAL","TIDAK DAPAT DIKESAN/HILANG"],"BENCANA":["JEREBU","KEMALANGAN","BANJIR","GEMPA BUMI","HUJAN LEBAT/RIBUT TAUFAN","PENCEMARAN UDARA","KEMARAU","CUACA PANAS EL NINO","PENCEMARAN SISA KIMIA","PENCEMARAN ALAM","TANAH RUNTUH"],"DIGANTUNG SEKOLAH":["DIGANTUNG SEKOLAH"],"MASALAH KELUARGA":["BEKERJA","BERPINDAH RANDAH","PEREBUTAN HAK PENJAGAAN ANAK","MENGIKUT KELUARGA BERCUTI/BERKURSUS","MENJAGA/MENGURUSKAN AHLI KELUARGA","MENJAGA AHLI KELUARGA YANG SAKIT","KEMATIAN AHLI KELUARGA TERDEKAT","KEMISKINAN/KESEMPITAN HIDUP","MASALAH PENGANGKUTAN","MENZIARAHI KELUARGA SAKIT","BALIK KAMPUNG","BERPINDAH KE LUAR NEGARA","KRISIS KELUARGA","LARI DARI RUMAH"],"MASALAH PERIBADI":["TEKANAN PERASAAN/TRAUMA","KESAKITAN AKIBAT HAID/PERMULAAN HAID"],"PDPR":["PEMBELAJARAN DI RUMAH"],"PENGGILIRAN PEPERIKSAAN":["URUSAN PEPERIKSAAN"],"KEBENARAN PENGETUA/GURU BESAR":["HAJI/UMRAH/KEGIATAN AGAMA","PEPERIKSAAN/UJIAN SELAIN KPM","PERTANDINGAN/AKTIVITI SELAIN KPM","PROSES PERPINDAHAN SEKOLAH","TERLIBAT KES JENAYAH","TERLIBAT KES TRAFIK","URUSAN RASMI AGENSI KERAJAAN","LATIHAN/UJIAN LESEN MEMANDU","TAHANAN PIHAK BERKUASA","TERLIBAT PROSIDING MAHKAMAH","PERLINDUNGAN JABATAN KEBAJIKAN MASYARAKAT","CUTI SEMESTER","MENJALANI LATIHAN INDUSTRI"],"PONTENG":["BANGUN LEWAT","MALAS KE SEKOLAH","KETAGIHAN GAJET","TIDAK MENYIAPKAN KERJA SEKOLAH","MALAS KE AKTIVITI KOKURIKULUM"],"MASALAH KESIHATAN":["MAKLUMAN IBU BAPA/PENJAGA","KECEDERAAN/PATAH TULANG","SURAT CUTI SAKIT HOSPITAL/KLINIK","IMUNISASI RENDAH","DEMAM","TANTRUM (MBK)","TEMU JANJI HOSPITAL/KLINIK","MENJALANI TERAPI/RAWATAN/KUARANTIN","TIDAK MELEPASI SARINGAN KESIHATAN (MBK)","MENDAPATKAN RAWATAN TRADISIONAL","KEMURUNGAN","BATUK KOKOL","BEGUK","CACAR AIR","CHIKUNGUNYA","COVID-19 BERGEJALA","COVID-19 DENGAN KEBENARAN IBU BAPA","COVID-19 DIKUARANTIN","COVID-19 PENGGILIRAN","DENGGI","SWINE FLU (H1N1)","HEPATITIS","HAND, FOOT AND MOUTH DISEASE (HFMD)","INFLUENZA","JAPANESE ENCEPHALITIS","LEPTOSPIROSIS (PENYAKIT KENCING TIKUS)","KUDIS BUTA","MALARIA","MERS COV","SARS","TAUN","TIBI","SAKIT MISTIK","SAKIT MENTAL","TEKANAN EMOSI"],"SEKOLAH DALAM HOSPITAL":["SEKOLAH DALAM HOSPITAL"]};
+const STORE_KEY='kehadiran-5terbilang-2026-v1';
+const el={date:document.getElementById('dateInput'),body:document.getElementById('rosterBody'),present:document.getElementById('presentNum'),absent:document.getElementById('absentNum'),missing:document.getElementById('missingNum'),status:document.getElementById('saveStatus')};
+let db={version:1, records:{}};
+let storageOK=true;
+function todayISO(){const d=new Date();const local=new Date(d.getTime()-d.getTimezoneOffset()*60000);return local.toISOString().slice(0,10)}
+function freshRecord(){const r={};for(const pupil of ROSTER)r[pupil.id]={present:true,category:'',reason:''};return r;}
+function getRecord(date){if(!db.records[date])db.records[date]=freshRecord(); const r=db.records[date]; for(const pupil of ROSTER){if(!r[pupil.id]||typeof r[pupil.id].present!=='boolean')r[pupil.id]={present:true,category:'',reason:''};}return r;}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));storageOK=true;el.status.textContent='✓ Disimpan secara automatik dalam peranti ini.';el.status.style.color='#3c6b57';}catch(e){storageOK=false;el.status.textContent='Amaran: pelayar tidak membenarkan simpanan setempat. Sila gunakan fail sandaran sebelum menutup aplikasi.';el.status.style.color='#a84227';}updateTotals()}
+function load(){try{const raw=localStorage.getItem(STORE_KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&typeof parsed.records==='object'&&!Array.isArray(parsed.records))db={version:1,records:parsed.records};}}catch(e){storageOK=false}}
+function option(text,value){const o=document.createElement('option');o.textContent=text;o.value=value===undefined?text:value;return o;}
+function selectOptions(select,placeholder,items,selected){select.replaceChildren(option(placeholder,''));for(const item of items)select.append(option(item));select.value=items.includes(selected)?selected:'';}
+function updateTotals(){const r=getRecord(el.date.value);let present=0,absent=0,missing=0;for(const pupil of ROSTER){const s=r[pupil.id];if(s.present)present++;else{absent++;if(!s.category||!s.reason)missing++;}}el.present.textContent=present;el.absent.textContent=absent;el.missing.textContent=missing;}
+function render(){const r=getRecord(el.date.value);el.body.replaceChildren();for(const [i,pupil] of ROSTER.entries()){
+ const s=r[pupil.id]; const tr=document.createElement('tr');tr.classList.toggle('absent',!s.present);
+ const cellTick=document.createElement('td');const checked=document.createElement('input');checked.type='checkbox';checked.className='check';checked.checked=s.present;checked.setAttribute('aria-label','Hadir: '+pupil.name);cellTick.append(checked);
+ const cellName=document.createElement('td');const name=document.createElement('div');name.className='name';const index=document.createElement('span');index.className='index';index.textContent=String(i+1).padStart(2,'0');name.append(index,document.createTextNode(pupil.name));cellName.append(name);
+ const cellReason=document.createElement('td');const controls=document.createElement('div');controls.className='reasonControls';
+ const cat=document.createElement('select');cat.setAttribute('aria-label','Kategori tidak hadir: '+pupil.name);selectOptions(cat,'Pilih Kategori Tidak Hadir',Object.keys(REASONS),s.category);
+ const reason=document.createElement('select');reason.setAttribute('aria-label','Sebab tidak hadir: '+pupil.name);
+ function syncReason(){if(s.present){controls.replaceChildren();const dash=document.createElement('span');dash.className='reason-empty';dash.textContent='—';controls.append(dash);}else{controls.replaceChildren(cat,reason);selectOptions(reason,'Pilih Sebab Tidak Hadir',REASONS[s.category]||[],s.reason);cat.classList.toggle('needs',!s.category);reason.classList.toggle('needs',!s.reason);reason.disabled=!s.category;}}
+ syncReason();cellReason.append(controls);tr.append(cellTick,cellName,cellReason);el.body.append(tr);
+ checked.addEventListener('change',()=>{s.present=checked.checked;s.category='';s.reason='';tr.classList.toggle('absent',!s.present);syncReason();save();});
+ cat.addEventListener('change',()=>{s.category=cat.value;s.reason='';syncReason();save();});
+ reason.addEventListener('change',()=>{s.reason=reason.value;reason.classList.toggle('needs',!s.reason);save();});
+ }updateTotals();}
+function filenameDate(){return (el.date.value||todayISO()).replaceAll('-','')}
+function download(name,body,mime){
+ if(window.AttendanceNative && typeof AttendanceNative.saveFile==='function'){
+   const bytes=new TextEncoder().encode(body);let binary='';const BATCH=32768;
+   for(let i=0;i<bytes.length;i+=BATCH)binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+BATCH));
+   AttendanceNative.saveFile(name,mime,btoa(binary));return;
+ }
+const blob=new Blob([body],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);}
+function csvField(value){return '"'+String(value??'').replaceAll('"','""')+'"'}
+document.getElementById('exportCsv').addEventListener('click',()=>{const r=getRecord(el.date.value);const lines=[['Tarikh','Kelas','Bil','Nama Murid','Kehadiran','Kategori Tidak Hadir','Sebab Tidak Hadir']];for(const [i,p] of ROSTER.entries()){const s=r[p.id];lines.push([el.date.value,'5 TERBILANG',i+1,p.name,s.present?'HADIR':'TIDAK HADIR',s.present?'':s.category,s.present?'':s.reason]);}download('Kehadiran_5_Terbilang_'+filenameDate()+'.csv','\uFEFF'+lines.map(row=>row.map(csvField).join(',')).join('\r\n'),'text/csv;charset=utf-8')});
+document.getElementById('backup').addEventListener('click',()=>download('Sandaran_Kehadiran_5_Terbilang_'+filenameDate()+'.json',JSON.stringify({app:'KEHADIRAN-5T-OFFLINE',savedAt:new Date().toISOString(),data:db},null,2),'application/json;charset=utf-8'));
+document.getElementById('restore').addEventListener('click',()=>document.getElementById('restoreInput').click());
+document.getElementById('restoreInput').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;try{if(f.size>10_000_000)throw new Error('Fail terlalu besar');const parsed=JSON.parse(await f.text());if(parsed.app!=='KEHADIRAN-5T-OFFLINE'||!parsed.data||!parsed.data.records||typeof parsed.data.records!=='object'||Array.isArray(parsed.data.records))throw new Error('Format sandaran tidak sah');for(const [date,record] of Object.entries(parsed.data.records)){if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!record||typeof record!=='object'||Array.isArray(record))throw new Error('Data rekod tidak sah');for(const [id,s]of Object.entries(record)){if(!ROSTER.some(p=>p.id===id)||!s||typeof s.present!=='boolean'||typeof s.category!=='string'||typeof s.reason!=='string')throw new Error('Data murid tidak sah');}}if(confirm('Pulihkan rekod sandaran? Rekod sedia ada akan diganti.')){db=parsed.data;save();render();alert('Rekod berjaya dipulihkan.');}}catch(err){alert('Gagal membaca sandaran: '+err.message)}e.target.value='';});
+document.getElementById('resetDay').addEventListener('click',()=>{if(confirm('Tetap semula semua 29 murid kepada hadir bagi tarikh '+el.date.value+'? Rekod untuk tarikh ini akan ditimpa.')){db.records[el.date.value]=freshRecord();save();render()}});
+el.date.addEventListener('change',()=>{if(!el.date.value)el.date.value=todayISO();render();save()});
+window.attendanceSetUpdateStatus = function(message){
+ const s=document.getElementById('updateStatus');s.style.display='block';s.textContent=message;
+};
+if(window.AttendanceNative){
+ document.getElementById('checkUpdates').style.display='inline-block';
+ document.getElementById('configureUpdates').style.display='inline-block';
+}
+load();el.date.value=todayISO();getRecord(el.date.value);render();save();
+
+</script>
+</body>
+</html>
