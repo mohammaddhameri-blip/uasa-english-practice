@@ -1,0 +1,90 @@
+name: Build UASA Display APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out application
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android platform
+        run: sdkmanager "platforms;android-35"
+
+      - name: Prepare bundled display and signing key
+        env:
+          UASA_KEYSTORE_BASE64: ${{ secrets.UASA_KEYSTORE_BASE64 }}
+          UASA_STORE_PASSWORD: ${{ secrets.UASA_STORE_PASSWORD }}
+          UASA_KEY_PASSWORD: ${{ secrets.UASA_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$UASA_KEYSTORE_BASE64" || -z "$UASA_STORE_PASSWORD" || -z "$UASA_KEY_PASSWORD" ]]; then
+            echo "::error::Set UASA_KEYSTORE_BASE64, UASA_STORE_PASSWORD and UASA_KEY_PASSWORD in repository Actions secrets first."
+            exit 1
+          fi
+          mkdir -p uasa-5t-display/android/app/src/main/assets
+          mkdir -p uasa-5t-display/android/app/src/main/res/drawable
+          cp uasa-5t-display/index.html uasa-5t-display/android/app/src/main/assets/index.html
+          cp uasa-5t-display/school-logo.webp uasa-5t-display/android/app/src/main/assets/school-logo.webp
+          cp uasa-5t-display/school-logo.webp uasa-5t-display/android/app/src/main/res/drawable/school_logo.webp
+          printf %s "$UASA_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/uasa-release.jks"
+          echo "UASA_KEYSTORE_PATH=$RUNNER_TEMP/uasa-release.jks" >> "$GITHUB_ENV"
+
+      - name: Build signed release APK
+        env:
+          UASA_STORE_PASSWORD: ${{ secrets.UASA_STORE_PASSWORD }}
+          UASA_KEY_PASSWORD: ${{ secrets.UASA_KEY_PASSWORD }}
+        run: |
+          gradle -p uasa-5t-display/android --no-daemon :app:assembleRelease \
+            -PappVersionCode=${{ github.run_number }} \
+            -PappVersionName=1.0.${{ github.run_number }}
+          cp uasa-5t-display/android/app/build/outputs/apk/release/app-release.apk uasa-display.apk
+          SHA256=$(sha256sum uasa-display.apk | cut -d ' ' -f 1)
+          echo "APK_SHA256=$SHA256" >> "$GITHUB_ENV"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: uasa-display-signed-apk
+          path: uasa-display.apk
+
+      - name: Publish signed APK release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: uasa-display-v1.0.${{ github.run_number }}
+          name: Paparan UASA APK v1.0.${{ github.run_number }}
+          body: Official signed UASA smartboard app. Updates are automatically downloaded by previously installed signed versions.
+          files: uasa-display.apk
+
+      - name: Publish updater manifest to GitHub Pages
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+          cat > uasa-5t-display/apk-version.json <<EOF
+          {
+            "versionCode": ${{ github.run_number }},
+            "versionName": "1.0.${{ github.run_number }}",
+            "apkUrl": "https://github.com/${{ github.repository }}/releases/download/uasa-display-v1.0.${{ github.run_number }}/uasa-display.apk",
+            "sha256": "$APK_SHA256"
+          }
+          EOF
+          git add uasa-5t-display/apk-version.json
+          git commit -m "Publish UASA Android APK updater v1.0.${{ github.run_number }}"
+          git push origin HEAD:main

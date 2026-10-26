@@ -1,0 +1,38 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'my.ska.lawas.uasadisplay'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'my.ska.lawas.uasadisplay'
+        minSdk 24
+        targetSdk 34
+        versionCode (project.findProperty('appVersionCode') ?: '1').toInteger()
+        versionName (project.findProperty('appVersionName') ?: '1.0.0').toString()
+    }
+
+    signingConfigs {
+        release {
+            def keyFile = System.getenv('UASA_KEYSTORE_PATH')
+            if (keyFile) {
+                storeFile file(keyFile)
+                storePassword System.getenv('UASA_STORE_PASSWORD')
+                keyAlias 'uasa'
+                keyPassword System.getenv('UASA_KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
