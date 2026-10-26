@@ -4,8 +4,12 @@
 
 #analog{position:absolute;left:7vw;top:9vh;width:min(17vw,260px);height:min(17vw,260px);color:#a4a9aa}#analog svg{display:block;width:100%;height:100%}#analog text{font-family:"Times New Roman",Times,serif;fill:currentColor;font-size:14px}#analog line{stroke:currentColor;stroke-linecap:round}#analog .tick{stroke-width:1.2}#analog .hand{stroke-width:3}#analog #hourHand{stroke-width:4}
 @media(max-width:700px){#analog{left:3vw;top:19vh;width:20vw;height:20vw}header h1{font-size:4vw}header p{font-size:2.8vw}}
-#schoolLogo{display:block;width:clamp(64px,9vh,108px);height:clamp(64px,9vh,108px);object-fit:contain;margin:0 auto 1.3vh;filter:brightness(.72);flex-shrink:0}
-@media(max-height:500px){#schoolLogo{width:48px;height:48px;margin-bottom:.5vh}#board{padding-top:2vh}}
+/* Keep the heading in place while mirroring the clock with the school crest. */
+#heading{padding-top:calc(clamp(64px,9vh,108px) + 1.3vh)}
+#schoolLogo{position:absolute;right:7vw;top:9vh;display:block;width:min(17vw,260px);height:min(17vw,260px);object-fit:contain;margin:0;filter:brightness(.72)}
+#subject,#state{position:relative;top:-7vh}
+@media(max-width:700px){#schoolLogo{right:3vw;top:19vh;width:20vw;height:20vw}#subject,#state{top:-4vh}}
+@media(max-height:500px){#heading{padding-top:calc(48px + .5vh)}#board{padding-top:2vh}#subject,#state{top:-3vh}}
 
 #omrOpen{position:fixed;bottom:1vh;left:50%;transform:translateX(-50%);background:#191c20;color:#b5b8b8;border:1px solid #454b50;border-radius:5px;padding:10px 18px;cursor:pointer}
 #omrGuide{position:fixed;inset:0;z-index:10;background:#111315;color:#b5b8b8;padding:16px;filter:brightness(var(--dim,1))}
