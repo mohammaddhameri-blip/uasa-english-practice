@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
         setContentView(web);
         web.loadUrl(HOME);
         IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        if (Build.VERSION.SDK_INT >= 33) registerReceiver(downloadReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        if (Build.VERSION.SDK_INT >= 33) registerReceiver(downloadReceiver, filter, Context.RECEIVER_EXPORTED);
         else registerReceiver(downloadReceiver, filter);
         checkForUpdates(false);
     }
