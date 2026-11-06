@@ -135,12 +135,17 @@
         const index = i < groups.length
           ? Math.floor((i + .5) * groups.length / Math.min(count, groups.length))
           : (i - groups.length) % groups.length;
-        const candidates = all.filter((t, n) => t.group === groups[index] && !selected.has(n));
-        if (!candidates.length) continue;
-        const t = candidates[Math.floor((candidates.length - 1) / 2)];
-        const n = all.indexOf(t);
-        selected.add(n);
-        t.preferredGender = marker;
+        // If a small group is full, place the next pupil in another available group.
+        for (let offset = 0; offset < groups.length; offset++) {
+          const target = groups[(index + offset) % groups.length];
+          const candidates = all.filter((t, n) => t.group === target && !selected.has(n));
+          if (!candidates.length) continue;
+          const t = candidates[Math.floor((candidates.length - 1) / 2)];
+          const n = all.indexOf(t);
+          selected.add(n);
+          t.preferredGender = marker;
+          break;
+        }
       }
     };
     distribute(profile.boys, 'B');
