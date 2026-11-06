@@ -19,14 +19,14 @@
   }
   function blocks(sizes, centers, columns) {
     const out = [];
-    sizes.forEach((count, i) => block(out, count, centers[i][0], centers[i][1], columns, i));
+    sizes.forEach((count, i) => block(out, count, centers[i][0], centers[i][1], count === 4 ? 2 : columns, i));
     return out;
   }
   function horseshoe() {
     const out = [];
     [18, 28, 38, 48, 58, 68, 78].forEach(y => out.push(seat(9, y, 0)));
     [20, 30, 40, 50, 60, 70, 80].forEach(x => out.push(seat(x, 84, 1)));
-    [78, 68, 58, 48, 38, 28, 18].forEach(y => out.push(seat(87, y, 2)));
+    [78, 68, 58, 48, 38, 28, 18].forEach(y => out.push(seat(88, y, 2)));
     block(out, 8, 50, 51, 4, 3);
     return out;
   }
@@ -73,7 +73,7 @@
   }
   function arcs() {
     const out = [];
-    [[7, 24, 77, 23], [9, 12, 84, 49], [13, 4, 88, 79]].forEach((line, group) => {
+    [[7, 24, 77, 23], [9, 12, 84, 49], [13, 2, 90, 79]].forEach((line, group) => {
       const [count, start, end, y] = line;
       for (let i = 0; i < count; i++) {
         const fraction = count === 1 ? .5 : i / (count - 1);
