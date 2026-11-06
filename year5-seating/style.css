@@ -2,3 +2,33 @@
 
 
 button:disabled,select:disabled{opacity:.5;cursor:not-allowed}.table.locked{background:#e0ece5;border-color:#779d88;cursor:default}.table.locked .handle{display:none}#assignName{font-size:12px;margin-bottom:8px}#lockTable[aria-pressed=true]{background:#285b49;color:white}@media(max-width:800px){#selection{position:sticky;top:0;background:white;padding:12px;border:1px solid #c8d8cc;border-radius:10px;z-index:4}#selection .hint{display:block}}
+
+/* PAK21 classroom suggestion gallery */
+.suggestions-trigger{background:#f0f6e9;border-color:#a7bd97;color:#264e32;margin-top:9px}
+.suggestions-trigger:hover{background:#dfedd4}
+#suggestionsDialog{width:min(970px,96vw);max-height:91vh;overflow:auto;padding:24px}
+#suggestionsDialog .dialoghead{align-items:flex-start;gap:20px}
+#suggestionsDialog .dialoghead h2{margin:6px 0}
+#suggestionsDialog #closeSuggestions{font-size:24px;min-width:45px}
+#suggestionSummary{margin:0;color:#476352;font-size:13px;font-weight:700}
+.suggestion-option{display:flex;gap:10px;align-items:center;letter-spacing:0;font-size:13px;color:#24443e;margin:20px 0 10px;cursor:pointer}
+.suggestion-option input{width:17px;height:17px;accent-color:#285b49;flex-shrink:0}
+.suggestion-help{margin:5px 0 20px;line-height:1.6}
+.gender-key{white-space:nowrap}
+.gender-key b{font-size:10px;padding:3px 6px;border-radius:4px;margin-left:7px}
+.gender-B{background:#cee0e7;color:#295568}
+.gender-G{background:#eadbd0;color:#774d41}
+.suggestion-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.suggestion{border:1px solid #d8e3d8;border-radius:14px;padding:13px;background:#fff;display:flex;flex-direction:column}
+.suggestion h3{font-size:15px;margin:13px 2px 6px}
+.suggestion-type{font-size:12px;color:#35654e;margin:0 2px}
+.suggestion p{font-size:12px;line-height:1.5;margin:6px 2px 12px;flex:1;color:#667f70}
+.suggestion-apply{width:100%;margin-top:auto}
+.suggestion-preview{position:relative;aspect-ratio:1.4;border-radius:9px;border:1px solid #c9dacb;background:radial-gradient(#d6e2d7 .8px,transparent .8px) 0 0/12px 12px,#f7faf6;overflow:hidden}
+.suggestion-board{position:absolute;top:3%;left:30%;width:40%;height:5%;background:#c4dacb;border-radius:3px}
+.suggestion-seat{position:absolute;border:1px solid #7e9990;border-radius:3px;display:flex;justify-content:center;align-items:center;font-size:10px;font-weight:800;color:#36574d}
+.suggestion-seat.gender-B{background:#cee0e7;border-color:#87aebd;color:#295568}
+.suggestion-seat.gender-G{background:#eadbd0;border-color:#c9ad9b;color:#774d41}
+.suggestion-seat.gender-P{background:#e1e4dd;color:#626e62}
+@media(max-width:720px){#suggestionsDialog{padding:15px}.suggestion-gallery{grid-template-columns:1fr}.suggestion-option{align-items:flex-start}.suggestions-trigger{grid-column:1/-1}}
+@media print{#suggestionsDialog{display:none}}
