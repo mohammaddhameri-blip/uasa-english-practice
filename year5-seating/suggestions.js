@@ -144,8 +144,14 @@
       }
     };
     distribute(profile.boys, 'B');
-    distribute(profile.girls, 'G');
-    all.forEach(t => { if (!t.preferredGender) t.preferredGender = 'P'; });
+    // Fill every other seat with girls, leaving any unspecified pupils unclassified.
+    let girlsLeft = profile.girls;
+    all.forEach(t => {
+      if (!t.preferredGender) {
+        t.preferredGender = girlsLeft > 0 ? 'G' : 'P';
+        if (girlsLeft > 0) girlsLeft--;
+      }
+    });
     return all;
   }
   function assignNames(tables) {
