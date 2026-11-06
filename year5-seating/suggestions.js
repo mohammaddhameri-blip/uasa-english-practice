@@ -44,8 +44,8 @@
     const out = [];
     for (let i = 0; i < 21; i++) {
       const a = -Math.PI / 2 + i * Math.PI * 2 / 21;
-      out.push(seat(50 + 42 * Math.cos(a) - W / 2,
-                    56 + 33 * Math.sin(a) - H / 2, Math.floor(i / 4)));
+      out.push(seat(50 + 44 * Math.cos(a) - W / 2,
+                    56 + 35 * Math.sin(a) - H / 2, Math.floor(i / 4)));
     }
     block(out, 8, 50, 55, 4, 6);
     return out;
